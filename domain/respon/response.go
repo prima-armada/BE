@@ -7,7 +7,8 @@ type ResponseUser struct {
 	Role      string    `json:"role"`
 	Nip       string    `json:"nip"`
 	Password  string    `json:"password"`
-	Name      string    `json:"Name"`
+	Username  string    `json:"username"`
+	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"createdat"`
 	DeletedAt time.Time
 	UpdateAt  time.Time

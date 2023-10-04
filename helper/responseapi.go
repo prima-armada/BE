@@ -1,5 +1,7 @@
 package helper
 
+import "github.com/google/uuid"
+
 type Response struct {
 	Code    int    `json:"-"`
 	Status  string `json:"status"`
@@ -59,4 +61,7 @@ func getStatus(code int) (desc string) {
 
 	return
 
+}
+func convertUid() string {
+	return uuid.New().String()
 }

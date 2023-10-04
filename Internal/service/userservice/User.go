@@ -19,6 +19,10 @@ func NewServiceUser(ru repocontract.RepoUser) servicecontract.ServiceCase {
 
 // Register implements servicecontract.ServiceCase.
 func (sc *ServicesCase) Register(newRequest request.RequestUser) (data request.RequestUser, err error) {
+
+	// if newRequest.Role != "manager" || newRequest.Role != "hc" {
+	// 	return data, errors.New("tidak bisa diinput")
+	// }
 	newRequest.CreatedAt = time.Now()
 
 	data, err = sc.ru.Register(newRequest)

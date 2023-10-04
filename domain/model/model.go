@@ -7,7 +7,27 @@ type User struct {
 	Role      string
 	Nip       string
 	Password  string
-	Name      string
+	Username  string
+	CreatedAt time.Time
+	DeletedAt time.Time
+	UpdateAt  time.Time
+}
+
+type Manager struct {
+	Id        string
+	Nip       string
+	Nama      string
+	Bagian    string
+	CreatedAt time.Time
+	DeletedAt time.Time
+	UpdateAt  time.Time
+}
+
+type HumanCapital struct {
+	Id        string
+	Nip       string
+	Nama      string
+	Bagian    string
 	CreatedAt time.Time
 	DeletedAt time.Time
 	UpdateAt  time.Time

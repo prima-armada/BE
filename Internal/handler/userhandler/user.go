@@ -31,11 +31,12 @@ func (Hu *HandlerUser) Register(e echo.Context) error {
 	if binderr != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
-	fmt.Print(requestRegister.Role, "ini handle role")
+
 	data, errservice := Hu.um.Register(requestRegister)
+	fmt.Print("ini data handler", data)
 
 	if errservice != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
 	}
 	respondata := query.ReqtoResponUser(data)
 
