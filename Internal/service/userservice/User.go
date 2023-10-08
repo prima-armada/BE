@@ -1,31 +1,46 @@
 package userservice
 
 import (
+	"errors"
+	"par/bycripts"
 	"par/domain/contract/repocontract"
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
+	"par/validasi"
 	"time"
+
+	"github.com/go-playground/validator"
 )
 
 type ServicesCase struct {
-	ru repocontract.RepoUser
+	ru       repocontract.RepoUser
+	validate *validator.Validate
 }
 
 func NewServiceUser(ru repocontract.RepoUser) servicecontract.ServiceCase {
 	return &ServicesCase{
-		ru: ru,
+		ru:       ru,
+		validate: validator.New(),
 	}
 }
 
 // Register implements servicecontract.ServiceCase.
 func (sc *ServicesCase) Register(newRequest request.RequestUser) (data request.RequestUser, err error) {
 
-	// if newRequest.Role != "manager" || newRequest.Role != "hc" {
-	// 	return data, errors.New("tidak bisa diinput")
-	// }
+	validerr := sc.validate.Struct(newRequest)
+	if validerr != nil {
+
+		return request.RequestUser{}, errors.New(validasi.ValidationErrorHandle(validerr))
+	}
 	newRequest.CreatedAt = time.Now()
+	haspw := bycripts.Bcript(newRequest.Password)
+	newRequest.Password = haspw
 
-	data, err = sc.ru.Register(newRequest)
+	datarepo, errrepo := sc.ru.Register(newRequest)
 
-	return data, nil
+	if errrepo != nil {
+		return request.RequestUser{}, errors.New(errrepo.Error())
+	}
+
+	return datarepo, nil
 }

@@ -3,19 +3,21 @@ package model
 import "time"
 
 type User struct {
-	Id        string
+	Id        int
 	Role      string
-	Nip       string
+	Nip       string `gorm:"size:191; primaryKey"`
 	Password  string
 	Username  string
 	CreatedAt time.Time
 	DeletedAt time.Time
 	UpdateAt  time.Time
+	// Admins    []Admin   `gorm:"foreignKey:Nip;references:Nip"`
+	// Managers  []Manager `gorm:"foreignKey:Nip;references:Nip"`
 }
 
 type Manager struct {
-	Id        string
-	Nip       string
+	Id        int    `gorm:"primaryKey"`
+	Nip       string `gorm:"size:191" `
 	Nama      string
 	Bagian    string
 	CreatedAt time.Time
@@ -23,9 +25,9 @@ type Manager struct {
 	UpdateAt  time.Time
 }
 
-type HumanCapital struct {
-	Id        string
-	Nip       string
+type Admin struct {
+	Id        int    `gorm:"primaryKey"`
+	Nip       string `gorm:"size:191" `
 	Nama      string
 	Bagian    string
 	CreatedAt time.Time

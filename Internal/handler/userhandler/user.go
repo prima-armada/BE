@@ -1,7 +1,6 @@
 package userhandler
 
 import (
-	"fmt"
 	"net/http"
 	"par/domain/contract/handlecontract"
 	"par/domain/contract/servicecontract"
@@ -33,7 +32,7 @@ func (Hu *HandlerUser) Register(e echo.Context) error {
 	}
 
 	data, errservice := Hu.um.Register(requestRegister)
-	fmt.Print("ini data handler", data)
+	// fmt.Print("ini data handler", data)
 
 	if errservice != nil {
 		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))

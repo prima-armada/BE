@@ -25,6 +25,15 @@ func RequserToModelmanager(data request.RequestUser) model.Manager {
 		CreatedAt: data.CreatedAt,
 	}
 }
+
+func RequserToModelAdmin(data request.RequestUser) model.Admin {
+	return model.Admin{
+		Id:        data.IdAdmin,
+		Nip:       data.Nip,
+		Nama:      data.Name,
+		CreatedAt: data.CreatedAt,
+	}
+}
 func ModelmanagerToRequser(data model.Manager) request.RequestUser {
 	return request.RequestUser{
 		IdManager: data.Id,
@@ -33,9 +42,23 @@ func ModelmanagerToRequser(data model.Manager) request.RequestUser {
 		CreatedAt: data.CreatedAt,
 	}
 }
+func ModeladminToRequser(data model.Admin) request.RequestUser {
+	return request.RequestUser{
+		IdAdmin:   data.Id,
+		Nip:       data.Nip,
+		Name:      data.Nama,
+		CreatedAt: data.CreatedAt,
+	}
+}
 func ListModelToReq(data []model.Manager) (datareq []request.RequestUser) {
 	for _, val := range data {
 		datareq = append(datareq, ModelmanagerToRequser(val))
+	}
+	return datareq
+}
+func ListModelToRequest(data []model.Admin) (datareq []request.RequestUser) {
+	for _, val := range data {
+		datareq = append(datareq, ModeladminToRequser(val))
 	}
 	return datareq
 }
