@@ -11,8 +11,8 @@ type User struct {
 	CreatedAt time.Time
 	DeletedAt time.Time
 	UpdateAt  time.Time
-	// Admins    []Admin   `gorm:"foreignKey:Nip;references:Nip"`
-	// Managers  []Manager `gorm:"foreignKey:Nip;references:Nip"`
+	Admins    []Admin   `gorm:"foreignKey:Nip;references:Nip"`
+	Managers  []Manager `gorm:"foreignKey:Nip;references:Nip"`
 }
 
 type Manager struct {

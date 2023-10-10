@@ -31,6 +31,28 @@ func (ru *RepoUser) Register(newRequest request.RequestUser) (data request.Reque
 
 	lendata := len(gettall)
 
+	datareqtomdel := query.RequserToModel(newRequest)
+	gettuser, erralluser := ru.AllUser()
+	if erralluser != nil {
+		return request.RequestUser{}, errors.New(erralluser.Error())
+	}
+
+	lenuser := len(gettuser)
+
+	if lenuser <= 0 || lenuser > 0 {
+		lenuser += 1
+
+		datareqtomdel.Id = lenuser
+
+	}
+
+	tx := ru.db.Create(&datareqtomdel)
+
+	datamodeltoreq := query.ModelToReq(datareqtomdel)
+	if tx.Error != nil {
+		return data, tx.Error
+	}
+
 	nipmanager, errnipmanager := ru.Nipmanagerexist(newRequest.Nip)
 
 	nipadmin, errnipadmin := ru.NipadminExist(newRequest.Nip)
@@ -82,27 +104,6 @@ func (ru *RepoUser) Register(newRequest request.RequestUser) (data request.Reque
 		}
 	}
 
-	datareqtomdel := query.RequserToModel(newRequest)
-	gettuser, erralluser := ru.AllUser()
-	if erralluser != nil {
-		return request.RequestUser{}, errors.New(erralluser.Error())
-	}
-
-	lenuser := len(gettuser)
-
-	if lenuser <= 0 || lenuser > 0 {
-		lenuser += 1
-
-		datareqtomdel.Id = lenuser
-
-	}
-
-	tx := ru.db.Create(&datareqtomdel)
-
-	datamodeltoreq := query.ModelToReq(datareqtomdel)
-	if tx.Error != nil {
-		return data, tx.Error
-	}
 	return datamodeltoreq, nil
 }
 
