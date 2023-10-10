@@ -10,6 +10,7 @@ type ResponseUser struct {
 	Username  string    `json:"username"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"createdat"`
+	Token     string    `json:token"`
 	DeletedAt time.Time
 	UpdateAt  time.Time
 }

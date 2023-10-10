@@ -10,3 +10,6 @@ type RepoUser interface {
 	NipadminExist(nip string) (data request.RequestUser, err error)
 	Nipmanagerexist(nip string) (data request.RequestUser, err error)
 }
+type RepoLogin interface {
+	Login(username string, password string) (string, request.RequestUser, error)
+}
