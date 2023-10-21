@@ -14,21 +14,21 @@ func ValidationErrorHandle(err error) string {
 		for _, v := range castedObject {
 			switch v.Tag() {
 			case "required":
-				message = fmt.Sprintf("%s Ada Tabel yang Kosong, Harap Diisi !!!", v.Field())
+				message = fmt.Sprintf("Ada Tabel yang Kosong, Harap Diisi !!!", v.Field())
 			case "min":
-				message = fmt.Sprintf("%s Input Minimal %s character !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input Minimal %s character !!!", v.Field(), v.Param())
 			case "max":
-				message = fmt.Sprintf("%s Input Maksimal %s character !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input Maksimal %s character !!!", v.Field(), v.Param())
 			case "lte":
-				message = fmt.Sprintf("%s Input tidak boleh di bawah %s !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input tidak boleh di bawah %s !!!", v.Field(), v.Param())
 			case "gte":
-				message = fmt.Sprintf("%s Input tidak boleh di atas %s !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input tidak boleh di atas %s !!!", v.Field(), v.Param())
 			case "numeric":
-				message = fmt.Sprintf("%s Input Harus Numeric !!!", v.Field())
+				message = fmt.Sprintf("Input Harus Numeric !!!", v.Field())
 			case "url":
-				message = fmt.Sprintf("%s Input Harus Url !!!", v.Field())
+				message = fmt.Sprintf(" Input Harus Url !!!", v.Field())
 			case "password":
-				message = fmt.Sprintf("%s Input value must be filled", v.Field())
+				message = fmt.Sprintf(" Input value must be filled", v.Field())
 
 			}
 		}

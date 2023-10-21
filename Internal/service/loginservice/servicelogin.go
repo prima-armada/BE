@@ -19,12 +19,12 @@ func NewServiceLogin(rl repocontract.RepoLogin) servicecontract.ServiceLogin {
 }
 
 // Login implements servicecontract.ServiceLogin.
-func (sl *Servicelogin) Login(username string, password string) (string, request.RequestUser, error) {
-	if username == "" || password == "" {
+func (sl *Servicelogin) Login(nip string, password string) (string, request.RequestUser, error) {
+	if nip == "" || password == "" {
 		return "", request.RequestUser{}, errors.New("inputan tidak boleh kosong")
 	}
 
-	token, datarepo, errrepo := sl.rl.Login(username, password)
+	token, datarepo, errrepo := sl.rl.Login(nip, password)
 	checkpw := bycripts.CheckPassword(datarepo.Password, password)
 
 	if checkpw != nil {

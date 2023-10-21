@@ -30,7 +30,7 @@ func (hl *HandlerLogin) Login(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errbind.Error(), http.StatusBadRequest, true))
 	}
 
-	token, dataservice, errservice := hl.sl.Login(reques.Username, reques.Password)
+	token, dataservice, errservice := hl.sl.Login(reques.Nip, reques.Password)
 
 	if errservice != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))

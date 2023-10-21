@@ -34,3 +34,11 @@ type Admin struct {
 	DeletedAt time.Time
 	UpdateAt  time.Time
 }
+
+type Department struct {
+	Id             int    `gorm:"primaryKey"`
+	NamaDepartment string `gorm:"size:191" `
+	CreatedAt      time.Time
+	DeletedAt      time.Time
+	UpdateAt       time.Time
+}

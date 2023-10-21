@@ -8,9 +8,14 @@ type ResponseUser struct {
 	Nip       string    `json:"nip"`
 	Password  string    `json:"password"`
 	Username  string    `json:"username"`
-	Name      string    `json:"name"`
+	Token     string    `json:"token"`
 	CreatedAt time.Time `json:"createdat"`
-	Token     string    `json:token"`
 	DeletedAt time.Time
 	UpdateAt  time.Time
+}
+
+type ResponseDeparment struct {
+	NameDepartment string    `json:"nama_departments"`
+	CreatedAt      time.Time `json:"createdat"`
+	UpdateAt       time.Time `json:"updatedat"`
 }

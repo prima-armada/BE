@@ -9,6 +9,11 @@ import (
 	rl "par/internal/repo/repologin"
 	ls "par/internal/service/loginservice"
 
+	dh "par/internal/handler/departmenthandler"
+	rd "par/internal/repo/repodepartment"
+	ds "par/internal/service/departmentservice"
+	middlewares "par/middleware"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -25,4 +30,10 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	handlelogin := lh.NewHandlLogin(servicelogin)
 	logingrup := e.Group("/login")
 	logingrup.POST("", handlelogin.Login)
+
+	rpd := rd.NewRepoDepartments(db)
+	servicedepart := ds.NewServiceDepartments(rpd)
+	handledepart := dh.NewHandlesDepartment(servicedepart)
+	departgrup := e.Group("/department")
+	departgrup.POST("/adddepartment", handledepart.AddDepartment, middlewares.JWTMiddleware())
 }
