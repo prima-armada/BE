@@ -15,3 +15,11 @@ type RequestUser struct {
 	DeletedAt time.Time
 	UpdateAt  time.Time
 }
+
+type RequestDepartment struct {
+	Id             int
+	NameDepartment string `json:"nama" form:"nama" validate:"required,min=5"`
+	CreatedAt      time.Time
+	DeletedAt      time.Time
+	UpdateAt       time.Time
+}

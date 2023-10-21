@@ -107,7 +107,35 @@ func ReqtoResponUser(data request.RequestUser) respon.ResponseUser {
 		Nip:       data.Nip,
 		Password:  data.Password,
 		Username:  data.Username,
-		Name:      data.Name,
 		CreatedAt: data.CreatedAt,
+	}
+}
+func ModeldepartmentToReqDepart(data model.Department) request.RequestDepartment {
+	return request.RequestDepartment{
+		NameDepartment: data.NamaDepartment,
+		CreatedAt:      data.CreatedAt,
+	}
+}
+
+func ReqDepartmentTomodelDepart(data request.RequestDepartment) model.Department {
+	return model.Department{
+		Id:             data.Id,
+		NamaDepartment: data.NameDepartment,
+		CreatedAt:      data.CreatedAt,
+	}
+}
+func ListDepartmentModelToReq(data []model.Department) (datareq []request.RequestDepartment) {
+	for _, val := range data {
+		datareq = append(datareq, ModeldepartmentToReqDepart(val))
+	}
+	return datareq
+}
+
+func ReqDepartmentToRespondepart(data request.RequestDepartment) respon.ResponseDeparment {
+	return respon.ResponseDeparment{
+
+		NameDepartment: data.NameDepartment,
+		CreatedAt:      data.CreatedAt,
+		UpdateAt:       data.UpdateAt,
 	}
 }

@@ -9,5 +9,9 @@ type ServiceCase interface {
 }
 
 type ServiceLogin interface {
-	Login(username string, password string) (string, request.RequestUser, error)
+	Login(nip string, password string) (string, request.RequestUser, error)
+}
+
+type ServiceDepartment interface {
+	Department(newDepartment request.RequestDepartment) (request.RequestDepartment, error)
 }

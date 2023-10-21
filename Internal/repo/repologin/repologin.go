@@ -22,14 +22,14 @@ func NewRepoLogin(db *gorm.DB) repocontract.RepoLogin {
 }
 
 // Login implements repocontract.RepoLogin.
-func (rl *Repologin) Login(username string, password string) (string, request.RequestUser, error) {
+func (rl *Repologin) Login(nip string, password string) (string, request.RequestUser, error) {
 	userdata := model.User{}
 
-	tx := rl.db.Where("username = ?", username).First(&userdata)
+	tx := rl.db.Where("nip = ?", nip).First(&userdata)
 	if tx.Error != nil {
 		return "", request.RequestUser{}, tx.Error
 	}
-	createtoken, errtoken := middlewares.CreateTokenTeam(userdata.Id, userdata.Role)
+	createtoken, errtoken := middlewares.CreateTokenTeam(userdata.Nip, userdata.Role)
 
 	if errtoken != nil {
 		return "", request.RequestUser{}, errors.New("gagal membuat token")

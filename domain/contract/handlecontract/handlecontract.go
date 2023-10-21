@@ -9,3 +9,7 @@ type HandleUser interface {
 type HandleLogin interface {
 	Login(e echo.Context) error
 }
+
+type HandleDepartment interface {
+	AddDepartment(e echo.Context) error
+}

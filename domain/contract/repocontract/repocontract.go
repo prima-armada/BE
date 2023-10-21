@@ -11,5 +11,10 @@ type RepoUser interface {
 	Nipmanagerexist(nip string) (data request.RequestUser, err error)
 }
 type RepoLogin interface {
-	Login(username string, password string) (string, request.RequestUser, error)
+	Login(nip string, password string) (string, request.RequestUser, error)
+}
+type RepoDepartment interface {
+	AddDepartment(newDepartment request.RequestDepartment) (request.RequestDepartment, error)
+	AllDepertment() (data []request.RequestDepartment, err error)
+	NameDepartment(name string) (data request.RequestDepartment, err error)
 }
