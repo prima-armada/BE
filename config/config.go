@@ -16,6 +16,7 @@ type AppConfig struct {
 	MYSQL_HOST     string
 	MYSQL_PORT     uint
 	MYSQL_DBNAME   string
+	MYSQL_TIMEZONE string
 	SERVER_PORT    uint
 }
 
@@ -53,6 +54,7 @@ func initConfig() *AppConfig {
 	defaultConfig.MYSQL_USER = os.Getenv("MYSQL_USER")
 	defaultConfig.MYSQL_PASSWORD = os.Getenv("MYSQL_PASSWORD")
 	defaultConfig.MYSQL_HOST = os.Getenv("MYSQL_HOST")
+	defaultConfig.MYSQL_TIMEZONE = os.Getenv("MYSQL_TIMEZONE")
 
 	cnvDBPort, err := strconv.Atoi(os.Getenv("MYSQL_PORT"))
 	if err != nil {

@@ -17,4 +17,5 @@ type RepoDepartment interface {
 	AddDepartment(newDepartment request.RequestDepartment) (request.RequestDepartment, error)
 	AllDepertment() (data []request.RequestDepartment, err error)
 	NameDepartment(name string) (data request.RequestDepartment, err error)
+	UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
 }

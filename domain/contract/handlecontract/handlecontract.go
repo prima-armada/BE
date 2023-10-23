@@ -12,4 +12,6 @@ type HandleLogin interface {
 
 type HandleDepartment interface {
 	AddDepartment(e echo.Context) error
+	AllDepartment(e echo.Context) error
+	UpdatedDepartment(e echo.Context) error
 }
