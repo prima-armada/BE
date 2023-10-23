@@ -36,4 +36,6 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	handledepart := dh.NewHandlesDepartment(servicedepart)
 	departgrup := e.Group("/department")
 	departgrup.POST("/adddepartment", handledepart.AddDepartment, middlewares.JWTMiddleware())
+	departgrup.GET("", handledepart.AllDepartment, middlewares.JWTMiddleware())
+	departgrup.PUT("/:id", handledepart.UpdatedDepartment, middlewares.JWTMiddleware())
 }

@@ -14,4 +14,6 @@ type ServiceLogin interface {
 
 type ServiceDepartment interface {
 	Department(newDepartment request.RequestDepartment) (request.RequestDepartment, error)
+	AllDepartment() ([]request.RequestDepartment, error)
+	UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
 }
