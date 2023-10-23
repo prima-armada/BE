@@ -77,3 +77,12 @@ func (sd *ServicesDepartment) UpdatedDepartment(id int, update request.RequestDe
 	}
 	return datarepo, nil
 }
+
+func (sd *ServicesDepartment) DeletedDepartment(id int) error {
+	_, errrepo := sd.rd.DeletedDepartment(id)
+
+	if errrepo != nil {
+		return errrepo
+	}
+	return nil
+}

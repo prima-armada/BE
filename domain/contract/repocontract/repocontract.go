@@ -18,4 +18,5 @@ type RepoDepartment interface {
 	AllDepertment() (data []request.RequestDepartment, err error)
 	NameDepartment(name string) (data request.RequestDepartment, err error)
 	UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
+	DeletedDepartment(id int) (row int, err error)
 }

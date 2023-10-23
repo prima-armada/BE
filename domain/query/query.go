@@ -114,28 +114,25 @@ func ModeldepartmentToReqDepart(data model.Department) request.RequestDepartment
 	return request.RequestDepartment{
 		NameDepartment: data.NamaDepartment,
 		CreatedAt:      data.CreatedAt,
-		UpdateAt:       data.UpdateAt,
 	}
 }
 func ModelUpdatedepartmentToReqDepart(data model.Department) request.RequestDepartment {
 	return request.RequestDepartment{
+		UpdateAt:       data.UpdatedAt,
 		NameDepartment: data.NamaDepartment,
-		UpdateAt:       data.UpdateAt,
 	}
 }
 
 func ReqDepartmentTomodelDepart(data request.RequestDepartment) model.Department {
 	return model.Department{
-		Id:             data.Id,
 		NamaDepartment: data.NameDepartment,
-		CreatedAt:      data.CreatedAt,
 	}
 }
+
 func ReqDepartmentTomodelDepartudated(data request.RequestDepartment) model.Department {
 	return model.Department{
-		Id:             data.Id,
+
 		NamaDepartment: data.NameDepartment,
-		UpdateAt:       data.UpdateAt,
 	}
 }
 func ListDepartmentModelToReq(data []model.Department) (datareq []request.RequestDepartment) {

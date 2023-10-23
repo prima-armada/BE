@@ -6,7 +6,6 @@ import (
 	"par/domain/model"
 	"par/domain/query"
 	"par/domain/request"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -24,18 +23,19 @@ func NewRepoDepartments(db *gorm.DB) repocontract.RepoDepartment {
 // AddDepartment implements repocontract.RepoDepartment.
 func (rd *RepoDepartment) AddDepartment(newDepartment request.RequestDepartment) (request.RequestDepartment, error) {
 	reqdeparttomodeldepart := query.ReqDepartmentTomodelDepart(newDepartment)
-	reqdeparttomodeldepart.CreatedAt = time.Now()
-	alldepart, errall := rd.AllDepertment()
 
-	lendepart := len(alldepart)
+	// alldepart, errall := rd.AllDepertment()
 
-	if errall != nil {
-		return request.RequestDepartment{}, errall
-	}
-	if lendepart <= 0 || lendepart > 0 {
-		lendepart++
-		reqdeparttomodeldepart.Id = lendepart
-	}
+	// lendepart := len(alldepart)
+
+	// if errall != nil {
+	// 	return request.RequestDepartment{}, errall
+	// }
+	// if lendepart <= 0 || lendepart > 0 {
+	// 	lendepart++
+	// 	reqdeparttomodeldepart.Id = lendepart
+
+	// }
 
 	tx := rd.db.Create(&reqdeparttomodeldepart)
 
@@ -50,7 +50,7 @@ func (rd *RepoDepartment) AddDepartment(newDepartment request.RequestDepartment)
 // AllDepertment implements repocontract.RepoDepartment.
 func (rd *RepoDepartment) AllDepertment() (data []request.RequestDepartment, err error) {
 	var activ []model.Department
-	tx := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.update_at from departments").Find(&activ)
+	tx := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.updated_at from departments").Find(&activ)
 	if tx.Error != nil {
 		return data, tx.Error
 	}
@@ -62,7 +62,7 @@ func (rd *RepoDepartment) AllDepertment() (data []request.RequestDepartment, err
 func (rd *RepoDepartment) NameDepartment(name string) (data request.RequestDepartment, err error) {
 	var activ model.Department
 
-	tx := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.update_at from departments WHERE departments.nama_department= ? ", name).First(&activ)
+	tx := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.updated_at from departments WHERE departments.nama_department= ? ", name).First(&activ)
 
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 
@@ -78,7 +78,7 @@ func (rd *RepoDepartment) UpdatedDepartment(id int, update request.RequestDepart
 
 	var depart model.Department
 
-	tx1 := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.update_at from departments WHERE departments.id= ? ", id).First(&depart)
+	tx1 := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.updated_at from departments WHERE departments.id= ? ", id).First(&depart)
 
 	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
 
@@ -96,3 +96,29 @@ func (rd *RepoDepartment) UpdatedDepartment(id int, update request.RequestDepart
 
 	return modeltoreq, nil
 }
+
+func (rd *RepoDepartment) DeletedDepartment(id int) (row int, err error) {
+	Depart := model.Department{}
+
+	tx := rd.db.Unscoped().Delete(&Depart, id)
+
+	if tx.Error != nil {
+		return -1, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return -1, errors.New("delete department by id failed, error query")
+	}
+	return int(tx.RowsAffected), nil
+}
+
+// IdDoctor := Doctor{}
+
+// 	tx := repo.db.Unscoped().Delete(&IdDoctor, id)
+// 	if tx.Error != nil {
+// 		return -1, tx.Error
+// 	}
+// 	if tx.RowsAffected == 0 {
+// 		return -1, errors.New("delete doctor by id failed, error query")
+// 	}
+// 	return int(tx.RowsAffected), nil
+// }

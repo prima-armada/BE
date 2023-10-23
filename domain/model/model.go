@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type User struct {
 	Id        int
@@ -9,7 +13,6 @@ type User struct {
 	Password  string
 	Username  string
 	CreatedAt time.Time
-	DeletedAt time.Time
 	UpdateAt  time.Time
 	Admins    []Admin   `gorm:"foreignKey:Nip;references:Nip"`
 	Managers  []Manager `gorm:"foreignKey:Nip;references:Nip"`
@@ -21,7 +24,6 @@ type Manager struct {
 	Nama      string
 	Bagian    string
 	CreatedAt time.Time
-	DeletedAt time.Time
 	UpdateAt  time.Time
 }
 
@@ -31,14 +33,12 @@ type Admin struct {
 	Nama      string
 	Bagian    string
 	CreatedAt time.Time
-	DeletedAt time.Time
 	UpdateAt  time.Time
 }
 
 type Department struct {
-	Id             int    `gorm:"primaryKey"`
+	gorm.Model
 	NamaDepartment string `gorm:"size:191" `
-	CreatedAt      time.Time
-	DeletedAt      time.Time
-	UpdateAt       time.Time
+	// CreatedAt      time.Time
+	// UpdateAt       time.Time
 }
