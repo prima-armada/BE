@@ -8,18 +8,16 @@ import (
 
 func RequserToModel(data request.RequestUser) model.User {
 	return model.User{
-		Id:        data.Id,
-		Role:      data.Role,
-		Nip:       data.Nip,
-		Password:  data.Password,
-		Username:  data.Username,
-		CreatedAt: data.CreatedAt,
+
+		Role:     data.Role,
+		Nip:      data.Nip,
+		Password: data.Password,
+		Username: data.Username,
 	}
 }
 
 func ModeltoReq(data model.User) request.RequestUser {
 	return request.RequestUser{
-		Id:        data.Id,
 		Role:      data.Role,
 		Nip:       data.Nip,
 		Password:  data.Password,
@@ -41,33 +39,30 @@ func ReqtoRepon(data request.RequestUser, token string) respon.ResponseUser {
 
 func RequserToModelmanager(data request.RequestUser) model.Manager {
 	return model.Manager{
-		Id:        data.IdManager,
-		Nip:       data.Nip,
-		Nama:      data.Name,
-		CreatedAt: data.CreatedAt,
+
+		Nama:   data.Name,
+		Nip:    data.Nip,
+		Bagian: data.Bagian,
 	}
 }
 
 func RequserToModelAdmin(data request.RequestUser) model.Admin {
 	return model.Admin{
-		Id:        data.IdAdmin,
-		Nip:       data.Nip,
-		Nama:      data.Name,
-		CreatedAt: data.CreatedAt,
+		Nama:   data.Name,
+		Nip:    data.Nip,
+		Bagian: data.Bagian,
 	}
 }
 func ModelmanagerToRequser(data model.Manager) request.RequestUser {
 	return request.RequestUser{
-		IdManager: data.Id,
-		Nip:       data.Nip,
+
 		Name:      data.Nama,
 		CreatedAt: data.CreatedAt,
 	}
 }
 func ModeladminToRequser(data model.Admin) request.RequestUser {
 	return request.RequestUser{
-		IdAdmin:   data.Id,
-		Nip:       data.Nip,
+
 		Name:      data.Nama,
 		CreatedAt: data.CreatedAt,
 	}
@@ -86,7 +81,7 @@ func ListModelToRequest(data []model.Admin) (datareq []request.RequestUser) {
 }
 func ModelToReq(data model.User) request.RequestUser {
 	return request.RequestUser{
-		Id:        data.Id,
+
 		Role:      data.Role,
 		Nip:       data.Nip,
 		Password:  data.Password,
@@ -114,28 +109,26 @@ func ModeldepartmentToReqDepart(data model.Department) request.RequestDepartment
 	return request.RequestDepartment{
 		NameDepartment: data.NamaDepartment,
 		CreatedAt:      data.CreatedAt,
-		UpdateAt:       data.UpdateAt,
+		UpdateAt:       data.UpdatedAt,
 	}
 }
 func ModelUpdatedepartmentToReqDepart(data model.Department) request.RequestDepartment {
 	return request.RequestDepartment{
+		UpdateAt:       data.UpdatedAt,
 		NameDepartment: data.NamaDepartment,
-		UpdateAt:       data.UpdateAt,
 	}
 }
 
 func ReqDepartmentTomodelDepart(data request.RequestDepartment) model.Department {
 	return model.Department{
-		Id:             data.Id,
 		NamaDepartment: data.NameDepartment,
-		CreatedAt:      data.CreatedAt,
 	}
 }
+
 func ReqDepartmentTomodelDepartudated(data request.RequestDepartment) model.Department {
 	return model.Department{
-		Id:             data.Id,
+
 		NamaDepartment: data.NameDepartment,
-		UpdateAt:       data.UpdateAt,
 	}
 }
 func ListDepartmentModelToReq(data []model.Department) (datareq []request.RequestDepartment) {

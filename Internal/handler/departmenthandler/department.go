@@ -93,3 +93,25 @@ func (hd *HandlerDepartment) UpdatedDepartment(e echo.Context) error {
 	return e.JSON(http.StatusCreated, helper.GetResponse(reqtorespon, http.StatusOK, false))
 
 }
+
+func (hd *HandlerDepartment) DeletedDepartment(e echo.Context) error {
+	role := middlewares.ExtractTokenTeamRole(e)
+	if role != "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
+	}
+	id := e.Param("id")
+
+	cnv, errcnv := strconv.Atoi(id)
+
+	if errcnv != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errcnv.Error(), http.StatusBadRequest, true))
+	}
+
+	errservice := hd.sd.DeletedDepartment(cnv)
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+
+	return e.JSON(http.StatusOK, helper.GetResponse("Delete Succes", http.StatusOK, false))
+}

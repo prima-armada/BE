@@ -32,4 +32,5 @@ require (
 	golang.org/x/text v0.11.0 // indirect
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.4
+	gorm.io/plugin/soft_delete v1.2.1
 )
