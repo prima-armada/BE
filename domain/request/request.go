@@ -9,8 +9,7 @@ type RequestUser struct {
 	Password  string `json:"password" form:"password" validate:"required,min=5"`
 	Username  string `json:"username" form:"username" validate:"required,min=5"`
 	Name      string `json:"nama" form:"nama" validate:"required,min=5"`
-	IdAdmin   int
-	IdManager int
+	Bagian    string `json:"bagian" form:"bagian" validate:"required"`
 	CreatedAt time.Time
 	DeletedAt time.Time
 	UpdateAt  time.Time

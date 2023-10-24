@@ -8,6 +8,7 @@ type RepoUser interface {
 	AllAdmin() (data []request.RequestUser, err error)
 	AllUser() (data []request.RequestUser, err error)
 	NipadminExist(nip string) (data request.RequestUser, err error)
+	NipUserExist(nip string) (data request.RequestUser, err error)
 	Nipmanagerexist(nip string) (data request.RequestUser, err error)
 }
 type RepoLogin interface {

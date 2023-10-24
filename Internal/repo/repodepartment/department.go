@@ -111,14 +111,3 @@ func (rd *RepoDepartment) DeletedDepartment(id int) (row int, err error) {
 	return int(tx.RowsAffected), nil
 }
 
-// IdDoctor := Doctor{}
-
-// 	tx := repo.db.Unscoped().Delete(&IdDoctor, id)
-// 	if tx.Error != nil {
-// 		return -1, tx.Error
-// 	}
-// 	if tx.RowsAffected == 0 {
-// 		return -1, errors.New("delete doctor by id failed, error query")
-// 	}
-// 	return int(tx.RowsAffected), nil
-// }

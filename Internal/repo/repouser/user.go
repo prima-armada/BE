@@ -26,36 +26,19 @@ func (ru *RepoUser) Register(newRequest request.RequestUser) (data request.Reque
 
 	datamanager := query.RequserToModelmanager(newRequest)
 	dataadmin := query.RequserToModelAdmin(newRequest)
-
-	gettall, _ := ru.AllManager()
-
-	lendata := len(gettall)
-
 	datareqtomdel := query.RequserToModel(newRequest)
-	gettuser, erralluser := ru.AllUser()
-	if erralluser != nil {
-		return request.RequestUser{}, errors.New(erralluser.Error())
+
+	_, erruserexist := ru.NipUserExist(datareqtomdel.Nip)
+	if erruserexist == nil {
+		return request.RequestUser{}, errors.New("Nip Sudah Ada")
 	}
-
-	lenuser := len(gettuser)
-
-	if lenuser <= 0 || lenuser > 0 {
-		lenuser += 1
-
-		datareqtomdel.Id = lenuser
-
-	}
-
 	tx := ru.db.Create(&datareqtomdel)
 
-	datamodeltoreq := query.ModelToReq(datareqtomdel)
 	if tx.Error != nil {
 		return data, tx.Error
 	}
-
-	nipmanager, errnipmanager := ru.Nipmanagerexist(newRequest.Nip)
-
-	nipadmin, errnipadmin := ru.NipadminExist(newRequest.Nip)
+	nipmanager, errnipmanager := ru.Nipmanagerexist(datamanager.Nip)
+	nipadmin, errnipadmin := ru.NipadminExist(dataadmin.Nip)
 
 	if errnipmanager == nil && errnipadmin == nil {
 		if nipadmin.Nip == nipmanager.Nip {
@@ -63,23 +46,16 @@ func (ru *RepoUser) Register(newRequest request.RequestUser) (data request.Reque
 		}
 
 	}
-
 	if nipmanager.Nip == "" {
 
 		if newRequest.Role == "manager" {
-			if lendata <= 0 || lendata > 0 {
-				lendata += 1
 
-				datamanager.Id = lendata
+			tx2 := ru.db.Create(&datamanager)
 
-				tx2 := ru.db.Create(&datamanager)
-
-				if tx2.Error != nil {
-					return request.RequestUser{}, tx2.Error
-				}
+			if tx2.Error != nil {
+				return request.RequestUser{}, tx2.Error
 			}
 		}
-
 	} else {
 		return request.RequestUser{}, errors.New("anda sudah terdaftar di manager")
 	}
@@ -87,24 +63,19 @@ func (ru *RepoUser) Register(newRequest request.RequestUser) (data request.Reque
 	if errnipadmin == nil {
 		return request.RequestUser{}, errors.New("anda sudah terdaftar di admin")
 	}
-	admin, _ := ru.AllAdmin()
 	if nipadmin.Nip == "" {
-		lenadmins := len(admin)
+
 		if newRequest.Role == "admin" {
-			if lenadmins <= 0 || lenadmins > 0 {
-				lenadmins += 1
-
-				dataadmin.Id = lenadmins
-				tx3 := ru.db.Create(&dataadmin)
-
-				if tx3.Error != nil {
-					return request.RequestUser{}, errors.New(tx3.Error.Error())
-				}
+			newRequest.Bagian = "humancapital"
+			tx3 := ru.db.Create(&dataadmin)
+			if tx3.Error != nil {
+				return request.RequestUser{}, errors.New(tx3.Error.Error())
 			}
 		}
 	}
-
+	datamodeltoreq := query.ModelToReq(datareqtomdel)
 	return datamodeltoreq, nil
+
 }
 
 // NipadminExist implements repocontract.RepoUser.
@@ -133,6 +104,20 @@ func (ru *RepoUser) Nipmanagerexist(nip string) (data request.RequestUser, err e
 	}
 	var activcore = query.ModelmanagerToRequser(activ)
 	fmt.Print("ini data id", activcore)
+	return activcore, nil
+}
+
+func (ru *RepoUser) NipUserExist(nip string) (data request.RequestUser, err error) {
+	var activ model.User
+
+	tx := ru.db.Raw("Select users.id, users.nip, users.password from users WHERE users.nip= ? ", nip).First(&activ)
+
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+
+		return request.RequestUser{}, tx.Error
+	}
+	var activcore = query.ModeltoReq(activ)
+	// fmt.Print("ini data id", activcore)
 	return activcore, nil
 }
 
