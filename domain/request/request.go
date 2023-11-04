@@ -13,6 +13,7 @@ type RequestUser struct {
 	CreatedAt time.Time
 	DeletedAt time.Time
 	UpdateAt  time.Time
+	UserId    int
 }
 
 type RequestDepartment struct {

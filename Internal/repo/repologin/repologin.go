@@ -35,6 +35,6 @@ func (rl *Repologin) Login(nip string, password string) (string, request.Request
 		return "", request.RequestUser{}, errors.New("gagal membuat token")
 	}
 
-	datamodeltoreq := query.ModelToReq(userdata)
+	datamodeltoreq := query.ModeltoReq(userdata)
 	return createtoken, datamodeltoreq, nil
 }
