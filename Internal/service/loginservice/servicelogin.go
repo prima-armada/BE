@@ -10,11 +10,13 @@ import (
 
 type Servicelogin struct {
 	rl repocontract.RepoLogin
+	ru repocontract.RepoUser
 }
 
-func NewServiceLogin(rl repocontract.RepoLogin) servicecontract.ServiceLogin {
+func NewServiceLogin(rl repocontract.RepoLogin, ru repocontract.RepoUser) servicecontract.ServiceLogin {
 	return &Servicelogin{
 		rl: rl,
+		ru: ru,
 	}
 }
 
@@ -23,7 +25,11 @@ func (sl *Servicelogin) Login(nip string, password string) (string, request.Requ
 	if nip == "" || password == "" {
 		return "", request.RequestUser{}, errors.New("inputan tidak boleh kosong")
 	}
+	_, exitnip := sl.ru.NipUserExist(nip)
 
+	if exitnip != nil {
+		return "", request.RequestUser{}, errors.New("Nip Belum Terdaftar")
+	}
 	token, datarepo, errrepo := sl.rl.Login(nip, password)
 	checkpw := bycripts.CheckPassword(datarepo.Password, password)
 

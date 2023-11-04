@@ -27,16 +27,20 @@ func ModeltoReq(data model.User) request.RequestUser {
 }
 func ReqtoRepon(data request.RequestUser, token string) respon.ResponseUser {
 	return respon.ResponseUser{
-		Id:        data.Id,
 		Role:      data.Role,
 		Nip:       data.Nip,
-		Password:  data.Password,
 		Username:  data.Username,
 		CreatedAt: data.CreatedAt,
-		Token:     token,
 	}
 }
-
+func ReqtoResponLogin(data request.RequestUser, token string) respon.LoginRespon {
+	return respon.LoginRespon{
+		Role:     data.Role,
+		Nip:      data.Nip,
+		Username: data.Username,
+		Token:    token,
+	}
+}
 func RequserToModelmanager(data request.RequestUser) model.Manager {
 	return model.Manager{
 
@@ -97,10 +101,8 @@ func ListModelUserToReq(data []model.User) (datareq []request.RequestUser) {
 }
 func ReqtoResponUser(data request.RequestUser) respon.ResponseUser {
 	return respon.ResponseUser{
-		Id:        data.Id,
 		Role:      data.Role,
 		Nip:       data.Nip,
-		Password:  data.Password,
 		Username:  data.Username,
 		CreatedAt: data.CreatedAt,
 	}
@@ -112,6 +114,7 @@ func ModeldepartmentToReqDepart(data model.Department) request.RequestDepartment
 		UpdateAt:       data.UpdatedAt,
 	}
 }
+
 func ModelUpdatedepartmentToReqDepart(data model.Department) request.RequestDepartment {
 	return request.RequestDepartment{
 		UpdateAt:       data.UpdatedAt,
@@ -131,16 +134,33 @@ func ReqDepartmentTomodelDepartudated(data request.RequestDepartment) model.Depa
 		NamaDepartment: data.NameDepartment,
 	}
 }
+func ModelsdepartmentToReqDepart(data *model.Department) request.RequestDepartment {
+
+	return request.RequestDepartment{
+		Id:             int(data.ID),
+		NameDepartment: data.NamaDepartment,
+		CreatedAt:      data.CreatedAt,
+		UpdateAt:       data.UpdatedAt,
+	}
+}
 func ListDepartmentModelToReq(data []model.Department) (datareq []request.RequestDepartment) {
 	for _, val := range data {
-		datareq = append(datareq, ModeldepartmentToReqDepart(val))
+		datareq = append(datareq, ModelsdepartmentToReqDepart(&val))
 	}
 	return datareq
 }
 
 func ReqDepartmentToRespondepart(data request.RequestDepartment) respon.ResponseDeparment {
 	return respon.ResponseDeparment{
-
+		Id:             data.Id,
+		NameDepartment: data.NameDepartment,
+		CreatedAt:      data.CreatedAt,
+		UpdateAt:       data.UpdateAt,
+	}
+}
+func RequstDepartmentToRespondepart(data *request.RequestDepartment) respon.ResponseDeparment {
+	return respon.ResponseDeparment{
+		Id:             data.Id,
 		NameDepartment: data.NameDepartment,
 		CreatedAt:      data.CreatedAt,
 		UpdateAt:       data.UpdateAt,
@@ -155,7 +175,7 @@ func ReqDepartUpdatementToRespondepart(data request.RequestDepartment) respon.Re
 }
 func ListReqDepartmentToRespondepart(data []request.RequestDepartment) (datareq []respon.ResponseDeparment) {
 	for _, val := range data {
-		datareq = append(datareq, ReqDepartmentToRespondepart(val))
+		datareq = append(datareq, RequstDepartmentToRespondepart(&val))
 	}
 	return datareq
 }
