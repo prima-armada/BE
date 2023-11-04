@@ -26,7 +26,7 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	Usergrup.POST("/adduser", hndlmhs.Register)
 
 	rpl := rl.NewRepoLogin(db)
-	servicelogin := ls.NewServiceLogin(rpl)
+	servicelogin := ls.NewServiceLogin(rpl, rpm)
 	handlelogin := lh.NewHandlLogin(servicelogin)
 	logingrup := e.Group("/login")
 	logingrup.POST("", handlelogin.Login)

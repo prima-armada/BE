@@ -14,21 +14,25 @@ func ValidationErrorHandle(err error) string {
 		for _, v := range castedObject {
 			switch v.Tag() {
 			case "required":
-				message = fmt.Sprintf("Ada Tabel yang Kosong, Harap Diisi !!!", v.Field())
+				message = fmt.Sprintf("Ada Tabel yang Kosong, Harap Diisi !!!")
 			case "min":
-				message = fmt.Sprintf(" Input Minimal %s character !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input Minimal 5 character !!!")
 			case "max":
-				message = fmt.Sprintf(" Input Maksimal %s character !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input Maksimal 15 character !!!")
 			case "lte":
-				message = fmt.Sprintf(" Input tidak boleh di bawah %s !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input tidak boleh di bawah 2 !!!")
 			case "gte":
-				message = fmt.Sprintf(" Input tidak boleh di atas %s !!!", v.Field(), v.Param())
+				message = fmt.Sprintf(" Input tidak boleh di atas 15 !!!")
 			case "numeric":
-				message = fmt.Sprintf("Input Harus Numeric !!!", v.Field())
+				message = fmt.Sprintf("Input Harus angka !!!")
 			case "url":
-				message = fmt.Sprintf(" Input Harus Url !!!", v.Field())
+				message = fmt.Sprintf(" Input Harus Url !!!")
 			case "password":
-				message = fmt.Sprintf(" Input value must be filled", v.Field())
+				message = fmt.Sprintf(" Input value must be filled")
+			case "alphanum":
+				message = fmt.Sprintf(" input harus angka dan huruf")
+			case "alpha":
+				message = fmt.Sprintf(" input harus huruf")
 
 			}
 		}

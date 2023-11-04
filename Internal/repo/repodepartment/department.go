@@ -2,6 +2,7 @@ package repodepartment
 
 import (
 	"errors"
+	"fmt"
 	"par/domain/contract/repocontract"
 	"par/domain/model"
 	"par/domain/query"
@@ -50,11 +51,12 @@ func (rd *RepoDepartment) AddDepartment(newDepartment request.RequestDepartment)
 // AllDepertment implements repocontract.RepoDepartment.
 func (rd *RepoDepartment) AllDepertment() (data []request.RequestDepartment, err error) {
 	var activ []model.Department
-	tx := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.updated_at from departments").Find(&activ)
+	tx := rd.db.Raw("Select departments.id, departments.nama_department, departments.created_at, departments.updated_at from departments").Find(&activ)
 	if tx.Error != nil {
 		return data, tx.Error
 	}
 	dtmdlttoreq := query.ListDepartmentModelToReq(activ)
+	fmt.Print("ini repo", dtmdlttoreq)
 	return dtmdlttoreq, nil
 }
 
@@ -110,4 +112,3 @@ func (rd *RepoDepartment) DeletedDepartment(id int) (row int, err error) {
 	}
 	return int(tx.RowsAffected), nil
 }
-
