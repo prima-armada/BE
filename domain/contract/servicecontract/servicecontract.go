@@ -2,6 +2,7 @@ package servicecontract
 
 import (
 	"par/domain/request"
+	"time"
 )
 
 type ServiceCase interface {
@@ -17,4 +18,11 @@ type ServiceDepartment interface {
 	AllDepartment() ([]request.RequestDepartment, error)
 	UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
 	DeletedDepartment(id int) error
+}
+
+type ServiceSubmissionManager interface {
+	AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error)
+	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
+	// UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
+	// DeletedDepartment(id int) error
 }

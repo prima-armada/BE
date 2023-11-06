@@ -16,3 +16,7 @@ type HandleDepartment interface {
 	UpdatedDepartment(e echo.Context) error
 	DeletedDepartment(e echo.Context) error
 }
+type HandleSubmissionManager interface {
+	AddSubmissionManager(e echo.Context) error
+	GetAllSubmissionManager(e echo.Context) error
+}

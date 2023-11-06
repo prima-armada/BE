@@ -43,7 +43,7 @@ func (rd *RepoDepartment) AddDepartment(newDepartment request.RequestDepartment)
 	if tx.Error != nil {
 		return request.RequestDepartment{}, tx.Error
 	}
-	modeltoreq := query.ModeldepartmentToReqDepart(reqdeparttomodeldepart)
+	modeltoreq := query.ModeldepartmentToReqDepart(&reqdeparttomodeldepart)
 
 	return modeltoreq, nil
 }
@@ -64,13 +64,13 @@ func (rd *RepoDepartment) AllDepertment() (data []request.RequestDepartment, err
 func (rd *RepoDepartment) NameDepartment(name string) (data request.RequestDepartment, err error) {
 	var activ model.Department
 
-	tx := rd.db.Raw("Select departments.nama_department, departments.created_at, departments.updated_at from departments WHERE departments.nama_department= ? ", name).First(&activ)
+	tx := rd.db.Raw("Select departments.id, departments.nama_department, departments.created_at, departments.updated_at from departments WHERE departments.nama_department= ? ", name).First(&activ)
 
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 
 		return request.RequestDepartment{}, tx.Error
 	}
-	var activcore = query.ModeldepartmentToReqDepart(activ)
+	var activcore = query.ModeldepartmentToReqDepart(&activ)
 
 	return activcore, nil
 

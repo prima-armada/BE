@@ -2,6 +2,7 @@ package repouser
 
 import (
 	"errors"
+	"fmt"
 	"par/domain/contract/repocontract"
 	"par/domain/model"
 	"par/domain/query"
@@ -39,7 +40,7 @@ func (ru *RepoUser) Register(newRequest request.RequestUser) (data request.Reque
 		return data, tx.Error
 	}
 
-	datamodeltoreq := query.ModeltoReq(datareqtomdel)
+	datamodeltoreq := query.ModeltoReq(&datareqtomdel)
 	return datamodeltoreq, nil
 
 }
@@ -52,7 +53,7 @@ func (ru *RepoUser) UsernameUserExist(username string) (data request.RequestUser
 
 		return request.RequestUser{}, tx.Error
 	}
-	var activcore = query.ModeltoReq(activ)
+	var activcore = query.ModeltoReq(&activ)
 	// fmt.Print("ini data id", activcore)
 	return activcore, nil
 }
@@ -66,7 +67,7 @@ func (ru *RepoUser) NipUserExist(nip string) (data request.RequestUser, err erro
 
 		return request.RequestUser{}, tx.Error
 	}
-	var activcore = query.ModeltoReq(activ)
+	var activcore = query.ModeltoReq(&activ)
 	// fmt.Print("ini data id", activcore)
 	return activcore, nil
 }
@@ -80,4 +81,19 @@ func (ru *RepoUser) AllUser() (data []request.RequestUser, err error) {
 	}
 	dtmdlttoreq := query.ListModelUserToReq(activ)
 	return dtmdlttoreq, nil
+}
+
+// IdUserExist implements repocontract.RepoUser.
+func (ru *RepoUser) IdUserExist(id int) (data request.RequestUser, err error) {
+	var activ model.User
+
+	tx := ru.db.Raw("Select users.id, users.nip, users.password,users.bagian from users WHERE users.id= ? ", id).First(&activ)
+
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+
+		return request.RequestUser{}, tx.Error
+	}
+	var activcore = query.ModeltoReq(&activ)
+	fmt.Print("ini data id", activcore.Bagian)
+	return activcore, nil
 }
