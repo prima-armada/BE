@@ -23,3 +23,26 @@ type RequestDepartment struct {
 	DeletedAt      time.Time
 	UpdateAt       time.Time
 }
+type ReqSubmissionManager struct {
+	IdPengajuan      int
+	IdDepartment     uint
+	Jumlah           string `json:"jumlah" form:"jumlah" validate:"required"`
+	Alasan           string `json:"alasan" form:"alasan" validate:"required,min=5"`
+	StatusPengajuan  string
+	TanggalKebutuhan string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
+	Pencaharian      string `json:"pencaharian" form:"pencaharian" validate:"required"`
+	Golongan         string `json:"golongan" form:"golongan" validate:"required"`
+	TanggalPengajuan time.Time
+}
+type ReqGetManager struct {
+	Id               uint
+	Nama             string
+	NamaDepartment   string
+	Jumlah           string `json:"jumlah" form:"jumlah" validate:"required"`
+	Alasan           string `json:"alasan" form:"alasan" validate:"required,min=5"`
+	StatusPengajuan  string
+	TanggalKebutuhan string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
+	Pencharian       string `json:"pencaharian" form:"pencaharian" validate:"required"`
+	Golongan         string `json:"golongan" form:"golongan" validate:"required"`
+	TanggalPengajuan time.Time
+}

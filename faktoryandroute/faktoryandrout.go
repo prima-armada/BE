@@ -12,12 +12,17 @@ import (
 	dh "par/internal/handler/departmenthandler"
 	rd "par/internal/repo/repodepartment"
 	ds "par/internal/service/departmentservice"
+
+	sm "par/internal/handler/submissionmanager"
+	rm "par/internal/repo/repomanager"
+	lsm "par/internal/service/submissionmanagerservice"
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
+// s
 func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	rpm := ru.NewRepoUser(db)
 	ucmhsw := us.NewServiceUser(rpm)
@@ -39,4 +44,11 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	departgrup.GET("", handledepart.AllDepartment, middlewares.JWTMiddleware())
 	departgrup.PUT("/:id", handledepart.UpdatedDepartment, middlewares.JWTMiddleware())
 	departgrup.DELETE("/:id", handledepart.DeletedDepartment, middlewares.JWTMiddleware())
+
+	rpsm := rm.NewRepoSubmissionManager(db)
+	servicemanager := lsm.NewServiceSubmissionManager(rpsm, rpd, rpm)
+	handlemanager := sm.NewHandlesSubmissionManager(servicemanager)
+	managergrup := e.Group("/manager")
+	managergrup.POST("/addsubmission", handlemanager.AddSubmissionManager, middlewares.JWTMiddleware())
+	managergrup.GET("", handlemanager.GetAllSubmissionManager, middlewares.JWTMiddleware())
 }

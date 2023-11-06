@@ -29,12 +29,12 @@ func (rl *Repologin) Login(nip string, password string) (string, request.Request
 	if tx.Error != nil {
 		return "", request.RequestUser{}, tx.Error
 	}
-	createtoken, errtoken := middlewares.CreateTokenTeam(userdata.Nip, userdata.Role)
+	createtoken, errtoken := middlewares.CreateTokenTeam(userdata.Nip, userdata.Role, int(userdata.ID))
 
 	if errtoken != nil {
 		return "", request.RequestUser{}, errors.New("gagal membuat token")
 	}
 
-	datamodeltoreq := query.ModeltoReq(userdata)
+	datamodeltoreq := query.ModeltoReq(&userdata)
 	return createtoken, datamodeltoreq, nil
 }

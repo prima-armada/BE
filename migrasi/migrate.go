@@ -9,4 +9,5 @@ import (
 func MigrateDB(db *gorm.DB) {
 	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Department{})
+	db.AutoMigrate(&model.Submission{})
 }
