@@ -13,9 +13,17 @@ import (
 	rd "par/internal/repo/repodepartment"
 	ds "par/internal/service/departmentservice"
 
-	sm "par/internal/handler/submissionmanager"
-	rm "par/internal/repo/repomanager"
-	lsm "par/internal/service/submissionmanagerservice"
+	sm "par/internal/handler/submissionhandler"
+	rm "par/internal/repo/reposubmission"
+	lsm "par/internal/service/submissionservice"
+
+	// srd "par/internal/handler/submissiondireksi"
+	// rrd "par/internal/repo/repodireksi"
+	// lsd "par/internal/service/submissiondireksi"
+
+	// sra "par/internal/handler/submissionadmin"
+	// rra "par/internal/repo/repoadmin"
+	// lsa "par/internal/service/submissionadmin"
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -45,10 +53,13 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	departgrup.PUT("/:id", handledepart.UpdatedDepartment, middlewares.JWTMiddleware())
 	departgrup.DELETE("/:id", handledepart.DeletedDepartment, middlewares.JWTMiddleware())
 
-	rpsm := rm.NewRepoSubmissionManager(db)
-	servicemanager := lsm.NewServiceSubmissionManager(rpsm, rpd, rpm)
-	handlemanager := sm.NewHandlesSubmissionManager(servicemanager)
-	managergrup := e.Group("/manager")
-	managergrup.POST("/addsubmission", handlemanager.AddSubmissionManager, middlewares.JWTMiddleware())
-	managergrup.GET("", handlemanager.GetAllSubmissionManager, middlewares.JWTMiddleware())
+	rpsm := rm.NewRepoSubmission(db)
+	servicesubmission := lsm.NewServiceSubmission(rpsm, rpd, rpm)
+	handlesubmmission := sm.NewHandlesSubmission(servicesubmission)
+	submissiongrup := e.Group("/submission")
+	submissiongrup.POST("/addsubmission", handlesubmmission.AddSubmissionManager, middlewares.JWTMiddleware())
+	submissiongrup.GET("/manager", handlesubmmission.GetAllSubmissionManager, middlewares.JWTMiddleware())
+	submissiongrup.GET("/direksi", handlesubmmission.GetAllSubmissionDireksi, middlewares.JWTMiddleware())
+	submissiongrup.GET("/admin", handlesubmmission.GetAllSubmissionAdmin, middlewares.JWTMiddleware())
+
 }

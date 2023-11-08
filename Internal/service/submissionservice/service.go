@@ -1,4 +1,4 @@
-package submissionmanagerservice
+package submissionservice
 
 import (
 	"errors"
@@ -12,15 +12,15 @@ import (
 	"github.com/go-playground/validator"
 )
 
-type ServiceSubmissionManager struct {
+type ServiceSubmission struct {
 	rd       repocontract.RepoDepartment
-	rsm      repocontract.RepoSubmissionManager
+	rsm      repocontract.RepoSubmission
 	ru       repocontract.RepoUser
 	validate *validator.Validate
 }
 
-func NewServiceSubmissionManager(rsm repocontract.RepoSubmissionManager, rd repocontract.RepoDepartment, ru repocontract.RepoUser) servicecontract.ServiceSubmissionManager {
-	return &ServiceSubmissionManager{
+func NewServiceSubmission(rsm repocontract.RepoSubmission, rd repocontract.RepoDepartment, ru repocontract.RepoUser) servicecontract.ServiceSubmission {
+	return &ServiceSubmission{
 		rd:       rd,
 		rsm:      rsm,
 		ru:       ru,
@@ -28,7 +28,7 @@ func NewServiceSubmissionManager(rsm repocontract.RepoSubmissionManager, rd repo
 	}
 }
 
-func (ssm *ServiceSubmissionManager) AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error) {
+func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error) {
 	validerr := ssm.validate.Struct(newSubmission)
 	if validerr != nil {
 
@@ -40,7 +40,7 @@ func (ssm *ServiceSubmissionManager) AddSubmissionManager(newSubmission request.
 	if erruser != nil {
 		return request.ReqSubmissionManager{}, erruser
 	}
-	fmt.Print("department", cekuser.Bagian, "\n")
+
 	newSubmission.IdPengajuan = cekuser.Id
 	fmt.Print("cekid", newSubmission.IdPengajuan)
 	cekdepartment, errdepartment := ssm.rd.NameDepartment(cekuser.Bagian)
@@ -65,12 +65,30 @@ func (ssm *ServiceSubmissionManager) AddSubmissionManager(newSubmission request.
 	return datarepo, nil
 }
 
-// GetAllSubmissionManager implements servicecontract.ServiceSubmissionManager.
-func (ssm *ServiceSubmissionManager) GetAllSubmissionManager(id int) ([]request.ReqGetManager, error) {
+func (ssm *ServiceSubmission) GetAllSubmissionManager(id int) ([]request.ReqGetManager, error) {
 	datarepo, errrepo := ssm.rsm.GetAllSubmissionManager(id)
-	fmt.Print("service", datarepo)
+	// fmt.Print("service", datarepo)
 	if errrepo != nil {
 		return []request.ReqGetManager{}, errrepo
+	}
+	return datarepo, nil
+}
+
+func (ssm *ServiceSubmission) GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error) {
+	datarepo, errrepo := ssm.rsm.GetAllSubmissionAdmin()
+
+	if errrepo != nil {
+
+		return []request.ReqGetAdmin{}, errrepo
+	}
+	return datarepo, nil
+}
+
+func (ssm *ServiceSubmission) GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error) {
+	datarepo, errrepo := ssm.rsm.GetAllSubmissionDireksi(deparment)
+	// fmt.Print("service", datarepo)
+	if errrepo != nil {
+		return []request.ReqGetDireksi{}, errrepo
 	}
 	return datarepo, nil
 }

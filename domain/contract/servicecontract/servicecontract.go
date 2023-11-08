@@ -20,9 +20,17 @@ type ServiceDepartment interface {
 	DeletedDepartment(id int) error
 }
 
-type ServiceSubmissionManager interface {
+type ServiceSubmission interface {
 	AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error)
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
-	// UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
-	// DeletedDepartment(id int) error
+	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
+	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
+}
+
+type ServiceSubmissionDireksi interface {
+	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
+}
+
+type ServiceSubmissionAdmin interface {
+	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
 }

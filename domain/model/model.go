@@ -51,3 +51,35 @@ type ReqGetManager struct {
 	Golongan         string
 	TanggalPengajuan time.Time
 }
+type ReqGetDireksi struct {
+	Id               uint
+	Nama             string
+	NamaDepartment   string
+	Jumlah           string
+	Alasan           string
+	StatusPengajuan  string
+	TanggalKebutuhan string
+	Pencharian       string
+	Golongan         string
+	TanggalPengajuan time.Time
+	TanggalDisetujui string
+}
+type ReqGetAdmin struct {
+	Id                uint
+	UserPengajuan     string
+	NamaDepartment    string
+	Jumlah            string
+	Alasan            string
+	Pencharian        string
+	TanggalKebutuhan  string
+	MaksimalGaji      float64
+	NamaEvaluasi      string
+	NamaVerifikasi    string
+	NamaPersetujuan   string
+	StatusPengajuan   string
+	Golongan          string
+	TanggalVerifikasi string
+	TanggalEvaluasi   string
+	TanggalPengajuan  time.Time
+	TanggalDisetujui  string
+}
