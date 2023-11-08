@@ -78,3 +78,9 @@ type ReqGetAdmin struct {
 	TanggalPengajuan  time.Time
 	TanggalDisetujui  string
 }
+type UpdateAdmin struct {
+	IdEvaluasi       int
+	StatusPengajuan  string    `json:"status" form:"status" validate:"required,min=5"`
+	TanggalDievalusi time.Time `json:"tanggal_disetujui" form:"tanggal_disetujui"`
+	MaksimalGaji     float64   `json:"gaji" form:"gaji" validate:"required"`
+}

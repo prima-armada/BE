@@ -92,3 +92,36 @@ func (ssm *ServiceSubmission) GetAllSubmissionDireksi(deparment string) ([]reque
 	}
 	return datarepo, nil
 }
+
+// UpdateSubmissionAdmin implements servicecontract.ServiceSubmission.
+func (ssm *ServiceSubmission) UpdateSubmissionAdmin(iduser int, idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error) {
+	validerr := ssm.validate.Struct(update)
+	if validerr != nil {
+
+		return request.UpdateAdmin{}, errors.New(validasi.ValidationErrorHandle(validerr))
+	}
+	// fmt.Print("id manager", idManager)
+	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+
+	if erruser != nil {
+		return request.UpdateAdmin{}, erruser
+	}
+
+	update.IdEvaluasi = cekuser.Id
+
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+
+	//set timezone,
+	now := time.Now().In(loc)
+	if update.StatusPengajuan == "disetujui" || update.StatusPengajuan == "diverifikasi" {
+		return request.UpdateAdmin{}, errors.New("anda tidak mempunyai akses tersebut")
+	}
+	update.TanggalDievalusi = now
+
+	datarepo, errrepo := ssm.rsm.UpdateSubmissionAdmin(idsubmission, update)
+
+	if errrepo != nil {
+		return request.UpdateAdmin{}, errrepo
+	}
+	return datarepo, nil
+}

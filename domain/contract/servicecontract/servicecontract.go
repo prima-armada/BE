@@ -25,12 +25,5 @@ type ServiceSubmission interface {
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
 	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
 	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
-}
-
-type ServiceSubmissionDireksi interface {
-	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
-}
-
-type ServiceSubmissionAdmin interface {
-	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
+	UpdateSubmissionAdmin(iduser int, idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error)
 }

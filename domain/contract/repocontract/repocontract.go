@@ -28,10 +28,5 @@ type RepoSubmission interface {
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
 	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
 	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
-}
-type RepoSubmissionDireksi interface {
-	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
-}
-type RepoSubmissionAdmin interface {
-	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
+	UpdateSubmissionAdmin(idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error)
 }

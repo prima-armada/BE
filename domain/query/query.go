@@ -318,3 +318,30 @@ func ListModeltoReqadmin(data []model.ReqGetAdmin) (datareq []request.ReqGetAdmi
 	}
 	return datareq
 }
+func ReqadminTomodelsubmissionudated(data request.UpdateAdmin) model.Submission {
+	return model.Submission{
+
+		MaksimalGaji:    data.MaksimalGaji,
+		StatusPengajuan: data.StatusPengajuan,
+		IdEvaluasi:      uint(data.IdEvaluasi),
+		TanggalEvaluasi: data.TanggalDievalusi,
+	}
+}
+func ModelsubmissionToReqadminudated(data model.Submission) request.UpdateAdmin {
+	return request.UpdateAdmin{
+
+		MaksimalGaji:     data.MaksimalGaji,
+		StatusPengajuan:  data.StatusPengajuan,
+		IdEvaluasi:       int(data.IdEvaluasi),
+		TanggalDievalusi: data.TanggalEvaluasi,
+	}
+}
+func ReqsubmissionToResadminupated(data request.UpdateAdmin) respon.ResponUpdateAdmin {
+	return respon.ResponUpdateAdmin{
+
+		MaksimalGaji:     data.MaksimalGaji,
+		StatusPengajuan:  data.StatusPengajuan,
+		IdEvaluasi:       int(data.IdEvaluasi),
+		TanggalDievalusi: data.TanggalDievalusi,
+	}
+}

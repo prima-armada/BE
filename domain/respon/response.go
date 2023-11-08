@@ -77,3 +77,9 @@ type ReSponGetAdmin struct {
 	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
 	TanggalDisetujui  string    `json:"tanggal_disetujui"`
 }
+type ResponUpdateAdmin struct {
+	IdEvaluasi       int
+	StatusPengajuan  string    `json:"status" `
+	TanggalDievalusi time.Time `json:"tanggal_eval" `
+	MaksimalGaji     float64   `json:"gaji"`
+}

@@ -1,6 +1,7 @@
 package reposubmission
 
 import (
+	"errors"
 	"par/domain/contract/repocontract"
 	"par/domain/model"
 	"par/domain/query"
@@ -83,4 +84,27 @@ func (rsm *RepoSubmission) GetAllSubmissionDireksi(deparment string) ([]request.
 	list := query.ListModeltoReqDireksi(modeldireksi)
 
 	return list, nil
+}
+
+// UpdateSubmissionAdmin implements repocontract.RepoSubmission.
+func (rsm *RepoSubmission) UpdateSubmissionAdmin(idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error) {
+	var submission model.Submission
+
+	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan, from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
+
+	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
+
+		return request.UpdateAdmin{}, tx1.Error
+	}
+
+	reqadmintomodelsubmission := query.ReqadminTomodelsubmissionudated(update)
+
+	tx2 := rsm.db.Model(&reqadmintomodelsubmission).Where("id = ?", idsubmission).Updates(&reqadmintomodelsubmission)
+
+	if tx2.Error != nil {
+		return request.UpdateAdmin{}, tx2.Error
+	}
+	modeltoreq := query.ModelsubmissionToReqadminudated(reqadmintomodelsubmission)
+
+	return modeltoreq, nil
 }

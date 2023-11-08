@@ -8,6 +8,7 @@ import (
 	"par/domain/request"
 	"par/helper"
 	middlewares "par/middleware"
+	"strconv"
 	"time"
 
 	echo "github.com/labstack/echo/v4"
@@ -103,5 +104,36 @@ func (hs *HandlerSubmission) GetAllSubmissionDireksi(e echo.Context) error {
 	}
 	respon := query.ListReqltoResDireksi(dataservice)
 
+	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
+}
+
+// UpdateSubmissionAdmin implements handlecontract.HandleSubmission.
+func (hs *HandlerSubmission) UpdateSubmissionAdmin(e echo.Context) error {
+	Reqadmin := request.UpdateAdmin{}
+	role := middlewares.ExtractTokenTeamRole(e)
+	useradmin, errtoken := middlewares.ExtractTokenIdUser(e)
+	idpengajuan := e.Param("id")
+	cnv, errcnv := strconv.Atoi(idpengajuan)
+
+	if errcnv != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errcnv.Error(), http.StatusBadRequest, true))
+	}
+	if errtoken != nil {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
+	}
+	if role != "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
+	}
+	binderr := e.Bind(&Reqadmin)
+
+	if binderr != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
+	}
+	dataservice, errservice := hs.ss.UpdateSubmissionAdmin(useradmin, cnv, Reqadmin)
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+	respon := query.ReqsubmissionToResadminupated(dataservice)
 	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 }
