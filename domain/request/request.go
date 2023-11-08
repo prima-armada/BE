@@ -46,3 +46,35 @@ type ReqGetManager struct {
 	Golongan         string `json:"golongan" form:"golongan" validate:"required"`
 	TanggalPengajuan time.Time
 }
+type ReqGetDireksi struct {
+	Id               uint
+	Nama             string
+	NamaDepartment   string
+	Jumlah           string `json:"jumlah" form:"jumlah" validate:"required"`
+	Alasan           string `json:"alasan" form:"alasan" validate:"required,min=5"`
+	StatusPengajuan  string
+	TanggalKebutuhan string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
+	Pencharian       string `json:"pencaharian" form:"pencaharian" validate:"required"`
+	Golongan         string `json:"golongan" form:"golongan" validate:"required"`
+	TanggalPengajuan time.Time
+	TanggalDisetujui string `json:"tanggal_disetujui" form:"tanggal_disetujui" validate:"required"`
+}
+type ReqGetAdmin struct {
+	Id                uint
+	UserPengajuan     string
+	NamaDepartment    string
+	Jumlah            string
+	Alasan            string
+	Pencharian        string
+	TanggalKebutuhan  string
+	MaksimalGaji      float64
+	NamaEvaluasi      string
+	NamaVerifikasi    string
+	NamaPersetujuan   string
+	StatusPengajuan   string
+	Golongan          string
+	TanggalVerifikasi string
+	TanggalEvaluasi   string
+	TanggalPengajuan  time.Time
+	TanggalDisetujui  string
+}

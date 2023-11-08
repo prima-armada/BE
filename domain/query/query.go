@@ -220,3 +220,101 @@ func ListReqltoResmanager(data []request.ReqGetManager) (datares []respon.ReSpon
 	}
 	return datares
 }
+func GetReqDireksiToRes(data request.ReqGetDireksi) respon.ReSponGetDireksi {
+	return respon.ReSponGetDireksi{
+		IdPengajuan:      int(data.Id),
+		NamaManager:      data.Nama,
+		NamaDepartment:   data.NamaDepartment,
+		Jumlah:           data.Jumlah,
+		Alasan:           data.Alasan,
+		StatusPengajuan:  data.StatusPengajuan,
+		TanggalKebutuhan: data.TanggalKebutuhan,
+
+		Pencaharian:      data.Pencharian,
+		Golongan:         data.Golongan,
+		TanggalPengajuan: data.TanggalPengajuan,
+		TanggalDisetujui: data.TanggalDisetujui,
+	}
+}
+func ListReqltoResDireksi(data []request.ReqGetDireksi) (datares []respon.ReSponGetDireksi) {
+	for _, val := range data {
+		datares = append(datares, GetReqDireksiToRes(val))
+	}
+	return datares
+}
+func GetModeldireksiToReq(data model.ReqGetDireksi) request.ReqGetDireksi {
+	return request.ReqGetDireksi{
+		Id:               data.Id,
+		Nama:             data.Nama,
+		NamaDepartment:   data.NamaDepartment,
+		Jumlah:           data.Jumlah,
+		Alasan:           data.Alasan,
+		StatusPengajuan:  data.StatusPengajuan,
+		TanggalKebutuhan: data.TanggalKebutuhan,
+		Pencharian:       data.Pencharian,
+		Golongan:         data.Golongan,
+		TanggalPengajuan: data.TanggalPengajuan,
+		TanggalDisetujui: data.TanggalDisetujui,
+	}
+}
+func ListModeltoReqDireksi(data []model.ReqGetDireksi) (datareq []request.ReqGetDireksi) {
+	for _, val := range data {
+		datareq = append(datareq, GetModeldireksiToReq(val))
+	}
+	return datareq
+}
+
+func GetReqadminToRes(data request.ReqGetAdmin) respon.ReSponGetAdmin {
+	return respon.ReSponGetAdmin{
+		IdPengajuan:       int(data.Id),
+		NamaPengajuan:     data.UserPengajuan,
+		NamaDepartment:    data.NamaDepartment,
+		Jumlah:            data.Jumlah,
+		Alasan:            data.Alasan,
+		Pencaharian:       data.Pencharian,
+		TanggalKebutuhan:  data.TanggalKebutuhan,
+		MaksimalGaji:      data.MaksimalGaji,
+		NamaEvaluasi:      data.NamaEvaluasi,
+		NamaVerifikasi:    data.NamaVerifikasi,
+		NamaPersetujuan:   data.NamaPersetujuan,
+		StatusPengajuan:   data.StatusPengajuan,
+		Golongan:          data.Golongan,
+		TanggalVerifikasi: data.TanggalVerifikasi,
+		TanggalEvaluasi:   data.TanggalEvaluasi,
+		TanggalPengajuan:  data.TanggalPengajuan,
+		TanggalDisetujui:  data.TanggalDisetujui,
+	}
+}
+func ListReqltoResAdmin(data []request.ReqGetAdmin) (datares []respon.ReSponGetAdmin) {
+	for _, val := range data {
+		datares = append(datares, GetReqadminToRes(val))
+	}
+	return datares
+}
+func GetModeladminToReq(data model.ReqGetAdmin) request.ReqGetAdmin {
+	return request.ReqGetAdmin{
+		Id:                data.Id,
+		UserPengajuan:     data.UserPengajuan,
+		NamaDepartment:    data.NamaDepartment,
+		Jumlah:            data.Jumlah,
+		Alasan:            data.Alasan,
+		StatusPengajuan:   data.StatusPengajuan,
+		Pencharian:        data.Pencharian,
+		TanggalKebutuhan:  data.TanggalKebutuhan,
+		MaksimalGaji:      data.MaksimalGaji,
+		NamaEvaluasi:      data.NamaEvaluasi,
+		NamaVerifikasi:    data.NamaVerifikasi,
+		NamaPersetujuan:   data.NamaPersetujuan,
+		Golongan:          data.Golongan,
+		TanggalVerifikasi: data.TanggalVerifikasi,
+		TanggalEvaluasi:   data.TanggalEvaluasi,
+		TanggalPengajuan:  data.TanggalPengajuan,
+		TanggalDisetujui:  data.TanggalDisetujui,
+	}
+}
+func ListModeltoReqadmin(data []model.ReqGetAdmin) (datareq []request.ReqGetAdmin) {
+	for _, val := range data {
+		datareq = append(datareq, GetModeladminToReq(val))
+	}
+	return datareq
+}

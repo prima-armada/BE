@@ -23,7 +23,15 @@ type RepoDepartment interface {
 	DeletedDepartment(id int) (row int, err error)
 }
 
-type RepoSubmissionManager interface {
+type RepoSubmission interface {
 	AddSubmissionManager(newSubmission request.ReqSubmissionManager, res time.Time) (request.ReqSubmissionManager, error)
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
+	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
+	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
+}
+type RepoSubmissionDireksi interface {
+	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
+}
+type RepoSubmissionAdmin interface {
+	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
 }

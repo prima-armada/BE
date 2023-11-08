@@ -1,4 +1,4 @@
-package submissionmanager
+package submissionhandler
 
 import (
 	"net/http"
@@ -13,17 +13,17 @@ import (
 	echo "github.com/labstack/echo/v4"
 )
 
-type HandlerSubmissionManager struct {
-	ssm servicecontract.ServiceSubmissionManager
+type HandlerSubmission struct {
+	ss servicecontract.ServiceSubmission
 }
 
-func NewHandlesSubmissionManager(ssm servicecontract.ServiceSubmissionManager) handlecontract.HandleSubmissionManager {
-	return &HandlerSubmissionManager{
-		ssm: ssm,
+func NewHandlesSubmission(ss servicecontract.ServiceSubmission) handlecontract.HandleSubmission {
+	return &HandlerSubmission{
+		ss: ss,
 	}
 }
 
-func (hm *HandlerSubmissionManager) AddSubmissionManager(e echo.Context) error {
+func (hs *HandlerSubmission) AddSubmissionManager(e echo.Context) error {
 	Reqmanager := request.ReqSubmissionManager{}
 	role := middlewares.ExtractTokenTeamRole(e)
 	usermanagar, errtoken := middlewares.ExtractTokenIdUser(e)
@@ -43,7 +43,7 @@ func (hm *HandlerSubmissionManager) AddSubmissionManager(e echo.Context) error {
 	if errConvtime != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errConvtime.Error(), http.StatusBadRequest, true))
 	}
-	dataservice, errservice := hm.ssm.AddSubmissionManager(Reqmanager, usermanagar, res)
+	dataservice, errservice := hs.ss.AddSubmissionManager(Reqmanager, usermanagar, res)
 
 	if errservice != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
@@ -53,8 +53,7 @@ func (hm *HandlerSubmissionManager) AddSubmissionManager(e echo.Context) error {
 
 }
 
-// GetAllSubmissionManager implements handlecontract.HandleSubmissionManager.
-func (hsm *HandlerSubmissionManager) GetAllSubmissionManager(e echo.Context) error {
+func (hs *HandlerSubmission) GetAllSubmissionManager(e echo.Context) error {
 	role := middlewares.ExtractTokenTeamRole(e)
 	usermanagar, errtoken := middlewares.ExtractTokenIdUser(e)
 
@@ -65,12 +64,44 @@ func (hsm *HandlerSubmissionManager) GetAllSubmissionManager(e echo.Context) err
 		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses manager", http.StatusUnauthorized, true))
 	}
 
-	dataservice, errservice := hsm.ssm.GetAllSubmissionManager(usermanagar)
+	dataservice, errservice := hs.ss.GetAllSubmissionManager(usermanagar)
 
 	if errservice != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
 	}
 	respon := query.ListReqltoResmanager(dataservice)
+
+	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
+}
+
+func (hs *HandlerSubmission) GetAllSubmissionAdmin(e echo.Context) error {
+	role := middlewares.ExtractTokenTeamRole(e)
+	if role != "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
+
+	}
+	dataservice, errservice := hs.ss.GetAllSubmissionAdmin()
+	if errservice != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
+	}
+	respon := query.ListReqltoResAdmin(dataservice)
+
+	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
+}
+
+// GetAllSubmissionDireksi implements handlecontract.HandleSubmission.
+func (hs *HandlerSubmission) GetAllSubmissionDireksi(e echo.Context) error {
+	role := middlewares.ExtractTokenTeamRole(e)
+	departdireksi := middlewares.ExtractTokenTeamDepartment(e)
+
+	if role != "direksi" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses direksi", http.StatusUnauthorized, true))
+	}
+	dataservice, errservice := hs.ss.GetAllSubmissionDireksi(departdireksi)
+	if errservice != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
+	}
+	respon := query.ListReqltoResDireksi(dataservice)
 
 	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 }
