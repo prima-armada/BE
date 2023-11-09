@@ -20,11 +20,9 @@ type HandleSubmission interface {
 	AddSubmissionManager(e echo.Context) error
 	GetAllSubmissionManager(e echo.Context) error
 	GetAllSubmissionDireksi(e echo.Context) error
+	GetAllSubmissionPresident(e echo.Context) error
 	GetAllSubmissionAdmin(e echo.Context) error
-}
-type HandleSubmissionDireksi interface {
-	GetAllSubmissionDireksi(e echo.Context) error
-}
-type HandleSubmissionAdmin interface {
-	GetAllSubmissionAdmin(e echo.Context) error
+	UpdateSubmissionAdmin(e echo.Context) error
+	UpdateSubmissionPresident(e echo.Context) error
+	UpdateSubmissionDireksi(e echo.Context) error
 }

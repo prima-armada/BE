@@ -92,3 +92,110 @@ func (ssm *ServiceSubmission) GetAllSubmissionDireksi(deparment string) ([]reque
 	}
 	return datarepo, nil
 }
+
+func (ssm *ServiceSubmission) UpdateSubmissionAdmin(iduser int, idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error) {
+	validerr := ssm.validate.Struct(update)
+	if validerr != nil {
+
+		return request.UpdateAdmin{}, errors.New(validasi.ValidationErrorHandle(validerr))
+	}
+	// fmt.Print("id manager", idManager)
+	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+
+	if erruser != nil {
+		return request.UpdateAdmin{}, erruser
+	}
+
+	update.IdEvaluasi = cekuser.Id
+
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+
+	//set timezone,
+	now := time.Now().In(loc)
+	if update.StatusPengajuan == "disetujui" || update.StatusPengajuan == "diverifikasi" {
+		return request.UpdateAdmin{}, errors.New("anda tidak mempunyai akses tersebut")
+	}
+	update.TanggalDievalusi = now
+
+	datarepo, errrepo := ssm.rsm.UpdateSubmissionAdmin(idsubmission, update)
+
+	if errrepo != nil {
+		return request.UpdateAdmin{}, errrepo
+	}
+	return datarepo, nil
+}
+
+func (ssm *ServiceSubmission) UpdateSubmissionPresident(iduser int, idsubmission int, update request.UpdateVicePresident) (request.UpdateVicePresident, error) {
+	validerr := ssm.validate.Struct(update)
+	if validerr != nil {
+
+		return request.UpdateVicePresident{}, errors.New(validasi.ValidationErrorHandle(validerr))
+	}
+	// fmt.Print("id manager", idManager)
+	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+
+	if erruser != nil {
+		return request.UpdateVicePresident{}, erruser
+	}
+
+	update.IdVerifikasi = cekuser.Id
+
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+
+	//set timezone,
+	now := time.Now().In(loc)
+	if update.StatusPengajuan == "disetujui" || update.StatusPengajuan == "dievaluasi" {
+		return request.UpdateVicePresident{}, errors.New("anda tidak mempunyai akses tersebut atau anda harus verifikasi pengajuan manager")
+	}
+	update.TanggalVerifikasi = now
+
+	datarepo, errrepo := ssm.rsm.UpdateSubmissionPresident(idsubmission, update)
+
+	if errrepo != nil {
+		return request.UpdateVicePresident{}, errrepo
+	}
+	return datarepo, nil
+}
+
+// UpdateSubmissionDireksi implements servicecontract.ServiceSubmission.
+func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission int, update request.UpdateDireksi) (request.UpdateDireksi, error) {
+	validerr := ssm.validate.Struct(update)
+	if validerr != nil {
+
+		return request.UpdateDireksi{}, errors.New(validasi.ValidationErrorHandle(validerr))
+	}
+	// fmt.Print("id manager", idManager)
+	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+
+	if erruser != nil {
+		return request.UpdateDireksi{}, erruser
+	}
+
+	update.IdSetujui = cekuser.Id
+
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+
+	//set timezone,
+	now := time.Now().In(loc)
+	if update.StatusPengajuan == "diverifikasi" || update.StatusPengajuan == "dievaluasi" {
+		return request.UpdateDireksi{}, errors.New(" anda hanya melakukan persutujuan pengajuan")
+	}
+	update.TanggalDisetujui = now
+
+	datarepo, errrepo := ssm.rsm.UpdateSubmissionDireksi(idsubmission, update)
+
+	if errrepo != nil {
+		return request.UpdateDireksi{}, errrepo
+	}
+	return datarepo, nil
+}
+
+// GetAllSubmissionPresident implements servicecontract.ServiceSubmission.
+func (ssm *ServiceSubmission) GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error) {
+	datarepo, errrepo := ssm.rsm.GetAllSubmissionPresident(deparment)
+	// fmt.Print("service", datarepo)
+	if errrepo != nil {
+		return []request.ReqGetPresident{}, errrepo
+	}
+	return datarepo, nil
+}

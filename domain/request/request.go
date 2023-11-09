@@ -59,6 +59,19 @@ type ReqGetDireksi struct {
 	TanggalPengajuan time.Time
 	TanggalDisetujui string `json:"tanggal_disetujui" form:"tanggal_disetujui" validate:"required"`
 }
+type ReqGetPresident struct {
+	Id                uint
+	Nama              string
+	NamaDepartment    string
+	Jumlah            string `json:"jumlah" form:"jumlah" validate:"required"`
+	Alasan            string `json:"alasan" form:"alasan" validate:"required,min=5"`
+	StatusPengajuan   string
+	TanggalKebutuhan  string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
+	Pencharian        string `json:"pencaharian" form:"pencaharian" validate:"required"`
+	Golongan          string `json:"golongan" form:"golongan" validate:"required"`
+	TanggalPengajuan  time.Time
+	TanggalVerifikasi string `json:"tanggal_disetujui" form:"tanggal_disetujui" validate:"required"`
+}
 type ReqGetAdmin struct {
 	Id                uint
 	UserPengajuan     string
@@ -77,4 +90,21 @@ type ReqGetAdmin struct {
 	TanggalEvaluasi   string
 	TanggalPengajuan  time.Time
 	TanggalDisetujui  string
+}
+type UpdateAdmin struct {
+	IdEvaluasi       int
+	StatusPengajuan  string    `json:"status" form:"status" validate:"required,min=5"`
+	TanggalDievalusi time.Time `json:"tanggal_disetujui" form:"tanggal_disetujui"`
+	MaksimalGaji     float64   `json:"gaji" form:"gaji" validate:"required"`
+}
+
+type UpdateVicePresident struct {
+	IdVerifikasi      int
+	StatusPengajuan   string    `json:"status" form:"status" validate:"required,min=5"`
+	TanggalVerifikasi time.Time `json:"tanggal_verifikasi" form:"tanggal_verifikasi"`
+}
+type UpdateDireksi struct {
+	IdSetujui        int
+	StatusPengajuan  string    `json:"status" form:"status" validate:"required,min=5"`
+	TanggalDisetujui time.Time `json:"tanggal_disetujui" form:"tanggal_disetujui"`
 }
