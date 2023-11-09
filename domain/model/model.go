@@ -83,3 +83,16 @@ type ReqGetAdmin struct {
 	TanggalPengajuan  time.Time
 	TanggalDisetujui  string
 }
+type ReqGetPresident struct {
+	Id                uint
+	Nama              string
+	NamaDepartment    string
+	Jumlah            string
+	Alasan            string
+	StatusPengajuan   string
+	TanggalKebutuhan  string
+	Pencharian        string
+	Golongan          string
+	TanggalPengajuan  time.Time
+	TanggalVerifikasi string
+}

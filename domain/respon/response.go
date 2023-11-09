@@ -83,3 +83,26 @@ type ResponUpdateAdmin struct {
 	TanggalDievalusi time.Time `json:"tanggal_eval" `
 	MaksimalGaji     float64   `json:"gaji"`
 }
+type ResponUpdateVicePresident struct {
+	IdVerifikasi      int
+	StatusPengajuan   string    `json:"status"`
+	TanggalVerifikasi time.Time `json:"verifikasi_tanggal"`
+}
+type ResponUpdateDireksi struct {
+	IdPersetujuan      int       `json:"direksi"`
+	StatusPengajuan    string    `json:"status"`
+	TanggalPersetujuan time.Time `json:"persetujuan_tanggal"`
+}
+type ReSponGetPresident struct {
+	IdPengajuan       int       `json:"id"`
+	NamaManager       string    `json:"manager"`
+	NamaDepartment    string    `json:"department"`
+	Jumlah            string    `json:"jumlah"`
+	Alasan            string    `json:"alasan"`
+	StatusPengajuan   string    `json:"status"`
+	TanggalKebutuhan  string    `json:"tanggal_kebutuhan"`
+	Pencaharian       string    `json:"pencarian"`
+	Golongan          string    `json:"golongan"`
+	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
+	Tanggalverifikasi string    `json:"tanggal_diverifikasi"`
+}

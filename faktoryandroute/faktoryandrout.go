@@ -62,5 +62,8 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	submissiongrup.GET("/direksi", handlesubmmission.GetAllSubmissionDireksi, middlewares.JWTMiddleware())
 	submissiongrup.GET("/admin", handlesubmmission.GetAllSubmissionAdmin, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/admin/:id", handlesubmmission.UpdateSubmissionAdmin, middlewares.JWTMiddleware())
+	submissiongrup.GET("/vicepresident", handlesubmmission.GetAllSubmissionPresident, middlewares.JWTMiddleware())
+	submissiongrup.PUT("/vicepresident/:id", handlesubmmission.UpdateSubmissionPresident, middlewares.JWTMiddleware())
+	submissiongrup.PUT("/direksi/:id", handlesubmmission.UpdateSubmissionDireksi, middlewares.JWTMiddleware())
 
 }

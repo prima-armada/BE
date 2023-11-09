@@ -21,7 +21,6 @@ func NewRepoSubmission(db *gorm.DB) repocontract.RepoSubmission {
 	}
 }
 
-// AddSubmissionManager implements repocontract.RepoSubmissionManager.
 func (rsm *RepoSubmission) AddSubmissionManager(newSubmission request.ReqSubmissionManager, res time.Time) (request.ReqSubmissionManager, error) {
 	reqsubmissiontomodel := query.RequestmanagerTomodel(newSubmission, res)
 
@@ -37,7 +36,6 @@ func (rsm *RepoSubmission) AddSubmissionManager(newSubmission request.ReqSubmiss
 	return modeltoreq, nil
 }
 
-// GetAllSubmissionManager implements repocontract.RepoSubmissionManager.
 func (rsm *RepoSubmission) GetAllSubmissionManager(id int) ([]request.ReqGetManager, error) {
 	modelmanager := []model.ReqGetManager{}
 
@@ -51,7 +49,6 @@ func (rsm *RepoSubmission) GetAllSubmissionManager(id int) ([]request.ReqGetMana
 	return list, nil
 }
 
-// GetAllSubmissionAdmin implements repocontract.RepoSubmission.
 func (rsm *RepoSubmission) GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error) {
 	modelAdmin := []model.ReqGetAdmin{}
 	tx := rsm.db.
@@ -72,7 +69,6 @@ func (rsm *RepoSubmission) GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error
 	return list, nil
 }
 
-// GetAllSubmissionDireksi implements repocontract.RepoSubmission.
 func (rsm *RepoSubmission) GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error) {
 	modeldireksi := []model.ReqGetDireksi{}
 
@@ -86,7 +82,20 @@ func (rsm *RepoSubmission) GetAllSubmissionDireksi(deparment string) ([]request.
 	return list, nil
 }
 
-// UpdateSubmissionAdmin implements repocontract.RepoSubmission.
+// GetAllSubmissionPresident implements repocontract.RepoSubmission.
+func (rsm *RepoSubmission) GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error) {
+	modelpresident := []model.ReqGetPresident{}
+
+	tx := rsm.db.Raw("SELECT sb.id,u.nama, dp.nama_department ,sb.jumlah,sb.alasan,sb.status_pengajuan, sb.tanggal_kebutuhan,sb.pencharian,sb.golongan,sb.tanggal_pengajuan,sb.tanggal_verifikasi FROM users u, departments dp ,submissions sb where sb.id_department = dp.id AND sb.user_pengajuan =u.id and dp.nama_department = ?", deparment).Find(&modelpresident)
+
+	if tx.Error != nil {
+		return []request.ReqGetPresident{}, tx.Error
+	}
+	list := query.ListmodelltoReqPresident(modelpresident)
+
+	return list, nil
+}
+
 func (rsm *RepoSubmission) UpdateSubmissionAdmin(idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error) {
 	var submission model.Submission
 
@@ -105,6 +114,51 @@ func (rsm *RepoSubmission) UpdateSubmissionAdmin(idsubmission int, update reques
 		return request.UpdateAdmin{}, tx2.Error
 	}
 	modeltoreq := query.ModelsubmissionToReqadminudated(reqadmintomodelsubmission)
+
+	return modeltoreq, nil
+}
+
+func (rsm *RepoSubmission) UpdateSubmissionPresident(idsubmission int, update request.UpdateVicePresident) (request.UpdateVicePresident, error) {
+	var submission model.Submission
+
+	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan, from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
+
+	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
+
+		return request.UpdateVicePresident{}, tx1.Error
+	}
+
+	reqtomodel := query.ReqpresidentTomodelsubmissionudated(update)
+
+	tx2 := rsm.db.Model(&reqtomodel).Where("id = ?", idsubmission).Updates(&reqtomodel)
+
+	if tx2.Error != nil {
+		return request.UpdateVicePresident{}, tx2.Error
+	}
+	modeltoreq := query.ModelsubmissionToReqpresidentupdated(reqtomodel)
+
+	return modeltoreq, nil
+}
+
+// UpdateSubmissionDireksi implements repocontract.RepoSubmission.
+func (rsm *RepoSubmission) UpdateSubmissionDireksi(idsubmission int, update request.UpdateDireksi) (request.UpdateDireksi, error) {
+	var submission model.Submission
+
+	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan, from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
+
+	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
+
+		return request.UpdateDireksi{}, tx1.Error
+	}
+
+	reqtomodel := query.ReqdireksiTomodelsubmissionudated(update)
+
+	tx2 := rsm.db.Model(&reqtomodel).Where("id = ?", idsubmission).Updates(&reqtomodel)
+
+	if tx2.Error != nil {
+		return request.UpdateDireksi{}, tx2.Error
+	}
+	modeltoreq := query.ModelDireksiToreq(reqtomodel)
 
 	return modeltoreq, nil
 }

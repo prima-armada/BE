@@ -27,6 +27,9 @@ type RepoSubmission interface {
 	AddSubmissionManager(newSubmission request.ReqSubmissionManager, res time.Time) (request.ReqSubmissionManager, error)
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
 	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
+	GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error)
 	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
 	UpdateSubmissionAdmin(idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error)
+	UpdateSubmissionPresident(idsubmission int, update request.UpdateVicePresident) (request.UpdateVicePresident, error)
+	UpdateSubmissionDireksi(idsubmission int, update request.UpdateDireksi) (request.UpdateDireksi, error)
 }

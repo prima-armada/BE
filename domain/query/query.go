@@ -345,3 +345,95 @@ func ReqsubmissionToResadminupated(data request.UpdateAdmin) respon.ResponUpdate
 		TanggalDievalusi: data.TanggalDievalusi,
 	}
 }
+func ReqpresidentTomodelsubmissionudated(data request.UpdateVicePresident) model.Submission {
+	return model.Submission{
+
+		StatusPengajuan:   data.StatusPengajuan,
+		IdVerifikasi:      uint(data.IdVerifikasi),
+		TanggalVerifikasi: data.TanggalVerifikasi,
+	}
+}
+func ModelsubmissionToReqpresidentupdated(data model.Submission) request.UpdateVicePresident {
+	return request.UpdateVicePresident{
+
+		StatusPengajuan:   data.StatusPengajuan,
+		IdVerifikasi:      int(data.IdVerifikasi),
+		TanggalVerifikasi: data.TanggalVerifikasi,
+	}
+}
+func ReqtoResponPresident(data request.UpdateVicePresident) respon.ResponUpdateVicePresident {
+	return respon.ResponUpdateVicePresident{
+
+		StatusPengajuan:   data.StatusPengajuan,
+		IdVerifikasi:      int(data.IdVerifikasi),
+		TanggalVerifikasi: data.TanggalVerifikasi,
+	}
+}
+func ReqdireksiTomodelsubmissionudated(data request.UpdateDireksi) model.Submission {
+	return model.Submission{
+
+		StatusPengajuan:  data.StatusPengajuan,
+		Idpersetujuan:    uint(data.IdSetujui),
+		TanggalDisetujui: data.TanggalDisetujui,
+	}
+}
+func ModelDireksiToreq(data model.Submission) request.UpdateDireksi {
+	return request.UpdateDireksi{
+
+		StatusPengajuan:  data.StatusPengajuan,
+		IdSetujui:        int(data.Idpersetujuan),
+		TanggalDisetujui: data.TanggalDisetujui,
+	}
+}
+func ReqDireksiTores(data request.UpdateDireksi) respon.ResponUpdateDireksi {
+	return respon.ResponUpdateDireksi{
+
+		StatusPengajuan:    data.StatusPengajuan,
+		IdPersetujuan:      data.IdSetujui,
+		TanggalPersetujuan: data.TanggalDisetujui,
+	}
+}
+
+func GetmodelpresidentToReq(data model.ReqGetPresident) request.ReqGetPresident {
+	return request.ReqGetPresident{
+		Id:                data.Id,
+		Nama:              data.Nama,
+		NamaDepartment:    data.NamaDepartment,
+		Jumlah:            data.Jumlah,
+		Alasan:            data.Alasan,
+		StatusPengajuan:   data.StatusPengajuan,
+		TanggalKebutuhan:  data.TanggalKebutuhan,
+		Pencharian:        data.Pencharian,
+		Golongan:          data.Golongan,
+		TanggalPengajuan:  data.TanggalPengajuan,
+		TanggalVerifikasi: data.TanggalVerifikasi,
+	}
+}
+func ListmodelltoReqPresident(data []model.ReqGetPresident) (datares []request.ReqGetPresident) {
+	for _, val := range data {
+		datares = append(datares, GetmodelpresidentToReq(val))
+	}
+	return datares
+}
+
+func GetReqpresidentToRes(data request.ReqGetPresident) respon.ReSponGetPresident {
+	return respon.ReSponGetPresident{
+		IdPengajuan:       int(data.Id),
+		NamaManager:       data.Nama,
+		NamaDepartment:    data.NamaDepartment,
+		Jumlah:            data.Jumlah,
+		Alasan:            data.Alasan,
+		StatusPengajuan:   data.StatusPengajuan,
+		TanggalKebutuhan:  data.TanggalKebutuhan,
+		Pencaharian:       data.Pencharian,
+		Golongan:          data.Golongan,
+		TanggalPengajuan:  data.TanggalPengajuan,
+		Tanggalverifikasi: data.TanggalVerifikasi,
+	}
+}
+func ListReqltoResPresident(data []request.ReqGetPresident) (datares []respon.ReSponGetPresident) {
+	for _, val := range data {
+		datares = append(datares, GetReqpresidentToRes(val))
+	}
+	return datares
+}
