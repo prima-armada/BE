@@ -27,6 +27,7 @@ type Submission struct {
 	Jumlah            string
 	Alasan            string
 	TanggalKebutuhan  time.Time `gorm:"default:null"`
+	KodePengajuan     string
 	Pencharian        string
 	MaksimalGaji      float64
 	StatusPengajuan   string
@@ -45,6 +46,7 @@ type ReqGetManager struct {
 	NamaDepartment   string
 	Jumlah           string
 	Alasan           string
+	KodePengajuan    string
 	StatusPengajuan  string
 	TanggalKebutuhan string
 	Pencharian       string
@@ -57,6 +59,7 @@ type ReqGetDireksi struct {
 	NamaDepartment   string
 	Jumlah           string
 	Alasan           string
+	KodePengajuan    string
 	StatusPengajuan  string
 	TanggalKebutuhan string
 	Pencharian       string
@@ -67,6 +70,7 @@ type ReqGetDireksi struct {
 type ReqGetAdmin struct {
 	Id                uint
 	UserPengajuan     string
+	KodePengajuan     string
 	NamaDepartment    string
 	Jumlah            string
 	Alasan            string
@@ -88,6 +92,7 @@ type ReqGetPresident struct {
 	Nama              string
 	NamaDepartment    string
 	Jumlah            string
+	KodePengajuan     string
 	Alasan            string
 	StatusPengajuan   string
 	TanggalKebutuhan  string
@@ -95,4 +100,22 @@ type ReqGetPresident struct {
 	Golongan          string
 	TanggalPengajuan  time.Time
 	TanggalVerifikasi string
+}
+
+type FormulirKandidat struct {
+	gorm.Model
+	NamaManager          string
+	KodePengajuan        string
+	DepartementManager   string
+	NamaKandidat         string
+	ContactNumber        string
+	ContactYangDihubungi string
+	NomorContactDarurat  string
+	InformasiJob         string
+	NipRefrensi          string
+	JenjangPendidikan    string
+	NamaRefrensi         string
+	Alamat               string
+	Pengalaman           string
+	AdminId              uint
 }

@@ -17,13 +17,9 @@ import (
 	rm "par/internal/repo/reposubmission"
 	lsm "par/internal/service/submissionservice"
 
-	// srd "par/internal/handler/submissiondireksi"
-	// rrd "par/internal/repo/repodireksi"
-	// lsd "par/internal/service/submissiondireksi"
-
-	// sra "par/internal/handler/submissionadmin"
-	// rra "par/internal/repo/repoadmin"
-	// lsa "par/internal/service/submissionadmin"
+	kh "par/internal/handler/kandidathandler"
+	rk "par/internal/repo/repokandidat"
+	ks "par/internal/service/kandidatservice"
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -37,6 +33,7 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	hndlmhs := uh.NewHandleUser(ucmhsw)
 	Usergrup := e.Group("/user")
 	Usergrup.POST("/adduser", hndlmhs.Register)
+	Usergrup.GET("/allmanager/:roles", hndlmhs.NamaManager, middlewares.JWTMiddleware())
 
 	rpl := rl.NewRepoLogin(db)
 	servicelogin := ls.NewServiceLogin(rpl, rpm)
@@ -65,5 +62,12 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	submissiongrup.GET("/vicepresident", handlesubmmission.GetAllSubmissionPresident, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/vicepresident/:id", handlesubmmission.UpdateSubmissionPresident, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/direksi/:id", handlesubmmission.UpdateSubmissionDireksi, middlewares.JWTMiddleware())
+	submissiongrup.GET("/manager/:nama", handlesubmmission.GetNamaManager, middlewares.JWTMiddleware())
+
+	rpk := rk.NewRepoKandidat(db)
+	servicekandidat := ks.NewServiceKandidat(rpk, rpsm, rpd, rpm)
+	handlekandiat := kh.NewHandlesKandidat(servicekandidat)
+	kandidatgrup := e.Group("/kandidat")
+	kandidatgrup.POST("/addformulir", handlekandiat.AddFormulirKandidat, middlewares.JWTMiddleware())
 
 }

@@ -212,3 +212,28 @@ func (hsm *HandlerSubmission) GetAllSubmissionPresident(e echo.Context) error {
 
 	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 }
+
+// GetNamaManager implements handlecontract.HandleSubmission.
+func (hs *HandlerSubmission) GetNamaManager(e echo.Context) error {
+
+	namas := e.Param("nama")
+	role := middlewares.ExtractTokenTeamRole(e)
+
+	// fmt.Print("ini nama handler", namas)
+
+	if role != "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses manager", http.StatusUnauthorized, true))
+	}
+
+	dataservice, errservice := hs.ss.GetNamaManager(namas)
+	if dataservice == nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse("data tidak ada", http.StatusInternalServerError, true))
+	}
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+	respon := query.ListReqltoResmanager(dataservice)
+
+	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
+}

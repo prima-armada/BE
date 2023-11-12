@@ -7,6 +7,7 @@ import (
 	"par/domain/query"
 	"par/domain/request"
 	"par/helper"
+	middlewares "par/middleware"
 
 	echo "github.com/labstack/echo/v4"
 )
@@ -40,4 +41,20 @@ func (Hu *HandlerUser) Register(e echo.Context) error {
 	respondata := query.ReqtoResponUser(data)
 
 	return e.JSON(http.StatusCreated, helper.GetResponse(respondata, http.StatusCreated, false))
+}
+
+// NamaManager implements handlecontract.HandleUser.
+func (hu *HandlerUser) NamaManager(e echo.Context) error {
+	role := middlewares.ExtractTokenTeamRole(e)
+	if role != "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
+	}
+	roles := e.Param("roles")
+	dataservice, errservice := hu.um.GetAllManager(roles)
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+	respondata := query.ListreqlUserToRes(dataservice)
+	return e.JSON(http.StatusOK, helper.GetResponse(respondata, http.StatusOK, false))
 }

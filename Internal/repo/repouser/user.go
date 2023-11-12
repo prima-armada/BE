@@ -97,3 +97,29 @@ func (ru *RepoUser) IdUserExist(id int) (data request.RequestUser, err error) {
 	fmt.Print("ini data id", activcore.Bagian)
 	return activcore, nil
 }
+
+// GetAllManager implements repocontract.RepoUser.
+func (ru *RepoUser) GetAllManager(roles string) ([]request.RequestUser, error) {
+	var activ []model.User
+	tx := ru.db.Raw("Select users.id, users.role, users.nip, users.password,users.username,users.nama from users where users.role = ?", roles).Find(&activ)
+	if tx.Error != nil {
+		return []request.RequestUser{}, tx.Error
+	}
+	dtmdlttoreq := query.ListModelUserToReq(activ)
+	return dtmdlttoreq, nil
+}
+
+// NameExist implements repocontract.RepoUser.
+func (ru *RepoUser) NameExist(name string) (data request.RequestUser, err error) {
+	var activ model.User
+
+	tx := ru.db.Raw("Select users.id, users.nip, users.password,user.username,user.nama from users WHERE users.nama= ? ", name).First(&activ)
+
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+
+		return request.RequestUser{}, tx.Error
+	}
+	var activcore = query.ModeltoReq(&activ)
+	// fmt.Print("ini data id", activcore)
+	return activcore, nil
+}

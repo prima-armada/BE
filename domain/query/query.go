@@ -26,6 +26,7 @@ func ModeltoReq(data *model.User) request.RequestUser {
 		Nip:       data.Nip,
 		Password:  data.Password,
 		Username:  data.Username,
+		Name:      data.Nama,
 		Bagian:    data.Bagian,
 		CreatedAt: data.CreatedAt,
 	}
@@ -60,8 +61,16 @@ func ReqtoResponUser(data request.RequestUser) respon.ResponseUser {
 		Role:      data.Role,
 		Nip:       data.Nip,
 		Username:  data.Username,
+		Nama:      data.Name,
 		CreatedAt: data.CreatedAt,
 	}
+}
+func ListreqlUserToRes(data []request.RequestUser) (datareq []respon.ResponseUser) {
+	for _, val := range data {
+
+		datareq = append(datareq, ReqtoResponUser(val))
+	}
+	return datareq
 }
 func ModeldepartmentToReqDepart(data *model.Department) request.RequestDepartment {
 	return request.RequestDepartment{
@@ -148,6 +157,7 @@ func RequestmanagerTomodel(data request.ReqSubmissionManager, tanggal time.Time)
 		StatusPengajuan:  data.StatusPengajuan,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
+		KodePengajuan:    data.KodePengajuan,
 	}
 
 }
@@ -162,6 +172,7 @@ func ModelmanagerToRequest(data model.Submission, tanggal string) request.ReqSub
 		StatusPengajuan:  data.StatusPengajuan,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
+		KodePengajuan:    data.KodePengajuan,
 	}
 
 }
@@ -176,6 +187,7 @@ func ReqmanagerToRespon(data request.ReqSubmissionManager) respon.ResponSubmissi
 		StatusPengajuan:  data.StatusPengajuan,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
+		KodePengajuan:    data.KodePengajuan,
 	}
 
 }
@@ -192,6 +204,7 @@ func GetModelMnagerToReq(data model.ReqGetManager) request.ReqGetManager {
 		Pencharian:       data.Pencharian,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
+		KodePengajuan:    data.KodePengajuan,
 	}
 }
 func ListModeltoReqmanager(data []model.ReqGetManager) (datareq []request.ReqGetManager) {
@@ -212,6 +225,7 @@ func GetReqMnagerToRes(data request.ReqGetManager) respon.ReSponGetManager {
 		Pencaharian:      data.Pencharian,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
+		KodePengajuan:    data.KodePengajuan,
 	}
 }
 func ListReqltoResmanager(data []request.ReqGetManager) (datares []respon.ReSponGetManager) {
@@ -229,7 +243,7 @@ func GetReqDireksiToRes(data request.ReqGetDireksi) respon.ReSponGetDireksi {
 		Alasan:           data.Alasan,
 		StatusPengajuan:  data.StatusPengajuan,
 		TanggalKebutuhan: data.TanggalKebutuhan,
-
+		KodePengajuan:    data.KodePengajuan,
 		Pencaharian:      data.Pencharian,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
@@ -255,6 +269,7 @@ func GetModeldireksiToReq(data model.ReqGetDireksi) request.ReqGetDireksi {
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
 		TanggalDisetujui: data.TanggalDisetujui,
+		KodePengajuan:    data.KodePengajuan,
 	}
 }
 func ListModeltoReqDireksi(data []model.ReqGetDireksi) (datareq []request.ReqGetDireksi) {
@@ -283,6 +298,7 @@ func GetReqadminToRes(data request.ReqGetAdmin) respon.ReSponGetAdmin {
 		TanggalEvaluasi:   data.TanggalEvaluasi,
 		TanggalPengajuan:  data.TanggalPengajuan,
 		TanggalDisetujui:  data.TanggalDisetujui,
+		KodePengajuan:     data.KodePengajuan,
 	}
 }
 func ListReqltoResAdmin(data []request.ReqGetAdmin) (datares []respon.ReSponGetAdmin) {
@@ -310,6 +326,7 @@ func GetModeladminToReq(data model.ReqGetAdmin) request.ReqGetAdmin {
 		TanggalEvaluasi:   data.TanggalEvaluasi,
 		TanggalPengajuan:  data.TanggalPengajuan,
 		TanggalDisetujui:  data.TanggalDisetujui,
+		KodePengajuan:     data.KodePengajuan,
 	}
 }
 func ListModeltoReqadmin(data []model.ReqGetAdmin) (datareq []request.ReqGetAdmin) {
@@ -407,6 +424,7 @@ func GetmodelpresidentToReq(data model.ReqGetPresident) request.ReqGetPresident 
 		Golongan:          data.Golongan,
 		TanggalPengajuan:  data.TanggalPengajuan,
 		TanggalVerifikasi: data.TanggalVerifikasi,
+		KodePengajuan:     data.KodePengajuan,
 	}
 }
 func ListmodelltoReqPresident(data []model.ReqGetPresident) (datares []request.ReqGetPresident) {
@@ -436,4 +454,60 @@ func ListReqltoResPresident(data []request.ReqGetPresident) (datares []respon.Re
 		datares = append(datares, GetReqpresidentToRes(val))
 	}
 	return datares
+}
+func ReqtoResponKandidat(data request.ReqFormulirKandidat) respon.ResFormulirKandidat {
+	return respon.ResFormulirKandidat{
+		Id:                   data.Id,
+		NamaManager:          data.NamaManager,
+		KodePengajuan:        data.KodePengajuan,
+		DepartementManager:   data.DepartementManager,
+		NamaKandidat:         data.NamaKandidat,
+		ContactNumber:        data.ContactNumber,
+		ContactYangDihubungi: data.ContactYangDihubungi,
+		NomorContactDarurat:  data.NomorContactDarurat,
+		InformasiJob:         data.InformasiJob,
+		NipRefrensi:          data.NipRefrensi,
+		JenjangPendidikan:    data.JenjangPendidikan,
+		NamaRefrensi:         data.NamaRefrensi,
+		Alamat:               data.Alamat,
+		Pengalaman:           data.Pengalaman,
+		AdminId:              data.AdminId,
+	}
+}
+func ReqtomodelKandidat(data request.ReqFormulirKandidat) model.FormulirKandidat {
+	return model.FormulirKandidat{
+		NamaManager:          data.NamaManager,
+		KodePengajuan:        data.KodePengajuan,
+		DepartementManager:   data.DepartementManager,
+		NamaKandidat:         data.NamaKandidat,
+		ContactNumber:        data.ContactNumber,
+		ContactYangDihubungi: data.ContactYangDihubungi,
+		NomorContactDarurat:  data.NomorContactDarurat,
+		InformasiJob:         data.InformasiJob,
+		NipRefrensi:          data.NipRefrensi,
+		JenjangPendidikan:    data.JenjangPendidikan,
+		NamaRefrensi:         data.NamaRefrensi,
+		Alamat:               data.Alamat,
+		Pengalaman:           data.Pengalaman,
+		AdminId:              data.AdminId,
+	}
+}
+func ModeltoReqKandidat(data *model.FormulirKandidat) request.ReqFormulirKandidat {
+	return request.ReqFormulirKandidat{
+		Id:                   data.ID,
+		NamaManager:          data.NamaManager,
+		KodePengajuan:        data.KodePengajuan,
+		DepartementManager:   data.DepartementManager,
+		NamaKandidat:         data.NamaKandidat,
+		ContactNumber:        data.ContactNumber,
+		ContactYangDihubungi: data.ContactYangDihubungi,
+		NomorContactDarurat:  data.NomorContactDarurat,
+		InformasiJob:         data.InformasiJob,
+		NipRefrensi:          data.NipRefrensi,
+		JenjangPendidikan:    data.JenjangPendidikan,
+		NamaRefrensi:         data.NamaRefrensi,
+		Alamat:               data.Alamat,
+		Pengalaman:           data.Pengalaman,
+		AdminId:              data.AdminId,
+	}
 }

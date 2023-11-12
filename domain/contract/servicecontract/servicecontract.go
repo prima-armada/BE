@@ -7,6 +7,7 @@ import (
 
 type ServiceCase interface {
 	Register(newRequest request.RequestUser) (data request.RequestUser, err error)
+	GetAllManager(roles string) ([]request.RequestUser, error)
 }
 
 type ServiceLogin interface {
@@ -22,6 +23,7 @@ type ServiceDepartment interface {
 
 type ServiceSubmission interface {
 	AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error)
+	GetNamaManager(namamanager string) ([]request.ReqGetManager, error)
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
 	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
 	GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error)
@@ -29,4 +31,7 @@ type ServiceSubmission interface {
 	UpdateSubmissionAdmin(iduser int, idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error)
 	UpdateSubmissionPresident(iduser int, idsubmission int, update request.UpdateVicePresident) (request.UpdateVicePresident, error)
 	UpdateSubmissionDireksi(iduser int, idsubmission int, update request.UpdateDireksi) (request.UpdateDireksi, error)
+}
+type ServiceKandidat interface {
+	AddFormulirKandidat(newkandidata request.ReqFormulirKandidat, nama string, AdminId uint) (request.ReqFormulirKandidat, error)
 }

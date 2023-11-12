@@ -44,3 +44,13 @@ func (sc *ServicesCase) Register(newRequest request.RequestUser) (data request.R
 
 	return datarepo, nil
 }
+
+// GetAllManager implements servicecontract.ServiceCase.
+func (sc *ServicesCase) GetAllManager(roles string) ([]request.RequestUser, error) {
+	datarepo, errrepo := sc.ru.GetAllManager(roles)
+
+	if errrepo != nil {
+		return nil, errrepo
+	}
+	return datarepo, nil
+}
