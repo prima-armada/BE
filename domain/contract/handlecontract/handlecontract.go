@@ -4,6 +4,7 @@ import "github.com/labstack/echo/v4"
 
 type HandleUser interface {
 	Register(e echo.Context) error
+	NamaManager(e echo.Context) error
 }
 
 type HandleLogin interface {
@@ -23,6 +24,10 @@ type HandleSubmission interface {
 	GetAllSubmissionPresident(e echo.Context) error
 	GetAllSubmissionAdmin(e echo.Context) error
 	UpdateSubmissionAdmin(e echo.Context) error
+	GetNamaManager(e echo.Context) error
 	UpdateSubmissionPresident(e echo.Context) error
 	UpdateSubmissionDireksi(e echo.Context) error
+}
+type HandleKandidat interface {
+	AddFormulirKandidat(e echo.Context) error
 }

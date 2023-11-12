@@ -7,6 +7,7 @@ type ResponseUser struct {
 	Nip       string    `json:"nip"`
 	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"createdat"`
+	Nama      string    `json:"nama"`
 }
 type LoginRespon struct {
 	Role     string `json:"role"`
@@ -32,6 +33,7 @@ type ResponSubmissionManager struct {
 	Pencaharian      string    `json:"pencaharian"`
 	Golongan         string    `json:"golongan"`
 	TanggalPengajuan time.Time `json:"pengajuan_tanggal"`
+	KodePengajuan    string    `json:"kode_pengajuan"`
 }
 type ReSponGetManager struct {
 	IdPengajuan      int       `json:"id"`
@@ -44,6 +46,7 @@ type ReSponGetManager struct {
 	Pencaharian      string    `json:"pencarian"`
 	Golongan         string    `json:"golongan"`
 	TanggalPengajuan time.Time `json:"tanggal_pengajuan"`
+	KodePengajuan    string    `json:"kode_pengajuan"`
 }
 type ReSponGetDireksi struct {
 	IdPengajuan      int       `json:"id"`
@@ -57,6 +60,7 @@ type ReSponGetDireksi struct {
 	Golongan         string    `json:"golongan"`
 	TanggalPengajuan time.Time `json:"tanggal_pengajuan"`
 	TanggalDisetujui string    `json:"tanggal_disetujui"`
+	KodePengajuan    string    `json:"kode_pengajuan"`
 }
 type ReSponGetAdmin struct {
 	IdPengajuan       int       `json:"id"`
@@ -76,6 +80,7 @@ type ReSponGetAdmin struct {
 	TanggalEvaluasi   string    `json:"tanggal_evalusi"`
 	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
 	TanggalDisetujui  string    `json:"tanggal_disetujui"`
+	KodePengajuan     string    `json:"kode_pengajuan"`
 }
 type ResponUpdateAdmin struct {
 	IdEvaluasi       int
@@ -105,4 +110,22 @@ type ReSponGetPresident struct {
 	Golongan          string    `json:"golongan"`
 	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
 	Tanggalverifikasi string    `json:"tanggal_diverifikasi"`
+	KodePengajuan     string    `json:"kode_pengajuan"`
+}
+type ResFormulirKandidat struct {
+	Id                   uint
+	NamaManager          string `json:"manager"`
+	KodePengajuan        string `json:"kode_pengajuan"`
+	DepartementManager   string `json:"departement_manager"`
+	NamaKandidat         string `json:"nama_kandidat"`
+	ContactNumber        string `json:"contact_kandidat"`
+	ContactYangDihubungi string `json:"contact_kerabat"`
+	NomorContactDarurat  string `json:"nomor_kerabat"`
+	InformasiJob         string `json:"info_job"`
+	NipRefrensi          string `json:"nip_ref"`
+	JenjangPendidikan    string `json:"jenjang_pendidikan"`
+	NamaRefrensi         string `json:"nama_refrensi"`
+	Alamat               string `json:"alamat"`
+	Pengalaman           string `json:"pengalama"`
+	AdminId              uint
 }

@@ -6,6 +6,7 @@ import (
 	"par/domain/contract/repocontract"
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
+	"par/helper"
 	"par/validasi"
 	"time"
 
@@ -44,6 +45,7 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 	newSubmission.IdPengajuan = cekuser.Id
 	fmt.Print("cekid", newSubmission.IdPengajuan)
 	cekdepartment, errdepartment := ssm.rd.NameDepartment(cekuser.Bagian)
+	newSubmission.NamaDepartment = cekdepartment.NameDepartment
 
 	if errdepartment != nil {
 		return request.ReqSubmissionManager{}, errdepartment
@@ -55,7 +57,8 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 	newSubmission.IdDepartment = uint(cekdepartment.Id)
 	newSubmission.TanggalPengajuan = now
 	newSubmission.StatusPengajuan = "diajukan"
-
+	randString := helper.FileName(8)
+	newSubmission.KodePengajuan = cekdepartment.NameDepartment + randString
 	fmt.Print("newsubmission", newSubmission)
 	datarepo, errrepo := ssm.rsm.AddSubmissionManager(newSubmission, res)
 
@@ -196,6 +199,16 @@ func (ssm *ServiceSubmission) GetAllSubmissionPresident(deparment string) ([]req
 	// fmt.Print("service", datarepo)
 	if errrepo != nil {
 		return []request.ReqGetPresident{}, errrepo
+	}
+	return datarepo, nil
+}
+
+// GetNamaManager implements servicecontract.ServiceSubmission.
+func (ssm *ServiceSubmission) GetNamaManager(namamanager string) ([]request.ReqGetManager, error) {
+	datarepo, errrepo := ssm.rsm.GetNamaManager(namamanager)
+
+	if errrepo != nil {
+		return []request.ReqGetManager{}, errrepo
 	}
 	return datarepo, nil
 }
