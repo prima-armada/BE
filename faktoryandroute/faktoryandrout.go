@@ -20,6 +20,11 @@ import (
 	kh "par/internal/handler/kandidathandler"
 	rk "par/internal/repo/repokandidat"
 	ks "par/internal/service/kandidatservice"
+
+	shl "par/internal/handler/soalhandler"
+	rsl "par/internal/repo/reposoal"
+	ssl "par/internal/service/soalservice"
+
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -69,5 +74,15 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	handlekandiat := kh.NewHandlesKandidat(servicekandidat)
 	kandidatgrup := e.Group("/kandidat")
 	kandidatgrup.POST("/addformulir", handlekandiat.AddFormulirKandidat, middlewares.JWTMiddleware())
+
+	rps := rsl.NewReposoal(db)
+	servicesoal := ssl.NewServiceSoal(rps)
+	handlesoal := shl.NewHandlesSoal(servicesoal)
+	soalgrup := e.Group("/soal")
+	soalgrup.POST("/addsoal", handlesoal.Addsoal, middlewares.JWTMiddleware())
+	soalgrup.GET("", handlesoal.AllSoal, middlewares.JWTMiddleware())
+	soalgrup.GET("", handlesoal.KategoriSoal, middlewares.JWTMiddleware())
+	soalgrup.PUT("", handlesoal.UpdatedSoal, middlewares.JWTMiddleware())
+	soalgrup.DELETE("", handlesoal.Deletedsoal, middlewares.JWTMiddleware())
 
 }

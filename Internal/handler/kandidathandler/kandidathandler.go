@@ -25,6 +25,7 @@ func NewHandlesKandidat(sk servicecontract.ServiceKandidat) handlecontract.Handl
 func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 	reqformulir := request.ReqFormulirKandidat{}
 	nama := e.QueryParam("manager")
+	kode := e.QueryParam("kode")
 	role := middlewares.ExtractTokenTeamRole(e)
 	useradmin, errtoken := middlewares.ExtractTokenIdUser(e)
 
@@ -41,10 +42,10 @@ func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
 
-	dataservice, errservice := hk.sk.AddFormulirKandidat(reqformulir, nama, uint(useradmin))
+	dataservice, errservice := hk.sk.AddFormulirKandidat(reqformulir, nama, uint(useradmin), kode)
 
 	if errservice != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
 	}
 
 	respon := query.ReqtoResponKandidat(dataservice)

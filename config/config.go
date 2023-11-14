@@ -11,13 +11,17 @@ import (
 )
 
 type AppConfig struct {
-	MYSQL_USER     string
-	MYSQL_PASSWORD string
-	MYSQL_HOST     string
-	MYSQL_PORT     uint
-	MYSQL_DBNAME   string
-	MYSQL_TIMEZONE string
-	SERVER_PORT    uint
+	MYSQL_USER               string
+	MYSQL_PASSWORD           string
+	MYSQL_HOST               string
+	MYSQL_PORT               uint
+	MYSQL_DBNAME             string
+	MYSQL_TIMEZONE           string
+	SERVER_PORT              uint
+	CLOUDINARY_CLOUD_NAME    string
+	CLOUDINARY_API_KEY       string
+	CLOUDINARY_API_SECRET    string
+	CLOUDINARY_UPLOAD_FOLDER string
 }
 
 var lock = &sync.Mutex{}
@@ -55,7 +59,10 @@ func initConfig() *AppConfig {
 	defaultConfig.MYSQL_PASSWORD = os.Getenv("MYSQL_PASSWORD")
 	defaultConfig.MYSQL_HOST = os.Getenv("MYSQL_HOST")
 	defaultConfig.MYSQL_TIMEZONE = os.Getenv("MYSQL_TIMEZONE")
-
+	defaultConfig.CLOUDINARY_API_KEY = os.Getenv("CLOUDINARY_API_KEY")
+	defaultConfig.CLOUDINARY_API_SECRET = os.Getenv("CLOUDINARY_API_SECRET")
+	defaultConfig.CLOUDINARY_CLOUD_NAME = os.Getenv("CLOUDINARY_CLOUD_NAME")
+	defaultConfig.CLOUDINARY_UPLOAD_FOLDER = os.Getenv("CLOUDINARY_UPLOAD_FOLDER")
 	cnvDBPort, err := strconv.Atoi(os.Getenv("MYSQL_PORT"))
 	if err != nil {
 		log.Fatal("Cannot parse DB Port variable")

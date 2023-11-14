@@ -102,7 +102,7 @@ func (rd *RepoDepartment) UpdatedDepartment(id int, update request.RequestDepart
 func (rd *RepoDepartment) DeletedDepartment(id int) (row int, err error) {
 	Depart := model.Department{}
 
-	tx := rd.db.Unscoped().Delete(&Depart, id)
+	tx := rd.db.Unscoped().Delete(&Depart, id) //delete permanent
 
 	if tx.Error != nil {
 		return -1, tx.Error

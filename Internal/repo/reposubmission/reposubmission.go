@@ -190,3 +190,17 @@ func (rsm *RepoSubmission) NamaManager(namamanager string) (request.ReqGetManage
 
 	return list, nil
 }
+
+// NamaManager implements repocontract.RepoSubmission.
+func (rsm *RepoSubmission) CodeSubmission(kode string) (request.ReqGetManager, error) {
+	modelmanager := model.ReqGetManager{}
+
+	tx := rsm.db.Raw("SELECT sb.id,u.nama, dp.nama_department ,sb.jumlah,sb.alasan,sb.status_pengajuan, sb.tanggal_kebutuhan,sb.pencharian,sb.golongan,sb.tanggal_pengajuan,sb.kode_pengajuan FROM users u, departments dp ,submissions sb where sb.id_department = dp.id and sb.user_pengajuan = u.id and sb.kode_pengajuan= ?", kode).Find(&modelmanager)
+
+	if tx.Error != nil {
+		return request.ReqGetManager{}, tx.Error
+	}
+	list := query.GetModelMnagerToReq(modelmanager)
+
+	return list, nil
+}

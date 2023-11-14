@@ -129,3 +129,8 @@ type ResFormulirKandidat struct {
 	Pengalaman           string `json:"pengalama"`
 	AdminId              uint
 }
+type ResponSoal struct {
+	Id          uint
+	Kategori    string `json:"kategori"`
+	Description string `json:"deskripsi"`
+}

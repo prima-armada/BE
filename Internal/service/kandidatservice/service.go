@@ -27,11 +27,19 @@ func NewServiceKandidat(rk repocontract.RepoKandidat, rsm repocontract.RepoSubmi
 	}
 }
 
-func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirKandidat, nama string, AdminId uint) (request.ReqFormulirKandidat, error) {
+func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirKandidat, nama string, AdminId uint, kode string) (request.ReqFormulirKandidat, error) {
 	datapengajuan, errpenajuan := sk.rsm.NamaManager(nama)
+	kodeajuan, errajuan := sk.rsm.CodeSubmission(kode)
 
+	if errajuan != nil {
+		return request.ReqFormulirKandidat{}, errajuan
+	}
+
+	if kodeajuan.StatusPengajuan != "disetujui" {
+		return request.ReqFormulirKandidat{}, errors.New("status belum di setujui oleh direksi")
+	}
 	newkandidata.NamaManager = datapengajuan.Nama
-	newkandidata.KodePengajuan = datapengajuan.KodePengajuan
+	newkandidata.KodePengajuan = kodeajuan.KodePengajuan
 	newkandidata.DepartementManager = datapengajuan.NamaDepartment
 	if errpenajuan != nil {
 		return request.ReqFormulirKandidat{}, errpenajuan

@@ -17,6 +17,14 @@ type HandleDepartment interface {
 	UpdatedDepartment(e echo.Context) error
 	DeletedDepartment(e echo.Context) error
 }
+
+type HandleSoal interface {
+	Addsoal(e echo.Context) error
+	AllSoal(e echo.Context) error
+	KategoriSoal(e echo.Context) error
+	UpdatedSoal(e echo.Context) error
+	Deletedsoal(e echo.Context) error
+}
 type HandleSubmission interface {
 	AddSubmissionManager(e echo.Context) error
 	GetAllSubmissionManager(e echo.Context) error
