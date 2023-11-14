@@ -20,6 +20,12 @@ type Department struct {
 	gorm.Model
 	NamaDepartment string `gorm:"size:191" `
 }
+type SoalInterview struct {
+	gorm.Model
+	Kategori    string
+	Description string
+}
+
 type Submission struct {
 	gorm.Model
 	IdDepartment      uint

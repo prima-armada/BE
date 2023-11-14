@@ -511,3 +511,38 @@ func ModeltoReqKandidat(data *model.FormulirKandidat) request.ReqFormulirKandida
 		AdminId:              data.AdminId,
 	}
 }
+func Reqsoaltorespon(data request.RequesSoal) respon.ResponSoal {
+	return respon.ResponSoal{
+		Id:          data.Id,
+		Kategori:    data.Kategori,
+		Description: data.Description,
+	}
+}
+func ReqsoalTomodel(data request.RequesSoal) model.SoalInterview {
+	return model.SoalInterview{
+
+		Kategori:    data.Kategori,
+		Description: data.Description,
+	}
+}
+func Modelsoaltoreq(data *model.SoalInterview) request.RequesSoal {
+	return request.RequesSoal{
+		Id:          data.ID,
+		Kategori:    data.Kategori,
+		Description: data.Description,
+	}
+}
+
+func ListReqDtoressoal(data []request.RequesSoal) (datares []respon.ResponSoal) {
+	for _, val := range data {
+		datares = append(datares, Reqsoaltorespon(val))
+	}
+	return datares
+}
+
+func Listmodelotreqsoal(data []model.SoalInterview) (datareq []request.RequesSoal) {
+	for _, val := range data {
+		datareq = append(datareq, Modelsoaltoreq(&val))
+	}
+	return datareq
+}

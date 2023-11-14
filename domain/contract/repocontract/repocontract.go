@@ -17,19 +17,13 @@ type RepoUser interface {
 type RepoLogin interface {
 	Login(nip string, password string) (string, request.RequestUser, error)
 }
-type RepoDepartment interface {
-	AddDepartment(newDepartment request.RequestDepartment) (request.RequestDepartment, error)
-	AllDepertment() (data []request.RequestDepartment, err error)
-	NameDepartment(name string) (data request.RequestDepartment, err error)
-	UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
-	DeletedDepartment(id int) (row int, err error)
-}
 
 type RepoSubmission interface {
 	AddSubmissionManager(newSubmission request.ReqSubmissionManager, res time.Time) (request.ReqSubmissionManager, error)
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
 	GetNamaManager(namamanager string) ([]request.ReqGetManager, error)
 	NamaManager(namamanager string) (request.ReqGetManager, error)
+	CodeSubmission(kode string) (request.ReqGetManager, error)
 	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
 	GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error)
 	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
@@ -39,4 +33,18 @@ type RepoSubmission interface {
 }
 type RepoKandidat interface {
 	AddFormulirKandidat(newkandidat request.ReqFormulirKandidat) (request.ReqFormulirKandidat, error)
+}
+type RepoSoal interface {
+	AddSoal(newksoal request.RequesSoal) (request.RequesSoal, error)
+	KategoriSoal(kategori string) (data request.RequesSoal, err error)
+	AllSoal() (data []request.RequesSoal, err error)
+	Updatedsoal(id int, update request.RequesSoal) (data request.RequesSoal, err error)
+	DeletedSoal(id int) (row int, err error)
+}
+type RepoDepartment interface {
+	AddDepartment(newDepartment request.RequestDepartment) (request.RequestDepartment, error)
+	AllDepertment() (data []request.RequestDepartment, err error)
+	NameDepartment(name string) (data request.RequestDepartment, err error)
+	UpdatedDepartment(id int, update request.RequestDepartment) (data request.RequestDepartment, err error)
+	DeletedDepartment(id int) (row int, err error)
 }

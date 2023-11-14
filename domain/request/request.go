@@ -1,6 +1,8 @@
 package request
 
-import "time"
+import (
+	"time"
+)
 
 type RequestUser struct {
 	Id        int
@@ -131,4 +133,9 @@ type ReqFormulirKandidat struct {
 	Alamat               string `json:"alamat" form:"alamat"`
 	Pengalaman           string `json:"pengalama" form:"pengalaman"`
 	AdminId              uint
+}
+type RequesSoal struct {
+	Id          uint
+	Kategori    string `json:"kategori" form:"kategori" validate:"required,min=5"`
+	Description string `json:"deskripsi" form:"deskripsi" validate:"required,min=5"`
 }
