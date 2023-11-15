@@ -237,3 +237,22 @@ func (hs *HandlerSubmission) GetNamaManager(e echo.Context) error {
 
 	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 }
+
+func (hsm *HandlerSubmission) GetCode(e echo.Context) error {
+
+	code := e.QueryParam("code")
+	role := middlewares.ExtractTokenTeamRole(e)
+
+	if role != "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
+	}
+
+	dataservice, errservice := hsm.ss.CodeSubmission(code)
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+	respon := query.ListReqltoResmanager(dataservice)
+
+	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
+}

@@ -118,12 +118,12 @@ type UpdateDireksi struct {
 }
 type ReqFormulirKandidat struct {
 	Id                   uint
-	NamaManager          string
-	KodePengajuan        string
+	NamaManager          string `json:"nama_manager" form:"nama_manager" validate:"required,min=5"`
+	KodePengajuan        string `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
 	DepartementManager   string
 	NamaKandidat         string `json:"nama_kandidat  " form:"nama_kandidat" validate:"required,min=5"`
 	ContactNumber        string `json:"contact_kandidat" form:"contact_kandidat" validate:"required,min=5"`
-	ContactYangDihubungi string `json:"contact_kerabat" form:"contact_kerabat" validate:"required,min=5"`
+	ContactYangDihubungi string `json:"contact_kerabat" form:"contact_kerabat" validate:"required"`
 	NomorContactDarurat  string `json:"nomor_kerabat" form:"nomor_kerabat" validate:"required,min=5"`
 	InformasiJob         string `json:"info_job" form:"info_job" validate:"required,min=5"`
 	NipRefrensi          string `json:"nip_ref" form:"nip_ref"`
@@ -131,11 +131,26 @@ type ReqFormulirKandidat struct {
 	NamaRefrensi         string `json:"nama_refrensi" form:"nama_refrensi"`
 	DepartmentRefrensi   string `json:"department_refrensi" form:"department_refrensi"`
 	Alamat               string `json:"alamat" form:"alamat"`
-	Pengalaman           string `json:"pengalama" form:"pengalaman"`
+	Pengalaman           string `json:"pengalaman" form:"pengalaman"`
 	AdminId              uint
 }
 type RequesSoal struct {
 	Id          uint
 	Kategori    string `json:"kategori" form:"kategori" validate:"required,min=5"`
 	Description string `json:"deskripsi" form:"deskripsi" validate:"required,min=5"`
+}
+type ReqInterviewKandidat struct {
+	Id                  uint
+	NamaUser            string  `json:"nama_user" form:"nama_user"`
+	KodePengajuan       string  `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
+	IdSoal              uint    `json:"id_soal" form:"id_soal"`
+	KategoriSoal        string  `json:"kategori" form:"kategori" validate:"required,min=5"`
+	DepartementUser     string  `json:"department_user" form:"department_manager"`
+	NamaKandidat        string  `json:"nama_kandidat" form:"nama_kandidat"`
+	Nilai               float64 `json:"nilai" form:"nilai"`
+	Kriteria            string  `json:"kriteria" form:"kriteria" validate:"required,min=4"`
+	TanggalWwawancara   string  `json:"tanggal" form:"tanggal"`
+	UserId              uint
+	DepartementKandidat string
+	Role                string
 }
