@@ -140,3 +140,18 @@ type InterviewKandidat struct {
 	UserId              uint
 	Role                string
 }
+
+type DetailProses struct {
+	gorm.Model
+	IDAdmin            uint
+	NilaiAdmin         float64
+	NilaiManager       float64
+	KandidatDepartment string
+	NamaKandidat       string
+	TotalNilai         float64
+	KodePengajuan      string
+	IdManager          uint
+	NamaManager        string
+	NamaAdmin          string
+	Status             string
+}

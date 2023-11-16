@@ -29,6 +29,10 @@ import (
 	ri "par/internal/repo/repointerview"
 	is "par/internal/service/interviewservice"
 
+	ph "par/internal/handler/proseshandler"
+	rp "par/internal/repo/repoproses"
+	ps "par/internal/service/prosesservice"
+
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -97,5 +101,12 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	interviewgrup := e.Group("/interview")
 	interviewgrup.POST("/addinterview", handleinterview.AddFormulirInterview, middlewares.JWTMiddleware())
 	interviewgrup.GET("", handleinterview.GetallInterview, middlewares.JWTMiddleware())
+
+	rpp := rp.NewRepoproses(db)
+	serviceproses := ps.NewServiceprocess(rpp, rpi, rpk, rpm, rps)
+	handleproses := ph.NewHandlesProcess(serviceproses)
+	prosesgrup := e.Group("/proses")
+	prosesgrup.POST("/addproses", handleproses.AddProcess, middlewares.JWTMiddleware())
+	prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
 
 }

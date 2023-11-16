@@ -57,3 +57,8 @@ type RepoInterview interface {
 	GetallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
 	CekKategorInterview(kategori string) (request.ReqInterviewKandidat, error)
 }
+type RepoProcess interface {
+	AddProcess(newProcess request.ReqDetailProsesAdmin) (request.ReqDetailProsesAdmin, error)
+	GetallDetail() (data []request.ReqDetailProses, err error)
+	Getdetailkandidat(kode, nama, kandidat string) (data request.ReqDetailProsesAdmin, err error)
+}

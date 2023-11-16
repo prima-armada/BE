@@ -628,3 +628,51 @@ func Listmodelotreqinterview(data []model.InterviewKandidat) (datareq []request.
 	}
 	return datareq
 }
+func Reqprosesadmintomodel(data request.ReqDetailProsesAdmin) model.DetailProses {
+	return model.DetailProses{
+
+		IDAdmin:            data.IDAdmin,
+		NilaiAdmin:         data.NilaiAdmin,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		NamaAdmin:          data.NamaAdmin,
+		Status:             data.Status,
+		KandidatDepartment: data.KandidatDepartment,
+	}
+
+}
+func Modelprosesadmintoreq(data *model.DetailProses) request.ReqDetailProsesAdmin {
+	return request.ReqDetailProsesAdmin{
+		Id:                 data.ID,
+		IDAdmin:            data.IDAdmin,
+		NilaiAdmin:         data.NilaiAdmin,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		NamaAdmin:          data.NamaAdmin,
+		Status:             data.Status,
+		KandidatDepartment: data.KandidatDepartment,
+	}
+
+}
+func GetallProsessforAdmin(data *model.DetailProses) request.ReqDetailProses {
+	return request.ReqDetailProses{
+		Id:                 data.ID,
+		IDAdmin:            data.IDAdmin,
+		NilaiAdmin:         data.NilaiAdmin,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		NamaAdmin:          data.NamaAdmin,
+		Status:             data.Status,
+		KandidatDepartment: data.KandidatDepartment,
+	}
+
+}
+func Listmodelotreqdetail(data []model.DetailProses) (datareq []request.ReqDetailProses) {
+	for _, val := range data {
+		datareq = append(datareq, GetallProsessforAdmin(&val))
+	}
+	return datareq
+}

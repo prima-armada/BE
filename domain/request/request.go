@@ -154,3 +154,39 @@ type ReqInterviewKandidat struct {
 	DepartementKandidat string
 	Role                string
 }
+type ReqDetailProsesAdmin struct {
+	Id                 uint
+	IDAdmin            uint
+	KodePengajuan      string `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
+	NilaiAdmin         float64
+	NamaKandidat       string `json:"nama_kandidat" form:"nama_kandidat" validate:"required,min=5"`
+	TotalNilai         float64
+	NamaAdmin          string
+	KandidatDepartment string
+	Status             string
+}
+type ReqDetailProsesManager struct {
+	Id                 uint
+	IdManager          uint
+	NilaiManager       float64
+	KodePengajuan      string
+	NamaKandidat       string
+	TotalNilai         float64
+	NamaManager        string
+	KandidatDepartment string
+	Status             string
+}
+type ReqDetailProses struct {
+	Id                 uint    `json:"id"`
+	IDAdmin            uint    `json:"idadmin"`
+	IdManager          uint    `json:"id_manager"`
+	NilaiManager       float64 `json:"nilai_manager"`
+	NilaiAdmin         float64 `json:"nilai_admin"`
+	KodePengajuan      string  `json:"kodepengajuan"`
+	NamaKandidat       string  `json:"nama_kandidat"`
+	TotalNilai         float64 `json:"total_nilai"`
+	NamaManager        string  `json:"nama_manager"`
+	NamaAdmin          string  `json:"nama_admin"`
+	Status             string  `json:"status"`
+	KandidatDepartment string  `json:"department_kandidat"`
+}

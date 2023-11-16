@@ -48,3 +48,7 @@ type Serviceinterview interface {
 	AddInterview(newinterview request.ReqInterviewKandidat) (request.ReqInterviewKandidat, error)
 	GetallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
 }
+type ServiceProcess interface {
+	AddProcess(id int, newProcess request.ReqDetailProsesAdmin) (request.ReqDetailProsesAdmin, error)
+	GetallDetail() (data []request.ReqDetailProses, err error)
+}
