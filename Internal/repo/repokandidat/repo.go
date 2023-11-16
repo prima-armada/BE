@@ -2,6 +2,7 @@ package repokandidat
 
 import (
 	"par/domain/contract/repocontract"
+	"par/domain/model"
 	"par/domain/query"
 	"par/domain/request"
 
@@ -29,5 +30,35 @@ func (rk *Repokandidat) AddFormulirKandidat(newkandidat request.ReqFormulirKandi
 	}
 	modeltoreq := query.ModeltoReqKandidat(&reqsubmissiontomodel)
 	return modeltoreq, nil
+
+}
+
+// GetCodeKandidat implements repocontract.RepoKandidat.
+func (rk *Repokandidat) GetCodeKandidat(kode string) ([]request.ReqFormulirKandidat, error) {
+	modelkandidat := []model.FormulirKandidat{}
+
+	tx := rk.db.Raw("SELECT formulir_kandidats.id,formulir_kandidats.nama_manager ,formulir_kandidats.kode_pengajuan,formulir_kandidats.nama_kandidat FROM formulir_kandidats where formulir_kandidats.kode_pengajuan= ?", kode).Find(&modelkandidat)
+
+	if tx.Error != nil {
+		return []request.ReqFormulirKandidat{}, tx.Error
+	}
+	list := query.ListKandidattoreq(modelkandidat)
+
+	return list, nil
+
+}
+
+// GetCodedannamaKandidat implements repocontract.RepoKandidat.
+func (rk *Repokandidat) GetCodedannamaKandidat(kode string, nama string) (request.ReqFormulirKandidat, error) {
+	modelkandidat := model.FormulirKandidat{}
+
+	tx := rk.db.Raw("SELECT formulir_kandidats.id,formulir_kandidats.nama_manager,formulir_kandidats.departement_manager ,formulir_kandidats.kode_pengajuan,formulir_kandidats.nama_kandidat FROM formulir_kandidats where formulir_kandidats.kode_pengajuan= ? AND formulir_kandidats.nama_kandidat= ?", kode, nama).Find(&modelkandidat)
+
+	if tx.Error != nil {
+		return request.ReqFormulirKandidat{}, tx.Error
+	}
+	list := query.ModeltoReqKandidat(&modelkandidat)
+
+	return list, nil
 
 }

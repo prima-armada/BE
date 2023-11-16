@@ -21,7 +21,6 @@ func NewHandlLogin(sl servicecontract.ServiceLogin) handlecontract.HandleLogin {
 	}
 }
 
-// Login implements handlecontract.HandleLogin.
 func (hl *HandlerLogin) Login(e echo.Context) error {
 	reques := request.RequestUser{}
 

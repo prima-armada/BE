@@ -24,8 +24,7 @@ func NewHandlesKandidat(sk servicecontract.ServiceKandidat) handlecontract.Handl
 
 func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 	reqformulir := request.ReqFormulirKandidat{}
-	nama := e.QueryParam("manager")
-	kode := e.QueryParam("kode")
+
 	role := middlewares.ExtractTokenTeamRole(e)
 	useradmin, errtoken := middlewares.ExtractTokenIdUser(e)
 
@@ -33,7 +32,7 @@ func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
 	}
 	if role != "admin" || role == "" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses manager", http.StatusUnauthorized, true))
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
 	}
 
 	binderr := e.Bind(&reqformulir)
@@ -42,7 +41,7 @@ func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
 
-	dataservice, errservice := hk.sk.AddFormulirKandidat(reqformulir, nama, uint(useradmin), kode)
+	dataservice, errservice := hk.sk.AddFormulirKandidat(reqformulir, uint(useradmin))
 
 	if errservice != nil {
 		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
@@ -51,5 +50,24 @@ func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 	respon := query.ReqtoResponKandidat(dataservice)
 
 	return e.JSON(http.StatusCreated, helper.GetResponse(respon, http.StatusCreated, false))
+
+}
+
+func (hk *Handlerkandidat) GetCodeKandidat(e echo.Context) error {
+	role := middlewares.ExtractTokenTeamRole(e)
+	kode := e.QueryParam("code")
+
+	if role != "admin" && role != "manager" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin dan manager", http.StatusUnauthorized, true))
+	}
+	dataservice, errservice := hk.sk.GetCodeKandidat(kode)
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+
+	respon := query.Listtoreqresponkandidat(dataservice)
+
+	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 
 }

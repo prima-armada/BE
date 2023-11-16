@@ -25,6 +25,14 @@ import (
 	rsl "par/internal/repo/reposoal"
 	ssl "par/internal/service/soalservice"
 
+	ih "par/internal/handler/interviewhandler"
+	ri "par/internal/repo/repointerview"
+	is "par/internal/service/interviewservice"
+
+	ph "par/internal/handler/proseshandler"
+	rp "par/internal/repo/repoproses"
+	ps "par/internal/service/prosesservice"
+
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -68,12 +76,14 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	submissiongrup.PUT("/vicepresident/:id", handlesubmmission.UpdateSubmissionPresident, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/direksi/:id", handlesubmmission.UpdateSubmissionDireksi, middlewares.JWTMiddleware())
 	submissiongrup.GET("/manager/:nama", handlesubmmission.GetNamaManager, middlewares.JWTMiddleware())
+	submissiongrup.GET("", handlesubmmission.GetCode, middlewares.JWTMiddleware())
 
 	rpk := rk.NewRepoKandidat(db)
 	servicekandidat := ks.NewServiceKandidat(rpk, rpsm, rpd, rpm)
 	handlekandiat := kh.NewHandlesKandidat(servicekandidat)
 	kandidatgrup := e.Group("/kandidat")
 	kandidatgrup.POST("/addformulir", handlekandiat.AddFormulirKandidat, middlewares.JWTMiddleware())
+	kandidatgrup.GET("", handlekandiat.GetCodeKandidat, middlewares.JWTMiddleware())
 
 	rps := rsl.NewReposoal(db)
 	servicesoal := ssl.NewServiceSoal(rps)
@@ -84,5 +94,19 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	soalgrup.GET("", handlesoal.KategoriSoal, middlewares.JWTMiddleware())
 	soalgrup.PUT("", handlesoal.UpdatedSoal, middlewares.JWTMiddleware())
 	soalgrup.DELETE("", handlesoal.Deletedsoal, middlewares.JWTMiddleware())
+
+	rpi := ri.NewRepoInterview(db)
+	serviceinteview := is.NewServiceinterview(rpi, rpk, rpd, rpm, rps)
+	handleinterview := ih.NewHandlesInterview(serviceinteview)
+	interviewgrup := e.Group("/interview")
+	interviewgrup.POST("/addinterview", handleinterview.AddFormulirInterview, middlewares.JWTMiddleware())
+	interviewgrup.GET("", handleinterview.GetallInterview, middlewares.JWTMiddleware())
+
+	rpp := rp.NewRepoproses(db)
+	serviceproses := ps.NewServiceprocess(rpp, rpi, rpk, rpm, rps)
+	handleproses := ph.NewHandlesProcess(serviceproses)
+	prosesgrup := e.Group("/proses")
+	prosesgrup.POST("/addproses", handleproses.AddProcess, middlewares.JWTMiddleware())
+	prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
 
 }

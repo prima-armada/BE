@@ -35,7 +35,7 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 
 		return request.ReqSubmissionManager{}, errors.New(validasi.ValidationErrorHandle(validerr))
 	}
-	fmt.Print("id manager", idManager)
+
 	cekuser, erruser := ssm.ru.IdUserExist(idManager)
 
 	if erruser != nil {
@@ -43,7 +43,7 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 	}
 
 	newSubmission.IdPengajuan = cekuser.Id
-	fmt.Print("cekid", newSubmission.IdPengajuan)
+
 	cekdepartment, errdepartment := ssm.rd.NameDepartment(cekuser.Bagian)
 	newSubmission.NamaDepartment = cekdepartment.NameDepartment
 
@@ -70,7 +70,7 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 
 func (ssm *ServiceSubmission) GetAllSubmissionManager(id int) ([]request.ReqGetManager, error) {
 	datarepo, errrepo := ssm.rsm.GetAllSubmissionManager(id)
-	// fmt.Print("service", datarepo)
+
 	if errrepo != nil {
 		return []request.ReqGetManager{}, errrepo
 	}
@@ -89,7 +89,7 @@ func (ssm *ServiceSubmission) GetAllSubmissionAdmin() ([]request.ReqGetAdmin, er
 
 func (ssm *ServiceSubmission) GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error) {
 	datarepo, errrepo := ssm.rsm.GetAllSubmissionDireksi(deparment)
-	// fmt.Print("service", datarepo)
+
 	if errrepo != nil {
 		return []request.ReqGetDireksi{}, errrepo
 	}
@@ -102,7 +102,7 @@ func (ssm *ServiceSubmission) UpdateSubmissionAdmin(iduser int, idsubmission int
 
 		return request.UpdateAdmin{}, errors.New(validasi.ValidationErrorHandle(validerr))
 	}
-	// fmt.Print("id manager", idManager)
+
 	cekuser, erruser := ssm.ru.IdUserExist(iduser)
 
 	if erruser != nil {
@@ -206,6 +206,16 @@ func (ssm *ServiceSubmission) GetAllSubmissionPresident(deparment string) ([]req
 // GetNamaManager implements servicecontract.ServiceSubmission.
 func (ssm *ServiceSubmission) GetNamaManager(namamanager string) ([]request.ReqGetManager, error) {
 	datarepo, errrepo := ssm.rsm.GetNamaManager(namamanager)
+
+	if errrepo != nil {
+		return []request.ReqGetManager{}, errrepo
+	}
+	return datarepo, nil
+}
+
+// CodeSubmission implements servicecontract.ServiceSubmission.
+func (ssm *ServiceSubmission) CodeSubmission(kode string) ([]request.ReqGetManager, error) {
+	datarepo, errrepo := ssm.rsm.CodeSubmissions(kode)
 
 	if errrepo != nil {
 		return []request.ReqGetManager{}, errrepo

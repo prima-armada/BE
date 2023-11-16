@@ -35,7 +35,19 @@ type HandleSubmission interface {
 	GetNamaManager(e echo.Context) error
 	UpdateSubmissionPresident(e echo.Context) error
 	UpdateSubmissionDireksi(e echo.Context) error
+	GetCode(e echo.Context) error
 }
 type HandleKandidat interface {
 	AddFormulirKandidat(e echo.Context) error
+	GetCodeKandidat(e echo.Context) error
+}
+type HandleInterview interface {
+	AddFormulirInterview(e echo.Context) error
+	GetallInterview(e echo.Context) error
+	// CekKategoriInterview(e echo.Context) error
+}
+type HandleDetailProses interface {
+	AddProcess(e echo.Context) error
+	GetallDetail(e echo.Context) error
+	// CekKategoriInterview(e echo.Context) error
 }

@@ -5,6 +5,7 @@ import (
 	"par/domain/contract/repocontract"
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
+	"par/validasi"
 
 	"github.com/go-playground/validator"
 )
@@ -27,10 +28,21 @@ func NewServiceKandidat(rk repocontract.RepoKandidat, rsm repocontract.RepoSubmi
 	}
 }
 
-func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirKandidat, nama string, AdminId uint, kode string) (request.ReqFormulirKandidat, error) {
-	datapengajuan, errpenajuan := sk.rsm.NamaManager(nama)
-	kodeajuan, errajuan := sk.rsm.CodeSubmission(kode)
+func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirKandidat, AdminId uint) (request.ReqFormulirKandidat, error) {
 
+	validerr := sk.validate.Struct(newkandidata)
+	if validerr != nil {
+
+		return request.ReqFormulirKandidat{}, errors.New(validasi.ValidationErrorHandle(validerr))
+	}
+	datanama, errnama := sk.rsm.NamaManager(newkandidata.NamaManager)
+	if datanama.Nama == "" {
+		return request.ReqFormulirKandidat{}, errors.New("nama tidak ada")
+	}
+	kodeajuan, errajuan := sk.rsm.CodeSubmission(newkandidata.KodePengajuan)
+	if errnama != nil {
+		return request.ReqFormulirKandidat{}, errnama
+	}
 	if errajuan != nil {
 		return request.ReqFormulirKandidat{}, errajuan
 	}
@@ -38,12 +50,10 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 	if kodeajuan.StatusPengajuan != "disetujui" {
 		return request.ReqFormulirKandidat{}, errors.New("status belum di setujui oleh direksi")
 	}
-	newkandidata.NamaManager = datapengajuan.Nama
+	newkandidata.NamaManager = datanama.Nama
 	newkandidata.KodePengajuan = kodeajuan.KodePengajuan
-	newkandidata.DepartementManager = datapengajuan.NamaDepartment
-	if errpenajuan != nil {
-		return request.ReqFormulirKandidat{}, errpenajuan
-	}
+	newkandidata.DepartementManager = datanama.NamaDepartment
+
 	datauser, erruser := sk.ru.IdUserExist(int(AdminId))
 
 	if erruser != nil {
@@ -72,4 +82,14 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 	}
 	return datarepo, nil
 
+}
+
+// GetCodeKandidat implements servicecontract.ServiceKandidat.
+func (sk *Servicekandidat) GetCodeKandidat(kode string) (data []request.ReqFormulirKandidat, err error) {
+	data, err = sk.rk.GetCodeKandidat(kode)
+
+	if err != nil {
+		return []request.ReqFormulirKandidat{}, err
+	}
+	return data, nil
 }

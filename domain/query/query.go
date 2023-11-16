@@ -511,6 +511,18 @@ func ModeltoReqKandidat(data *model.FormulirKandidat) request.ReqFormulirKandida
 		AdminId:              data.AdminId,
 	}
 }
+func ListKandidattoreq(data []model.FormulirKandidat) (datareq []request.ReqFormulirKandidat) {
+	for _, val := range data {
+		datareq = append(datareq, ModeltoReqKandidat(&val))
+	}
+	return datareq
+}
+func Listtoreqresponkandidat(data []request.ReqFormulirKandidat) (datares []respon.ResFormulirKandidat) {
+	for _, val := range data {
+		datares = append(datares, ReqtoResponKandidat(val))
+	}
+	return datares
+}
 func Reqsoaltorespon(data request.RequesSoal) respon.ResponSoal {
 	return respon.ResponSoal{
 		Id:          data.Id,
@@ -543,6 +555,124 @@ func ListReqDtoressoal(data []request.RequesSoal) (datares []respon.ResponSoal) 
 func Listmodelotreqsoal(data []model.SoalInterview) (datareq []request.RequesSoal) {
 	for _, val := range data {
 		datareq = append(datareq, Modelsoaltoreq(&val))
+	}
+	return datareq
+}
+func Reqinterviewtomodel(data request.ReqInterviewKandidat, tanggal time.Time) model.InterviewKandidat {
+	return model.InterviewKandidat{
+
+		NamaUser:            data.NamaUser,
+		DepartementUser:     data.DepartementUser,
+		DepartementKandidat: data.DepartementKandidat,
+		KodePengajuan:       data.KodePengajuan,
+		IdSoal:              data.IdSoal,
+		KategoriSoal:        data.KategoriSoal,
+		NamaKandidat:        data.NamaKandidat,
+		Nilai:               data.Nilai,
+		Kriteria:            data.Kriteria,
+		TanggalWwawancara:   tanggal,
+		UserId:              data.UserId,
+		Role:                data.Role,
+	}
+
+}
+func ModelinterviewToRequest(data *model.InterviewKandidat, tanggal string) request.ReqInterviewKandidat {
+	return request.ReqInterviewKandidat{
+		Id:                  data.ID,
+		NamaUser:            data.NamaUser,
+		DepartementUser:     data.DepartementUser,
+		DepartementKandidat: data.DepartementKandidat,
+		KodePengajuan:       data.KodePengajuan,
+		IdSoal:              data.IdSoal,
+		KategoriSoal:        data.KategoriSoal,
+		NamaKandidat:        data.NamaKandidat,
+		Nilai:               data.Nilai,
+		Kriteria:            data.Kriteria,
+		TanggalWwawancara:   tanggal,
+		UserId:              data.UserId,
+		Role:                data.Role,
+	}
+
+}
+func ModelinterviewToRequest2(data *model.InterviewKandidat) request.ReqInterviewKandidat {
+	return request.ReqInterviewKandidat{
+		Id:                  data.ID,
+		NamaUser:            data.NamaUser,
+		DepartementUser:     data.DepartementUser,
+		DepartementKandidat: data.DepartementKandidat,
+		KodePengajuan:       data.KodePengajuan,
+		IdSoal:              data.IdSoal,
+		KategoriSoal:        data.KategoriSoal,
+		NamaKandidat:        data.NamaKandidat,
+		Nilai:               data.Nilai,
+		UserId:              data.UserId,
+	}
+
+}
+func ModelinterviewToReq(data *model.InterviewKandidat) request.ReqInterviewKandidat {
+	return request.ReqInterviewKandidat{
+		Id:                  data.ID,
+		NamaUser:            data.NamaUser,
+		DepartementUser:     data.DepartementUser,
+		DepartementKandidat: data.DepartementKandidat,
+		KodePengajuan:       data.KodePengajuan,
+		NamaKandidat:        data.NamaKandidat,
+		Nilai:               data.Nilai,
+		UserId:              data.UserId,
+	}
+
+}
+func Listmodelotreqinterview(data []model.InterviewKandidat) (datareq []request.ReqInterviewKandidat) {
+	for _, val := range data {
+		datareq = append(datareq, ModelinterviewToReq(&val))
+	}
+	return datareq
+}
+func Reqprosesadmintomodel(data request.ReqDetailProsesAdmin) model.DetailProses {
+	return model.DetailProses{
+
+		IDAdmin:            data.IDAdmin,
+		NilaiAdmin:         data.NilaiAdmin,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		NamaAdmin:          data.NamaAdmin,
+		Status:             data.Status,
+		KandidatDepartment: data.KandidatDepartment,
+	}
+
+}
+func Modelprosesadmintoreq(data *model.DetailProses) request.ReqDetailProsesAdmin {
+	return request.ReqDetailProsesAdmin{
+		Id:                 data.ID,
+		IDAdmin:            data.IDAdmin,
+		NilaiAdmin:         data.NilaiAdmin,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		NamaAdmin:          data.NamaAdmin,
+		Status:             data.Status,
+		KandidatDepartment: data.KandidatDepartment,
+	}
+
+}
+func GetallProsessforAdmin(data *model.DetailProses) request.ReqDetailProses {
+	return request.ReqDetailProses{
+		Id:                 data.ID,
+		IDAdmin:            data.IDAdmin,
+		NilaiAdmin:         data.NilaiAdmin,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		NamaAdmin:          data.NamaAdmin,
+		Status:             data.Status,
+		KandidatDepartment: data.KandidatDepartment,
+	}
+
+}
+func Listmodelotreqdetail(data []model.DetailProses) (datareq []request.ReqDetailProses) {
+	for _, val := range data {
+		datareq = append(datareq, GetallProsessforAdmin(&val))
 	}
 	return datareq
 }

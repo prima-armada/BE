@@ -125,3 +125,33 @@ type FormulirKandidat struct {
 	Pengalaman           string
 	AdminId              uint
 }
+type InterviewKandidat struct {
+	gorm.Model
+	NamaUser            string
+	DepartementUser     string
+	DepartementKandidat string
+	KodePengajuan       string
+	IdSoal              uint
+	KategoriSoal        string
+	NamaKandidat        string
+	Nilai               float64
+	Kriteria            string
+	TanggalWwawancara   time.Time
+	UserId              uint
+	Role                string
+}
+
+type DetailProses struct {
+	gorm.Model
+	IDAdmin            uint
+	NilaiAdmin         float64
+	NilaiManager       float64
+	KandidatDepartment string
+	NamaKandidat       string
+	TotalNilai         float64
+	KodePengajuan      string
+	IdManager          uint
+	NamaManager        string
+	NamaAdmin          string
+	Status             string
+}
