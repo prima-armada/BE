@@ -49,5 +49,6 @@ type HandleInterview interface {
 type HandleDetailProses interface {
 	AddProcess(e echo.Context) error
 	GetallDetail(e echo.Context) error
-	// CekKategoriInterview(e echo.Context) error
+	Updatedetail(e echo.Context) error
+	GetallDetailManager(e echo.Context) error
 }

@@ -169,8 +169,8 @@ type ReqDetailProsesManager struct {
 	Id                 uint
 	IdManager          uint
 	NilaiManager       float64
-	KodePengajuan      string
-	NamaKandidat       string
+	KodePengajuan      string `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
+	NamaKandidat       string `json:"nama_kandidat" form:"nama_kandidat" validate:"required,min=5"`
 	TotalNilai         float64
 	NamaManager        string
 	KandidatDepartment string

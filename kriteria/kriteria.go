@@ -1,5 +1,7 @@
 package kriteria
 
+import "errors"
+
 func KriteriaKandidat(test string) (nilai int) {
 	if test == "sangat baik" {
 		nilai = 4
@@ -16,4 +18,36 @@ func KriteriaKandidat(test string) (nilai int) {
 	}
 	nilai = 0
 	return nilai
+}
+func CekSTATUS(Nilai float64) (status string, err error) {
+	if Nilai > float64(4) {
+		status = "nilai lebih dari 4 tidak ada"
+		return status, errors.New("lebih dari 4 tidak ada")
+	} else if Nilai >= float64(3) && Nilai <= 4 {
+		status = "anda lolos ke tahap interview user"
+
+		return status, nil
+	} else if Nilai > float64(2) && Nilai < float64(3) {
+		status = "anda tidak  lolos ke tahap interview user"
+		return status, nil
+	}
+
+	status = "anda tidak  lolos ke tahap interview user"
+	return status, nil
+}
+func CekSTATUSformanager(Nilai float64) (status string, err error) {
+	if Nilai > float64(4) {
+		status = "nilai lebih dari 4 tidak ada"
+		return status, errors.New("lebih dari 4 tidak ada")
+	} else if Nilai >= float64(3) && Nilai <= 4 {
+		status = "harap menunggu konfirmasi hr"
+
+		return status, nil
+	} else if Nilai >= float64(2) && Nilai < float64(3) {
+		status = "anda tidak  lolos ke tahap selanjutnya"
+		return status, nil
+	}
+
+	status = "anda tidak  lolos ke tahap selanjutnya"
+	return status, nil
 }

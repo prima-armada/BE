@@ -51,4 +51,6 @@ type Serviceinterview interface {
 type ServiceProcess interface {
 	AddProcess(id int, newProcess request.ReqDetailProsesAdmin) (request.ReqDetailProsesAdmin, error)
 	GetallDetail() (data []request.ReqDetailProses, err error)
+	GetAlldetailManager(id int) (data []request.ReqDetailProsesManager, err error)
+	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
 }
