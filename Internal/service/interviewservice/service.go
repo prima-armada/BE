@@ -99,7 +99,6 @@ func (si *Serviceinterview) AddInterview(newinterview request.ReqInterviewKandid
 	return datarepo, nil
 }
 
-// GetallInterview implements servicecontract.Serviceinterview.
 func (si *Serviceinterview) GetallInterview(userid int, kode string, nama string) (data []request.ReqInterviewKandidat, err error) {
 	data, err = si.ri.GetallInterview(userid, kode, nama)
 

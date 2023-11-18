@@ -57,3 +57,15 @@ func (ri *Repointerview) GetallInterview(userid int, kode string, nama string) (
 
 	return modeltoreq, nil
 }
+
+// CekallInterview implements repocontract.RepoInterview.
+func (ri *Repointerview) CekallInterview(userid int, kode string, nama string) (data []request.ReqInterviewKandidat, err error) {
+	modelinterview := []model.InterviewKandidat{}
+	tx := ri.db.Raw("SELECT interview_kandidats.id, interview_kandidats.nama_user, interview_kandidats.departement_user, interview_kandidats.departement_kandidat, interview_kandidats.kode_pengajuan, interview_kandidats.id_soal, interview_kandidats.nama_kandidat, interview_kandidats.nilai AS nilai, interview_kandidats.user_id FROM interview_kandidats where interview_kandidats.kode_pengajuan= ? AND interview_kandidats.nama_kandidat= ? AND interview_kandidats.user_id =?", kode, nama, userid).Find(&modelinterview)
+	if tx.Error != nil {
+		return []request.ReqInterviewKandidat{}, tx.Error
+	}
+	modeltoreq := query.Listmodelotreqinterview(modelinterview)
+
+	return modeltoreq, nil
+}

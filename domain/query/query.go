@@ -676,3 +676,35 @@ func Listmodelotreqdetail(data []model.DetailProses) (datareq []request.ReqDetai
 	}
 	return datareq
 }
+func Reqdetailmanager(data request.ReqDetailProsesManager) model.DetailProses {
+	return model.DetailProses{
+
+		NilaiManager:       data.NilaiManager,
+		KandidatDepartment: data.KandidatDepartment,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		IdManager:          data.IdManager,
+		NamaManager:        data.NamaManager,
+		Status:             data.Status,
+	}
+}
+func Modeldetailmanagertoreq(data *model.DetailProses) request.ReqDetailProsesManager {
+	return request.ReqDetailProsesManager{
+		Id:                 data.ID,
+		NilaiManager:       data.NilaiManager,
+		KandidatDepartment: data.KandidatDepartment,
+		NamaKandidat:       data.NamaKandidat,
+		TotalNilai:         data.TotalNilai,
+		KodePengajuan:      data.KodePengajuan,
+		IdManager:          data.IdManager,
+		NamaManager:        data.NamaManager,
+		Status:             data.Status,
+	}
+}
+func Listmodelotreqdetailmanager(data []model.DetailProses) (datareq []request.ReqDetailProsesManager) {
+	for _, val := range data {
+		datareq = append(datareq, Modeldetailmanagertoreq(&val))
+	}
+	return datareq
+}

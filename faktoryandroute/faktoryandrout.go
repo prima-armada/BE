@@ -108,5 +108,7 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	prosesgrup := e.Group("/proses")
 	prosesgrup.POST("/addproses", handleproses.AddProcess, middlewares.JWTMiddleware())
 	prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
+	prosesgrup.GET("/manager", handleproses.GetallDetailManager, middlewares.JWTMiddleware())
+	prosesgrup.PUT("", handleproses.Updatedetail, middlewares.JWTMiddleware())
 
 }

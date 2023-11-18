@@ -55,10 +55,14 @@ type RepoDepartment interface {
 type RepoInterview interface {
 	AddInterview(newinterview request.ReqInterviewKandidat, tanggal time.Time) (request.ReqInterviewKandidat, error)
 	GetallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
+	CekallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
 	CekKategorInterview(kategori string) (request.ReqInterviewKandidat, error)
 }
 type RepoProcess interface {
 	AddProcess(newProcess request.ReqDetailProsesAdmin) (request.ReqDetailProsesAdmin, error)
 	GetallDetail() (data []request.ReqDetailProses, err error)
-	Getdetailkandidat(kode, nama, kandidat string) (data request.ReqDetailProsesAdmin, err error)
+	GetdetailkandidatAdmin(kode, nama, kandidat string) (data request.ReqDetailProsesAdmin, err error)
+	GetdetailkandidatManager(id int) (data request.ReqDetailProsesManager, err error)
+	GetAlldetailManager(department string) (data []request.ReqDetailProsesManager, err error)
+	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
 }

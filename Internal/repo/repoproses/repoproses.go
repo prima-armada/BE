@@ -50,7 +50,7 @@ func (rp *Repoproses) GetallDetail() (data []request.ReqDetailProses, err error)
 }
 
 // Getdetailkandidat implements repocontract.RepoProcess.
-func (rp *Repoproses) Getdetailkandidat(kode string, nama string, kandidat string) (data request.ReqDetailProsesAdmin, err error) {
+func (rp *Repoproses) GetdetailkandidatAdmin(kode string, nama string, kandidat string) (data request.ReqDetailProsesAdmin, err error) {
 	model := model.DetailProses{}
 	tx := rp.db.Raw("SELECT detail_proses.id, detail_proses.id_admin, detail_proses.nilai_admin, detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.nama_admin, detail_proses.status FROM detail_proses WHERE detail_proses.nama_admin = ? AND detail_proses.nama_kandidat = ? AND detail_proses.kode_pengajuan = ?", nama, kandidat, kode).Find(&model)
 
@@ -63,4 +63,44 @@ func (rp *Repoproses) Getdetailkandidat(kode string, nama string, kandidat strin
 	return modeltoreq, nil
 }
 
-// SELECT detail_proses.id, detail_proses.id_admin, detail_proses.nilai_admin, detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.nama_admin, detail_proses.status FROM detail_proses WHERE detail_proses.nama_admin ="furqan" AND detail_proses.nama_kandidat = "ammar" AND detail_proses.kode_pengajuan = "generalaffair60RVPrxN";
+// GetdetailkandidatManager implements repocontract.RepoProcess.
+func (rp *Repoproses) GetdetailkandidatManager(id int) (data request.ReqDetailProsesManager, err error) {
+	model := model.DetailProses{}
+	tx := rp.db.Raw("SELECT detail_proses.id,  detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.status,detail_proses.kandidat_department	 FROM detail_proses WHERE detail_proses.id = ?", id).Find(&model)
+
+	if tx.Error != nil {
+		return data, tx.Error
+	}
+
+	modeltoreq := query.Modeldetailmanagertoreq(&model)
+
+	return modeltoreq, nil
+}
+
+// UpdateDetail implements repocontract.RepoProcess.
+func (rp *Repoproses) UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error) {
+	reqmanagertomodel := query.Reqdetailmanager(update)
+
+	tx2 := rp.db.Model(&reqmanagertomodel).Where("id = ?", id).Updates(&reqmanagertomodel)
+
+	if tx2.Error != nil {
+		return data, tx2.Error
+	}
+	modeltoreq := query.Modeldetailmanagertoreq(&reqmanagertomodel)
+
+	return modeltoreq, nil
+}
+
+// GetAlldetailManager implements repocontract.RepoProcess.
+func (rp *Repoproses) GetAlldetailManager(department string) (data []request.ReqDetailProsesManager, err error) {
+	model := []model.DetailProses{}
+	tx := rp.db.Raw("SELECT detail_proses.id,  detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.status,detail_proses.kandidat_department	 FROM detail_proses WHERE detail_proses.kandidat_department = ?", department).Find(&model)
+
+	if tx.Error != nil {
+		return data, tx.Error
+	}
+
+	modeltoreq := query.Listmodelotreqdetailmanager(model)
+
+	return modeltoreq, nil
+}
