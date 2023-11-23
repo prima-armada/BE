@@ -26,7 +26,7 @@ type HandleSoal interface {
 	Deletedsoal(e echo.Context) error
 }
 type HandleSubmission interface {
-	AddSubmissionManager(e echo.Context) error
+	AddSubmission(e echo.Context) error
 	GetAllSubmissionManager(e echo.Context) error
 	GetAllSubmissionDireksi(e echo.Context) error
 	GetAllSubmissionPresident(e echo.Context) error
@@ -51,4 +51,7 @@ type HandleDetailProses interface {
 	GetallDetail(e echo.Context) error
 	Updatedetail(e echo.Context) error
 	GetallDetailManager(e echo.Context) error
+}
+type HandlePosisi interface {
+	AddPosisi(e echo.Context) error
 }

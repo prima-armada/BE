@@ -8,17 +8,20 @@ import (
 	"par/domain/request"
 	"par/helper"
 	middlewares "par/middleware"
+	"par/uploadgambar"
 
 	echo "github.com/labstack/echo/v4"
 )
 
 type Handlerkandidat struct {
 	sk servicecontract.ServiceKandidat
+	Up uploadgambar.Uploads
 }
 
-func NewHandlesKandidat(sk servicecontract.ServiceKandidat) handlecontract.HandleKandidat {
+func NewHandlesKandidat(sk servicecontract.ServiceKandidat, up uploadgambar.Uploads) handlecontract.HandleKandidat {
 	return &Handlerkandidat{
 		sk: sk,
+		Up: up,
 	}
 }
 
@@ -40,16 +43,26 @@ func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 	if binderr != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
+	cv, errcv := e.FormFile("cv")
 
+	if errcv != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse("data cv tidak terbuat", http.StatusBadGateway, true))
+	}
+
+	upload, errupload := hk.Up.Upload(cv)
+	if errupload != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse("cv tidak terupload", http.StatusBadRequest, true))
+	}
+	reqformulir.CV = upload
 	dataservice, errservice := hk.sk.AddFormulirKandidat(reqformulir, uint(useradmin))
 
 	if errservice != nil {
 		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
 	}
 
-	respon := query.ReqtoResponKandidat(dataservice)
+	// respon := query.ReqtoResponKandidat(dataservice)
 
-	return e.JSON(http.StatusCreated, helper.GetResponse(respon, http.StatusCreated, false))
+	return e.JSON(http.StatusCreated, helper.GetResponse(dataservice, http.StatusCreated, false))
 
 }
 

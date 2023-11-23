@@ -74,7 +74,7 @@ func (ru *RepoUser) NipUserExist(nip string) (data request.RequestUser, err erro
 // AllUser implements repocontract.RepoUser.
 func (ru *RepoUser) AllUser() (data []request.RequestUser, err error) {
 	var activ []model.User
-	tx := ru.db.Raw("Select users.id, users.role, users.nip, users.password,users.username from users").Find(&activ)
+	tx := ru.db.Raw("Select users.id, users.role, users.nip, users.password,users.username,users.bagian from users").Find(&activ)
 	if tx.Error != nil {
 		return data, tx.Error
 	}
@@ -100,7 +100,7 @@ func (ru *RepoUser) IdUserExist(id int) (data request.RequestUser, err error) {
 // GetAllManager implements repocontract.RepoUser.
 func (ru *RepoUser) GetAllManager(roles string) ([]request.RequestUser, error) {
 	var activ []model.User
-	tx := ru.db.Raw("Select users.id, users.role, users.nip, users.password,users.username,users.nama from users where users.role = ?", roles).Find(&activ)
+	tx := ru.db.Raw("Select users.id, users.role, users.nip, users.password,users.username,users.nama,users.bagian from users where users.role = ?", roles).Find(&activ)
 	if tx.Error != nil {
 		return []request.RequestUser{}, tx.Error
 	}

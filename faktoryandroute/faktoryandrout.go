@@ -1,9 +1,11 @@
 package faktoryandroute
 
 import (
+	"par/config"
 	uh "par/internal/handler/userhandler"
 	ru "par/internal/repo/repouser"
 	us "par/internal/service/userservice"
+	"par/uploadgambar"
 
 	lh "par/internal/handler/loginhandler"
 	rl "par/internal/repo/repologin"
@@ -33,6 +35,10 @@ import (
 	rp "par/internal/repo/repoproses"
 	ps "par/internal/service/prosesservice"
 
+	pth "par/internal/handler/posisihandler"
+	rpt "par/internal/repo/repoposisi"
+	pts "par/internal/service/posisiservice"
+
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -41,6 +47,8 @@ import (
 
 // s
 func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
+	cfg := config.GetConfig()
+	cld := uploadgambar.NewCloud(cfg)
 	rpm := ru.NewRepoUser(db)
 	ucmhsw := us.NewServiceUser(rpm)
 	hndlmhs := uh.NewHandleUser(ucmhsw)
@@ -67,7 +75,7 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	servicesubmission := lsm.NewServiceSubmission(rpsm, rpd, rpm)
 	handlesubmmission := sm.NewHandlesSubmission(servicesubmission)
 	submissiongrup := e.Group("/submission")
-	submissiongrup.POST("/addsubmission", handlesubmmission.AddSubmissionManager, middlewares.JWTMiddleware())
+	submissiongrup.POST("/addsubmission", handlesubmmission.AddSubmission, middlewares.JWTMiddleware())
 	submissiongrup.GET("/manager", handlesubmmission.GetAllSubmissionManager, middlewares.JWTMiddleware())
 	submissiongrup.GET("/direksi", handlesubmmission.GetAllSubmissionDireksi, middlewares.JWTMiddleware())
 	submissiongrup.GET("/admin", handlesubmmission.GetAllSubmissionAdmin, middlewares.JWTMiddleware())
@@ -80,7 +88,7 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 
 	rpk := rk.NewRepoKandidat(db)
 	servicekandidat := ks.NewServiceKandidat(rpk, rpsm, rpd, rpm)
-	handlekandiat := kh.NewHandlesKandidat(servicekandidat)
+	handlekandiat := kh.NewHandlesKandidat(servicekandidat, cld)
 	kandidatgrup := e.Group("/kandidat")
 	kandidatgrup.POST("/addformulir", handlekandiat.AddFormulirKandidat, middlewares.JWTMiddleware())
 	kandidatgrup.GET("", handlekandiat.GetCodeKandidat, middlewares.JWTMiddleware())
@@ -110,5 +118,14 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
 	prosesgrup.GET("/manager", handleproses.GetallDetailManager, middlewares.JWTMiddleware())
 	prosesgrup.PUT("", handleproses.Updatedetail, middlewares.JWTMiddleware())
+
+	rpt := rpt.NewRepoposisi(db)
+	serviceposisi := pts.NewServiceposisi(rpt, rpm)
+	handleposis := pth.NewHandlesPosisi(serviceposisi)
+	posisigrup := e.Group("/posisi")
+	posisigrup.POST("/add", handleposis.AddPosisi, middlewares.JWTMiddleware())
+	// prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
+	// prosesgrup.GET("/manager", handleproses.GetallDetailManager, middlewares.JWTMiddleware())
+	// prosesgrup.PUT("", handleproses.Updatedetail, middlewares.JWTMiddleware())
 
 }

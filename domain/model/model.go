@@ -15,7 +15,12 @@ type User struct {
 	Nama     string
 	Bagian   string
 }
-
+type Position struct {
+	gorm.Model
+	UserId      uint
+	LevelKosong string
+	Department  string
+}
 type Department struct {
 	gorm.Model
 	NamaDepartment string `gorm:"size:191" `
@@ -34,6 +39,7 @@ type Submission struct {
 	Alasan            string
 	TanggalKebutuhan  time.Time `gorm:"default:null"`
 	KodePengajuan     string
+	PosisiKosong      string
 	Pencharian        string
 	MaksimalGaji      float64
 	StatusPengajuan   string
@@ -47,17 +53,21 @@ type Submission struct {
 	TanggalEvaluasi   time.Time `gorm:"default:null"`
 }
 type ReqGetManager struct {
-	Id               uint
-	Nama             string
-	NamaDepartment   string
-	Jumlah           string
-	Alasan           string
-	KodePengajuan    string
-	StatusPengajuan  string
-	TanggalKebutuhan string
-	Pencharian       string
-	Golongan         string
-	TanggalPengajuan time.Time
+	Id                uint
+	Nama              string
+	NamaDepartment    string
+	Jumlah            string
+	Alasan            string
+	KodePengajuan     string
+	StatusPengajuan   string
+	PosisiKosong      string
+	TanggalKebutuhan  string
+	Pencharian        string
+	Golongan          string
+	TanggalPengajuan  time.Time
+	TanggalVerifikasi string
+	TanggalEvaluasi   string
+	TanggalDisetujui  string
 }
 type ReqGetDireksi struct {
 	Id               uint
@@ -68,6 +78,7 @@ type ReqGetDireksi struct {
 	KodePengajuan    string
 	StatusPengajuan  string
 	TanggalKebutuhan string
+	PosisiKosong     string
 	Pencharian       string
 	Golongan         string
 	TanggalPengajuan time.Time
@@ -77,6 +88,7 @@ type ReqGetAdmin struct {
 	Id                uint
 	UserPengajuan     string
 	KodePengajuan     string
+	PosisiKosong      string
 	NamaDepartment    string
 	Jumlah            string
 	Alasan            string
@@ -102,6 +114,7 @@ type ReqGetPresident struct {
 	Alasan            string
 	StatusPengajuan   string
 	TanggalKebutuhan  string
+	PosisiKosong      string
 	Pencharian        string
 	Golongan          string
 	TanggalPengajuan  time.Time
@@ -111,6 +124,8 @@ type ReqGetPresident struct {
 type FormulirKandidat struct {
 	gorm.Model
 	NamaManager          string
+	CuricullumVitae      string
+	PosisiLamar          string
 	KodePengajuan        string
 	DepartementManager   string
 	NamaKandidat         string

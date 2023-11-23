@@ -15,7 +15,7 @@ type ServiceLogin interface {
 }
 
 type ServiceSubmission interface {
-	AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error)
+	AddSubmission(newSubmission request.ReqSubmission, iduser int, res time.Time) (request.ReqSubmission, error)
 	GetNamaManager(namamanager string) ([]request.ReqGetManager, error)
 	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
 	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
@@ -53,4 +53,7 @@ type ServiceProcess interface {
 	GetallDetail() (data []request.ReqDetailProses, err error)
 	GetAlldetailManager(id int) (data []request.ReqDetailProsesManager, err error)
 	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
+}
+type ServicePosisi interface {
+	AddPosisi(id int, newProcess request.ReqPosisi) (request.ReqPosisi, error)
 }

@@ -2,6 +2,7 @@ package reposubmission
 
 import (
 	"errors"
+	"fmt"
 	"par/domain/contract/repocontract"
 	"par/domain/model"
 	"par/domain/query"
@@ -21,17 +22,17 @@ func NewRepoSubmission(db *gorm.DB) repocontract.RepoSubmission {
 	}
 }
 
-func (rsm *RepoSubmission) AddSubmissionManager(newSubmission request.ReqSubmissionManager, res time.Time) (request.ReqSubmissionManager, error) {
-	reqsubmissiontomodel := query.RequestmanagerTomodel(newSubmission, res)
+func (rsm *RepoSubmission) AddSubmission(newSubmission request.ReqSubmission, res time.Time) (request.ReqSubmission, error) {
+	reqsubmissiontomodel := query.RequestsubmissionTomodel(newSubmission, res)
 
 	tx := rsm.db.Create(&reqsubmissiontomodel)
 
 	if tx.Error != nil {
-		return request.ReqSubmissionManager{}, tx.Error
+		return request.ReqSubmission{}, tx.Error
 	}
 	timeString := reqsubmissiontomodel.TanggalKebutuhan.Format("02/01/2006")
 
-	modeltoreq := query.ModelmanagerToRequest(reqsubmissiontomodel, timeString)
+	modeltoreq := query.ModelsubmissionToRequest(reqsubmissiontomodel, timeString)
 
 	return modeltoreq, nil
 }
@@ -39,7 +40,7 @@ func (rsm *RepoSubmission) AddSubmissionManager(newSubmission request.ReqSubmiss
 func (rsm *RepoSubmission) GetAllSubmissionManager(id int) ([]request.ReqGetManager, error) {
 	modelmanager := []model.ReqGetManager{}
 
-	tx := rsm.db.Raw("SELECT sb.id,u.nama, dp.nama_department ,sb.jumlah,sb.alasan,sb.status_pengajuan, sb.tanggal_kebutuhan,sb.pencharian,sb.golongan,sb.tanggal_pengajuan,sb.kode_pengajuan FROM users u, departments dp ,submissions sb where sb.id_department = dp.id and sb.user_pengajuan = u.id and sb.user_pengajuan = ?", id).Find(&modelmanager)
+	tx := rsm.db.Raw("SELECT sb.id,u.nama, dp.nama_department ,sb.jumlah,sb.alasan,sb.status_pengajuan, sb.tanggal_kebutuhan,sb.pencharian,sb.golongan,sb.tanggal_pengajuan,sb.kode_pengajuan,sb.tanggal_verifikasi,sb.tanggal_disetujui,sb.tanggal_evaluasi FROM users u, departments dp ,submissions sb where sb.id_department = dp.id and sb.user_pengajuan = u.id and sb.user_pengajuan = ?", id).Find(&modelmanager)
 
 	if tx.Error != nil {
 		return []request.ReqGetManager{}, tx.Error
@@ -60,6 +61,8 @@ func (rsm *RepoSubmission) GetNamaManager(namamanager string) ([]request.ReqGetM
 	}
 	list := query.ListModeltoReqmanager(modelmanager)
 
+	fmt.Print("ini list", list)
+
 	return list, nil
 }
 
@@ -67,7 +70,7 @@ func (rsm *RepoSubmission) GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error
 	modelAdmin := []model.ReqGetAdmin{}
 	tx := rsm.db.
 		Table("submissions").
-		Select("submissions.id, manager.nama as user_pengajuan, departments.nama_department, submissions.jumlah, submissions.alasan, submissions.pencharian, submissions.tanggal_kebutuhan, submissions.maksimal_gaji, user_evaluasi.nama AS nama_evaluasi, user_verifikasi.nama AS nama_verifikasi, user_persetujuan.nama AS nama_persetujuan, submissions.status_pengajuan, submissions.golongan, submissions.tanggal_verifikasi, submissions.tanggal_evaluasi, submissions.tanggal_pengajuan, submissions.tanggal_disetujui,submission.kode_pengajuan").
+		Select("submissions.id, manager.nama as user_pengajuan, departments.nama_department, submissions.jumlah, submissions.alasan, submissions.pencharian, submissions.tanggal_kebutuhan, submissions.maksimal_gaji, user_evaluasi.nama AS nama_evaluasi, user_verifikasi.nama AS nama_verifikasi, user_persetujuan.nama AS nama_persetujuan, submissions.status_pengajuan, submissions.golongan, submissions.tanggal_verifikasi, submissions.tanggal_evaluasi, submissions.tanggal_pengajuan, submissions.tanggal_disetujui,submissions.kode_pengajuan").
 		Joins("LEFT JOIN users AS user_verifikasi ON submissions.id_verifikasi = user_verifikasi.id").
 		Joins("LEFT JOIN users AS user_persetujuan ON submissions.idpersetujuan = user_persetujuan.id").
 		Joins("LEFT JOIN users AS user_evaluasi ON submissions.id_evaluasi = user_evaluasi.id").
@@ -113,7 +116,7 @@ func (rsm *RepoSubmission) GetAllSubmissionPresident(deparment string) ([]reques
 func (rsm *RepoSubmission) UpdateSubmissionAdmin(idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error) {
 	var submission model.Submission
 
-	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan, from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
+	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
 
 	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
 
@@ -135,7 +138,7 @@ func (rsm *RepoSubmission) UpdateSubmissionAdmin(idsubmission int, update reques
 func (rsm *RepoSubmission) UpdateSubmissionPresident(idsubmission int, update request.UpdateVicePresident) (request.UpdateVicePresident, error) {
 	var submission model.Submission
 
-	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan, from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
+	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
 
 	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
 
@@ -158,7 +161,7 @@ func (rsm *RepoSubmission) UpdateSubmissionPresident(idsubmission int, update re
 func (rsm *RepoSubmission) UpdateSubmissionDireksi(idsubmission int, update request.UpdateDireksi) (request.UpdateDireksi, error) {
 	var submission model.Submission
 
-	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan, from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
+	tx1 := rsm.db.Raw("Select submissions.jumlah, submissions.alasan from submissions WHERE submissions.id= ? ", idsubmission).First(&submission)
 
 	if errors.Is(tx1.Error, gorm.ErrRecordNotFound) {
 
