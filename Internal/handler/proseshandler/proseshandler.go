@@ -1,6 +1,7 @@
 package proseshandler
 
 import (
+	"fmt"
 	"net/http"
 	"par/domain/contract/handlecontract"
 	"par/domain/contract/servicecontract"
@@ -31,8 +32,8 @@ func (hp *HandlerProses) AddProcess(e echo.Context) error {
 	if errtoken != nil {
 		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
 	}
-	if role == "admin" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin dan manager", http.StatusUnauthorized, true))
+	if role != "admin" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin", http.StatusUnauthorized, true))
 	}
 
 	binderr := e.Bind(&reqproses)
@@ -74,7 +75,7 @@ func (hp *HandlerProses) Updatedetail(e echo.Context) error {
 	IdProses := e.QueryParam("idproses")
 
 	cnv, errcnv := strconv.Atoi(IdProses)
-
+	fmt.Print(cnv)
 	if errcnv != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errcnv, http.StatusBadRequest, true))
 	}

@@ -25,12 +25,13 @@ type RequestDepartment struct {
 	DeletedAt      time.Time
 	UpdateAt       time.Time
 }
-type ReqSubmissionManager struct {
+type ReqSubmission struct {
 	IdPengajuan      int
 	IdDepartment     uint
 	Jumlah           string `json:"jumlah" form:"jumlah" validate:"required"`
 	Alasan           string `json:"alasan" form:"alasan" validate:"required,min=5"`
 	KodePengajuan    string
+	PosisiKosong     string `json:"posisi" form:"posisi" validate:"required,min=5"`
 	StatusPengajuan  string
 	TanggalKebutuhan string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
 	Pencaharian      string `json:"pencaharian" form:"pencaharian" validate:"required"`
@@ -39,17 +40,20 @@ type ReqSubmissionManager struct {
 	TanggalPengajuan time.Time
 }
 type ReqGetManager struct {
-	Id               uint
-	Nama             string
-	NamaDepartment   string
-	Jumlah           string `json:"jumlah" form:"jumlah" validate:"required"`
-	Alasan           string `json:"alasan" form:"alasan" validate:"required,min=5"`
-	StatusPengajuan  string
-	TanggalKebutuhan string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
-	Pencharian       string `json:"pencaharian" form:"pencaharian" validate:"required"`
-	Golongan         string `json:"golongan" form:"golongan" validate:"required"`
-	KodePengajuan    string
-	TanggalPengajuan time.Time
+	Id                uint
+	Nama              string
+	NamaDepartment    string
+	Jumlah            string `json:"jumlah" form:"jumlah" validate:"required"`
+	Alasan            string `json:"alasan" form:"alasan" validate:"required,min=5"`
+	StatusPengajuan   string
+	TanggalKebutuhan  string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
+	Pencharian        string `json:"pencaharian" form:"pencaharian" validate:"required"`
+	Golongan          string `json:"golongan" form:"golongan" validate:"required"`
+	KodePengajuan     string
+	TanggalPengajuan  time.Time
+	TanggalVerifikasi string
+	TanggalEvaluasi   string
+	TanggalDisetujui  string
 }
 type ReqGetDireksi struct {
 	Id               uint
@@ -121,6 +125,8 @@ type ReqFormulirKandidat struct {
 	NamaManager          string `json:"nama_manager" form:"nama_manager" validate:"required,min=5"`
 	KodePengajuan        string `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
 	DepartementManager   string
+	CV                   string
+	PosisiLamar          string `json:"posisi" form:"posisi" validate:"required,min=5"`
 	NamaKandidat         string `json:"nama_kandidat  " form:"nama_kandidat" validate:"required,min=5"`
 	ContactNumber        string `json:"contact_kandidat" form:"contact_kandidat" validate:"required,min=5"`
 	ContactYangDihubungi string `json:"contact_kerabat" form:"contact_kerabat" validate:"required"`
@@ -189,4 +195,10 @@ type ReqDetailProses struct {
 	NamaAdmin          string  `json:"nama_admin"`
 	Status             string  `json:"status"`
 	KandidatDepartment string  `json:"department_kandidat"`
+}
+type ReqPosisi struct {
+	Id          uint
+	UserId      uint
+	LevelKosong string `json:"posisi" form:"posisi" validate:"required,min=5"`
+	Department  string
 }

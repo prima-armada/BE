@@ -50,28 +50,29 @@ func (cl *cloudUpload) Upload(file *multipart.FileHeader) (string, error) {
 	// 	return "", errread
 	// }
 
-	// filetype := http.DetectContentType(	buffer)
-	// if filetype != "image/jpeg" && filetype != "image/png" && filetype != "image/jpg" && filetype != "image/webp" {
-	// 	err = errors.New("file format is not allowed. Please upload a JPEG, JPG, PNG or WEBP image")
-	// 	return
+	// filetype := http.DetectContentType(buffer)
+	// if filetype != "application/pdf" {
+	// 	return " ", errors.New("file bukan pdf")
 	// }
-
 	_, errpdf := model.NewPdfReader(src)
 	if errpdf != nil {
 		return "", errors.New("file anda bukan pdf")
 	}
+	src.Seek(0, 0)
 
 	publicID := fmt.Sprintf("%d-%s", int(file.Size), time.Now().Format("20060102-150405"))
 	uploadParams := uploader.UploadParams{
-		PublicID: publicID,
-		Folder:   os.Getenv("CLOUDINARY_UPLOAD_FOLDER"),
+		PublicID:     publicID,
+		Folder:       os.Getenv("CLOUDINARY_UPLOAD_FOLDER"),
+		ResourceType: "raw",
+		Format:       "pdf",
 	}
 
 	uploadResult, err := cl.clds.Upload.Upload(context.Background(), src, uploadParams)
 	if err != nil {
 		return "", err
 	}
-	fmt.Println(uploadResult.SecureURL)
+
 	return uploadResult.SecureURL, nil
 }
 

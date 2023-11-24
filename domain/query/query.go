@@ -61,6 +61,7 @@ func ReqtoResponUser(data request.RequestUser) respon.ResponseUser {
 		Role:      data.Role,
 		Nip:       data.Nip,
 		Username:  data.Username,
+		Bagian:    data.Bagian,
 		Nama:      data.Name,
 		CreatedAt: data.CreatedAt,
 	}
@@ -146,7 +147,7 @@ func ListReqDepartmentToRespondepart(data []request.RequestDepartment) (datareq 
 	return datareq
 }
 
-func RequestmanagerTomodel(data request.ReqSubmissionManager, tanggal time.Time) model.Submission {
+func RequestsubmissionTomodel(data request.ReqSubmission, tanggal time.Time) model.Submission {
 	return model.Submission{
 		IdDepartment:     data.IdDepartment,
 		UserPengajuan:    uint(data.IdPengajuan),
@@ -155,19 +156,21 @@ func RequestmanagerTomodel(data request.ReqSubmissionManager, tanggal time.Time)
 		TanggalKebutuhan: tanggal,
 		Pencharian:       data.Pencaharian,
 		StatusPengajuan:  data.StatusPengajuan,
+		PosisiKosong:     data.PosisiKosong,
 		Golongan:         data.Golongan,
 		TanggalPengajuan: data.TanggalPengajuan,
 		KodePengajuan:    data.KodePengajuan,
 	}
 
 }
-func ModelmanagerToRequest(data model.Submission, tanggal string) request.ReqSubmissionManager {
-	return request.ReqSubmissionManager{
+func ModelsubmissionToRequest(data model.Submission, tanggal string) request.ReqSubmission {
+	return request.ReqSubmission{
 		IdDepartment:     data.IdDepartment,
 		IdPengajuan:      int(data.UserPengajuan),
 		Jumlah:           data.Jumlah,
 		Alasan:           data.Alasan,
 		TanggalKebutuhan: tanggal,
+		PosisiKosong:     data.PosisiKosong,
 		Pencaharian:      data.Pencharian,
 		StatusPengajuan:  data.StatusPengajuan,
 		Golongan:         data.Golongan,
@@ -176,8 +179,8 @@ func ModelmanagerToRequest(data model.Submission, tanggal string) request.ReqSub
 	}
 
 }
-func ReqmanagerToRespon(data request.ReqSubmissionManager) respon.ResponSubmissionManager {
-	return respon.ResponSubmissionManager{
+func ReqsubmisionToRespon(data request.ReqSubmission) respon.ResponSubmission {
+	return respon.ResponSubmission{
 		IdDepartment:     data.IdDepartment,
 		IdPengajuan:      data.IdPengajuan,
 		Jumlah:           data.Jumlah,
@@ -194,17 +197,20 @@ func ReqmanagerToRespon(data request.ReqSubmissionManager) respon.ResponSubmissi
 
 func GetModelMnagerToReq(data model.ReqGetManager) request.ReqGetManager {
 	return request.ReqGetManager{
-		Id:               data.Id,
-		Nama:             data.Nama,
-		NamaDepartment:   data.NamaDepartment,
-		Jumlah:           data.Jumlah,
-		Alasan:           data.Alasan,
-		StatusPengajuan:  data.StatusPengajuan,
-		TanggalKebutuhan: data.TanggalKebutuhan,
-		Pencharian:       data.Pencharian,
-		Golongan:         data.Golongan,
-		TanggalPengajuan: data.TanggalPengajuan,
-		KodePengajuan:    data.KodePengajuan,
+		Id:                data.Id,
+		Nama:              data.Nama,
+		NamaDepartment:    data.NamaDepartment,
+		Jumlah:            data.Jumlah,
+		Alasan:            data.Alasan,
+		StatusPengajuan:   data.StatusPengajuan,
+		TanggalKebutuhan:  data.TanggalKebutuhan,
+		Pencharian:        data.Pencharian,
+		Golongan:          data.Golongan,
+		TanggalPengajuan:  data.TanggalPengajuan,
+		KodePengajuan:     data.KodePengajuan,
+		TanggalVerifikasi: data.TanggalVerifikasi,
+		TanggalEvaluasi:   data.TanggalEvaluasi,
+		TanggalDisetujui:  data.TanggalDisetujui,
 	}
 }
 func ListModeltoReqmanager(data []model.ReqGetManager) (datareq []request.ReqGetManager) {
@@ -215,17 +221,20 @@ func ListModeltoReqmanager(data []model.ReqGetManager) (datareq []request.ReqGet
 }
 func GetReqMnagerToRes(data request.ReqGetManager) respon.ReSponGetManager {
 	return respon.ReSponGetManager{
-		IdPengajuan:      int(data.Id),
-		NamaManager:      data.Nama,
-		NamaDepartment:   data.NamaDepartment,
-		Jumlah:           data.Jumlah,
-		Alasan:           data.Alasan,
-		StatusPengajuan:  data.StatusPengajuan,
-		TanggalKebutuhan: data.TanggalKebutuhan,
-		Pencaharian:      data.Pencharian,
-		Golongan:         data.Golongan,
-		TanggalPengajuan: data.TanggalPengajuan,
-		KodePengajuan:    data.KodePengajuan,
+		IdPengajuan:       int(data.Id),
+		NamaManager:       data.Nama,
+		NamaDepartment:    data.NamaDepartment,
+		Jumlah:            data.Jumlah,
+		Alasan:            data.Alasan,
+		StatusPengajuan:   data.StatusPengajuan,
+		TanggalKebutuhan:  data.TanggalKebutuhan,
+		Pencaharian:       data.Pencharian,
+		Golongan:          data.Golongan,
+		TanggalPengajuan:  data.TanggalPengajuan,
+		KodePengajuan:     data.KodePengajuan,
+		TanggalVerifikasi: data.TanggalVerifikasi,
+		TanggalEvaluasi:   data.TanggalEvaluasi,
+		TanggalDisetujui:  data.TanggalDisetujui,
 	}
 }
 func ListReqltoResmanager(data []request.ReqGetManager) (datares []respon.ReSponGetManager) {
@@ -490,6 +499,8 @@ func ReqtomodelKandidat(data request.ReqFormulirKandidat) model.FormulirKandidat
 		Alamat:               data.Alamat,
 		Pengalaman:           data.Pengalaman,
 		AdminId:              data.AdminId,
+		CuricullumVitae:      data.CV,
+		PosisiLamar:          data.PosisiLamar,
 	}
 }
 func ModeltoReqKandidat(data *model.FormulirKandidat) request.ReqFormulirKandidat {
@@ -509,6 +520,8 @@ func ModeltoReqKandidat(data *model.FormulirKandidat) request.ReqFormulirKandida
 		Alamat:               data.Alamat,
 		Pengalaman:           data.Pengalaman,
 		AdminId:              data.AdminId,
+		CV:                   data.CuricullumVitae,
+		PosisiLamar:          data.PosisiLamar,
 	}
 }
 func ListKandidattoreq(data []model.FormulirKandidat) (datareq []request.ReqFormulirKandidat) {
@@ -707,4 +720,22 @@ func Listmodelotreqdetailmanager(data []model.DetailProses) (datareq []request.R
 		datareq = append(datareq, Modeldetailmanagertoreq(&val))
 	}
 	return datareq
+}
+func Reqposisitomodel(data request.ReqPosisi) model.Position {
+	return model.Position{
+
+		UserId:      data.UserId,
+		LevelKosong: data.LevelKosong,
+		Department:  data.Department,
+	}
+
+}
+func ModelPosisitoreq(data *model.Position) request.ReqPosisi {
+	return request.ReqPosisi{
+		Id:          data.ID,
+		UserId:      data.UserId,
+		LevelKosong: data.LevelKosong,
+		Department:  data.Department,
+	}
+
 }

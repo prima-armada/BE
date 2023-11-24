@@ -29,17 +29,37 @@ func NewServiceSubmission(rsm repocontract.RepoSubmission, rd repocontract.RepoD
 	}
 }
 
-func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubmissionManager, idManager int, res time.Time) (request.ReqSubmissionManager, error) {
+func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission, iduser int, res time.Time) (request.ReqSubmission, error) {
+
 	validerr := ssm.validate.Struct(newSubmission)
 	if validerr != nil {
 
-		return request.ReqSubmissionManager{}, errors.New(validasi.ValidationErrorHandle(validerr))
+		return request.ReqSubmission{}, errors.New(validasi.ValidationErrorHandle(validerr))
 	}
 
-	cekuser, erruser := ssm.ru.IdUserExist(idManager)
+	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+	dtauser, erruser := ssm.ru.AllUser()
 
 	if erruser != nil {
-		return request.ReqSubmissionManager{}, erruser
+		return request.ReqSubmission{}, erruser
+	}
+	if cekuser.Role == "vicepresident" && newSubmission.PosisiKosong == "manager" {
+		for _, val := range dtauser {
+			if val.Role == "manager" && val.Bagian == cekuser.Bagian {
+				return request.ReqSubmission{}, errors.New("anda sudah punya manager")
+			}
+		}
+	}
+	if cekuser.Role == "vicepresident" && newSubmission.PosisiKosong == "staff" {
+		for _, val := range dtauser {
+			if val.Role == "manager" && val.Bagian == cekuser.Bagian {
+				return request.ReqSubmission{}, errors.New("manager anda yang berhak mengajukan untuk staff")
+			}
+		}
+	}
+
+	if erruser != nil {
+		return request.ReqSubmission{}, erruser
 	}
 
 	newSubmission.IdPengajuan = cekuser.Id
@@ -48,7 +68,7 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 	newSubmission.NamaDepartment = cekdepartment.NameDepartment
 
 	if errdepartment != nil {
-		return request.ReqSubmissionManager{}, errdepartment
+		return request.ReqSubmission{}, errdepartment
 	}
 	loc, _ := time.LoadLocation("Asia/Jakarta")
 
@@ -60,10 +80,10 @@ func (ssm *ServiceSubmission) AddSubmissionManager(newSubmission request.ReqSubm
 	randString := helper.FileName(8)
 	newSubmission.KodePengajuan = cekdepartment.NameDepartment + randString
 	fmt.Print("newsubmission", newSubmission)
-	datarepo, errrepo := ssm.rsm.AddSubmissionManager(newSubmission, res)
+	datarepo, errrepo := ssm.rsm.AddSubmission(newSubmission, res)
 
 	if errrepo != nil {
-		return request.ReqSubmissionManager{}, errrepo
+		return request.ReqSubmission{}, errrepo
 	}
 	return datarepo, nil
 }
@@ -136,6 +156,38 @@ func (ssm *ServiceSubmission) UpdateSubmissionPresident(iduser int, idsubmission
 	}
 	// fmt.Print("id manager", idManager)
 	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+	fmt.Print(cekuser.Bagian)
+	dep, errdep := ssm.rd.NameDepartment(cekuser.Bagian)
+
+	if errdep != nil {
+		return request.UpdateVicePresident{}, errdep
+	}
+
+	if dep.NameDepartment == "" {
+		return request.UpdateVicePresident{}, errors.New("department tidak ada")
+	}
+	cekdata, errdata := ssm.rsm.GetAllSubmissionAdmin()
+
+	if errdata != nil {
+		return request.UpdateVicePresident{}, errdata
+	}
+	for _, val := range cekdata {
+		if uint(idsubmission) == val.Id && cekuser.Bagian != val.NamaDepartment {
+			return request.UpdateVicePresident{}, errors.New("department tidak sama")
+		}
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diajukan" {
+			return request.UpdateVicePresident{}, errors.New("masih di ajukan")
+		}
+		if uint(idsubmission) == val.Id && val.TanggalEvaluasi == "" {
+			return request.UpdateVicePresident{}, errors.New("belum di evaluasi")
+		}
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diverifikasi" {
+			return request.UpdateVicePresident{}, errors.New("anda sudah verifikasi")
+		}
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "disetujui" {
+			return request.UpdateVicePresident{}, errors.New("anda sudah verifikasi")
+		}
+	}
 
 	if erruser != nil {
 		return request.UpdateVicePresident{}, erruser
@@ -167,9 +219,36 @@ func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission i
 
 		return request.UpdateDireksi{}, errors.New(validasi.ValidationErrorHandle(validerr))
 	}
-	// fmt.Print("id manager", idManager)
-	cekuser, erruser := ssm.ru.IdUserExist(iduser)
 
+	cekuser, erruser := ssm.ru.IdUserExist(iduser)
+	dep, errdep := ssm.rd.NameDepartment(cekuser.Bagian)
+
+	if errdep != nil {
+		return request.UpdateDireksi{}, errdep
+	}
+
+	if dep.NameDepartment == "" {
+		return request.UpdateDireksi{}, errors.New("department tidak ada")
+	}
+	cekdata, errdata := ssm.rsm.GetAllSubmissionAdmin()
+
+	if errdata != nil {
+		return request.UpdateDireksi{}, errdata
+	}
+	for _, val := range cekdata {
+		if uint(idsubmission) == val.Id && cekuser.Bagian != val.NamaDepartment {
+			return request.UpdateDireksi{}, errors.New("department tidak sama")
+		}
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diajukan" {
+			return request.UpdateDireksi{}, errors.New("masih di ajukan")
+		}
+		if uint(idsubmission) == val.Id && val.TanggalEvaluasi == "" {
+			return request.UpdateDireksi{}, errors.New("belum di evaluasi")
+		}
+		if uint(idsubmission) == val.Id && val.TanggalVerifikasi == "" {
+			return request.UpdateDireksi{}, errors.New("belum di verifikasi")
+		}
+	}
 	if erruser != nil {
 		return request.UpdateDireksi{}, erruser
 	}
@@ -180,6 +259,7 @@ func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission i
 
 	//set timezone,
 	now := time.Now().In(loc)
+
 	if update.StatusPengajuan == "diverifikasi" || update.StatusPengajuan == "dievaluasi" {
 		return request.UpdateDireksi{}, errors.New(" anda hanya melakukan persutujuan pengajuan")
 	}

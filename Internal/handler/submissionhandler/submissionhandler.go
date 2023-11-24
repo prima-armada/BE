@@ -24,32 +24,32 @@ func NewHandlesSubmission(ss servicecontract.ServiceSubmission) handlecontract.H
 	}
 }
 
-func (hs *HandlerSubmission) AddSubmissionManager(e echo.Context) error {
-	Reqmanager := request.ReqSubmissionManager{}
+func (hs *HandlerSubmission) AddSubmission(e echo.Context) error {
+	Reqsubmision := request.ReqSubmission{}
 	role := middlewares.ExtractTokenTeamRole(e)
 	usermanagar, errtoken := middlewares.ExtractTokenIdUser(e)
 
 	if errtoken != nil {
 		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
 	}
-	if role != "manager" || role == "" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses manager", http.StatusUnauthorized, true))
+	if role == "" || role == "admin" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses atasan", http.StatusUnauthorized, true))
 	}
-	binderr := e.Bind(&Reqmanager)
+	binderr := e.Bind(&Reqsubmision)
 
 	if binderr != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
-	res, errConvtime := time.Parse("02/01/2006", Reqmanager.TanggalKebutuhan)
+	res, errConvtime := time.Parse("02/01/2006", Reqsubmision.TanggalKebutuhan)
 	if errConvtime != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errConvtime.Error(), http.StatusBadRequest, true))
 	}
-	dataservice, errservice := hs.ss.AddSubmissionManager(Reqmanager, usermanagar, res)
+	dataservice, errservice := hs.ss.AddSubmission(Reqsubmision, usermanagar, res)
 
 	if errservice != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
 	}
-	reqtorespon := query.ReqmanagerToRespon(dataservice)
+	reqtorespon := query.ReqsubmisionToRespon(dataservice)
 	return e.JSON(http.StatusCreated, helper.GetResponse(reqtorespon, http.StatusCreated, false))
 
 }

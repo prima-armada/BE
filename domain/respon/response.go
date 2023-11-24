@@ -8,6 +8,7 @@ type ResponseUser struct {
 	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"createdat"`
 	Nama      string    `json:"nama"`
+	Bagian    string    `json:"bagian"`
 }
 type LoginRespon struct {
 	Role     string `json:"role"`
@@ -23,7 +24,7 @@ type ResponseDeparment struct {
 	UpdateAt       time.Time `json:"updatedat"`
 }
 
-type ResponSubmissionManager struct {
+type ResponSubmission struct {
 	IdPengajuan      int       `json:"user"`
 	IdDepartment     uint      `json:"department"`
 	Jumlah           string    `json:"jumlah"`
@@ -36,17 +37,20 @@ type ResponSubmissionManager struct {
 	KodePengajuan    string    `json:"kode_pengajuan"`
 }
 type ReSponGetManager struct {
-	IdPengajuan      int       `json:"id"`
-	NamaManager      string    `json:"user"`
-	NamaDepartment   string    `json:"department"`
-	Jumlah           string    `json:"jumlah"`
-	Alasan           string    `json:"alasan"`
-	StatusPengajuan  string    `json:"status"`
-	TanggalKebutuhan string    `json:"tanggal_kebutuhan"`
-	Pencaharian      string    `json:"pencarian"`
-	Golongan         string    `json:"golongan"`
-	TanggalPengajuan time.Time `json:"tanggal_pengajuan"`
-	KodePengajuan    string    `json:"kode_pengajuan"`
+	IdPengajuan       int       `json:"id"`
+	NamaManager       string    `json:"nama_manager"`
+	NamaDepartment    string    `json:"department"`
+	Jumlah            string    `json:"jumlah"`
+	Alasan            string    `json:"alasan"`
+	StatusPengajuan   string    `json:"status_pengajuan"`
+	TanggalKebutuhan  string    `json:"tanggal_kebutuhan"`
+	Pencaharian       string    `json:"pencarian"`
+	Golongan          string    `json:"golongan"`
+	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
+	KodePengajuan     string    `json:"kode_pengajuan"`
+	TanggalVerifikasi string    `json:"tanggal_verifikasi"`
+	TanggalDisetujui  string    `json:"tanggal_disetujui"`
+	TanggalEvaluasi   string    `json:"tanggal_evalusi"`
 }
 type ReSponGetDireksi struct {
 	IdPengajuan      int       `json:"id"`
@@ -82,6 +86,20 @@ type ReSponGetAdmin struct {
 	TanggalDisetujui  string    `json:"tanggal_disetujui"`
 	KodePengajuan     string    `json:"kode_pengajuan"`
 }
+type ReSponGetPresident struct {
+	IdPengajuan       int       `json:"id"`
+	NamaManager       string    `json:"nama_manager"`
+	NamaDepartment    string    `json:"department"`
+	Jumlah            string    `json:"jumlah"`
+	Alasan            string    `json:"alasan"`
+	StatusPengajuan   string    `json:"status_pengajuan"`
+	TanggalKebutuhan  string    `json:"tanggal_kebutuhan"`
+	Pencaharian       string    `json:"pencarian"`
+	Golongan          string    `json:"golongan"`
+	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
+	Tanggalverifikasi string    `json:"tanggal_verifikasi"`
+	KodePengajuan     string    `json:"kode_pengajuan"`
+}
 type ResponUpdateAdmin struct {
 	IdEvaluasi       int
 	StatusPengajuan  string    `json:"status" `
@@ -98,20 +116,7 @@ type ResponUpdateDireksi struct {
 	StatusPengajuan    string    `json:"status"`
 	TanggalPersetujuan time.Time `json:"persetujuan_tanggal"`
 }
-type ReSponGetPresident struct {
-	IdPengajuan       int       `json:"id"`
-	NamaManager       string    `json:"manager"`
-	NamaDepartment    string    `json:"department"`
-	Jumlah            string    `json:"jumlah"`
-	Alasan            string    `json:"alasan"`
-	StatusPengajuan   string    `json:"status"`
-	TanggalKebutuhan  string    `json:"tanggal_kebutuhan"`
-	Pencaharian       string    `json:"pencarian"`
-	Golongan          string    `json:"golongan"`
-	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
-	Tanggalverifikasi string    `json:"tanggal_diverifikasi"`
-	KodePengajuan     string    `json:"kode_pengajuan"`
-}
+
 type ResFormulirKandidat struct {
 	Id                   uint
 	NamaManager          string `json:"manager"`
@@ -133,4 +138,10 @@ type ResponSoal struct {
 	Id          uint
 	Kategori    string `json:"kategori"`
 	Description string `json:"deskripsi"`
+}
+type ResPosisi struct {
+	id          uint
+	UserId      uint
+	LevelKosong string
+	Department  string
 }
