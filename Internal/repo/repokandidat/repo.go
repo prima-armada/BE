@@ -37,7 +37,7 @@ func (rk *Repokandidat) AddFormulirKandidat(newkandidat request.ReqFormulirKandi
 func (rk *Repokandidat) GetCodeKandidat(kode string) ([]request.ReqFormulirKandidat, error) {
 	modelkandidat := []model.FormulirKandidat{}
 
-	tx := rk.db.Raw("SELECT formulir_kandidats.id,formulir_kandidats.nama_manager ,formulir_kandidats.kode_pengajuan,formulir_kandidats.nama_kandidat FROM formulir_kandidats where formulir_kandidats.kode_pengajuan= ?", kode).Find(&modelkandidat)
+	tx := rk.db.Raw("SELECT formulir_kandidats.id,formulir_kandidats.nama_manager ,formulir_kandidats.kode_pengajuan,formulir_kandidats.nama_kandidat,formulir_kandidats.posisi_lamar FROM formulir_kandidats where formulir_kandidats.kode_pengajuan= ?", kode).Find(&modelkandidat)
 
 	if tx.Error != nil {
 		return []request.ReqFormulirKandidat{}, tx.Error
@@ -52,7 +52,7 @@ func (rk *Repokandidat) GetCodeKandidat(kode string) ([]request.ReqFormulirKandi
 func (rk *Repokandidat) GetCodedannamaKandidat(kode string, nama string) (request.ReqFormulirKandidat, error) {
 	modelkandidat := model.FormulirKandidat{}
 
-	tx := rk.db.Raw("SELECT formulir_kandidats.id,formulir_kandidats.nama_manager,formulir_kandidats.departement_manager ,formulir_kandidats.kode_pengajuan,formulir_kandidats.nama_kandidat FROM formulir_kandidats where formulir_kandidats.kode_pengajuan= ? AND formulir_kandidats.nama_kandidat= ?", kode, nama).Find(&modelkandidat)
+	tx := rk.db.Raw("SELECT formulir_kandidats.id,formulir_kandidats.nama_manager,formulir_kandidats.departement_manager ,formulir_kandidats.kode_pengajuan,formulir_kandidats.nama_kandidat,formulir_kandidats.posisi_lamar FROM formulir_kandidats where formulir_kandidats.kode_pengajuan= ? AND formulir_kandidats.nama_kandidat= ?", kode, nama).Find(&modelkandidat)
 
 	if tx.Error != nil {
 		return request.ReqFormulirKandidat{}, tx.Error

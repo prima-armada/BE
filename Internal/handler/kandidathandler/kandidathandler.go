@@ -46,12 +46,12 @@ func (hk *Handlerkandidat) AddFormulirKandidat(e echo.Context) error {
 	cv, errcv := e.FormFile("cv")
 
 	if errcv != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse("data cv tidak terbuat", http.StatusBadGateway, true))
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errcv, http.StatusBadGateway, true))
 	}
 
 	upload, errupload := hk.Up.Upload(cv)
 	if errupload != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse("cv tidak terupload", http.StatusBadRequest, true))
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errupload, http.StatusBadRequest, true))
 	}
 	reqformulir.CV = upload
 	dataservice, errservice := hk.sk.AddFormulirKandidat(reqformulir, uint(useradmin))

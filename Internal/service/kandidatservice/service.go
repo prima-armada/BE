@@ -6,6 +6,7 @@ import (
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
 	"par/validasi"
+	"par/validasihp"
 
 	"github.com/go-playground/validator"
 )
@@ -35,36 +36,37 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 
 		return request.ReqFormulirKandidat{}, errors.New(validasi.ValidationErrorHandle(validerr))
 	}
-	datanama, errnama := sk.rsm.NamaManager(newkandidata.NamaManager)
-	if datanama.Nama == "" {
-		return request.ReqFormulirKandidat{}, errors.New("nama tidak ada")
+	dataname, errname := sk.ru.NameExist(newkandidata.NamaManager)
+	datahp1, errhp1 := validasihp.ValidateAndFormatPhoneNumber(newkandidata.ContactNumber)
+	if errname != nil {
+		return request.ReqFormulirKandidat{}, errname
 	}
+
+	if errhp1 != nil {
+		return request.ReqFormulirKandidat{}, errhp1
+	}
+	newkandidata.ContactNumber = datahp1
+
 	kodeajuan, errajuan := sk.rsm.CodeSubmission(newkandidata.KodePengajuan)
-	if errnama != nil {
-		return request.ReqFormulirKandidat{}, errnama
-	}
+
 	if errajuan != nil {
-		return request.ReqFormulirKandidat{}, errajuan
+		return request.ReqFormulirKandidat{}, errors.New("data kode pengajuan tidak ada")
 	}
 
 	if kodeajuan.StatusPengajuan != "disetujui" {
 		return request.ReqFormulirKandidat{}, errors.New("status belum di setujui oleh direksi")
 	}
-	newkandidata.NamaManager = datanama.Nama
+
 	newkandidata.KodePengajuan = kodeajuan.KodePengajuan
-	newkandidata.DepartementManager = datanama.NamaDepartment
+	newkandidata.DepartementManager = dataname.Bagian
 
 	datauser, erruser := sk.ru.IdUserExist(int(AdminId))
 
 	if erruser != nil {
-		return request.ReqFormulirKandidat{}, erruser
+		return request.ReqFormulirKandidat{}, errors.New("data user not found")
 	}
 	newkandidata.AdminId = uint(datauser.Id)
-	// datahp, errhp1 := validasihp.validateAndFormatPhoneNumber(newkandidata.ContactNumber)
 
-	// if errhp1 != nil {
-	// 	return request.ReqFormulirKandidat{}, errhp1
-	// }
 	lennamaref := len(newkandidata.NamaRefrensi)
 	lendepref := len(newkandidata.DepartmentRefrensi)
 	lennipref := len(newkandidata.NipRefrensi)
@@ -75,6 +77,32 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 		}
 		return newkandidata, nil
 	}
+	cekdata, errdata := sk.rsm.GetAllSubmissionAdmin()
+
+	if errdata != nil {
+		return request.ReqFormulirKandidat{}, errdata
+	}
+	for _, val := range cekdata {
+		if newkandidata.KodePengajuan == val.KodePengajuan {
+			// fmt.Print(a)
+			if newkandidata.PosisiLamar != val.PosisiKosong {
+				return request.ReqFormulirKandidat{}, errors.New("posisi yang di lamar tidak sesuai dengan posisi kosong pengajuan")
+			}
+			if newkandidata.NamaManager != val.UserPengajuan && newkandidata.DepartementManager != val.NamaDepartment {
+				return request.ReqFormulirKandidat{}, errors.New("nama manager yang anda masukkan tidak sama dengan kode pengajuan")
+			}
+		}
+
+	}
+
+	cekcode, errcode := sk.rk.GetCodedannamaKandidat(newkandidata.KodePengajuan, newkandidata.NamaKandidat)
+	if errcode != nil {
+		return request.ReqFormulirKandidat{}, errcode
+	}
+	if cekcode.NamaManager == newkandidata.NamaManager && cekcode.NamaKandidat == newkandidata.NamaKandidat {
+		return request.ReqFormulirKandidat{}, errors.New("nama " + cekcode.NamaKandidat + " sudah anda buat")
+	}
+
 	datarepo, errrepo := sk.rk.AddFormulirKandidat(newkandidata)
 
 	if errrepo != nil {
@@ -84,7 +112,6 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 
 }
 
-// GetCodeKandidat implements servicecontract.ServiceKandidat.
 func (sk *Servicekandidat) GetCodeKandidat(kode string) (data []request.ReqFormulirKandidat, err error) {
 	data, err = sk.rk.GetCodeKandidat(kode)
 

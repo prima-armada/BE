@@ -15,4 +15,6 @@ func MigrateDB(db *gorm.DB) {
 	db.AutoMigrate(&model.InterviewKandidat{})
 	db.AutoMigrate(&model.DetailProses{})
 	db.AutoMigrate(&model.Position{})
+	db.AutoMigrate(&model.SoalFPT{})
+	db.AutoMigrate(&model.InterviewFPT{})
 }

@@ -29,6 +29,20 @@ func NewServiceSubmission(rsm repocontract.RepoSubmission, rd repocontract.RepoD
 	}
 }
 
+// GetAllSubmissionUser implements servicecontract.ServiceSubmission.
+func (ssm *ServiceSubmission) GetAllSubmissionUser(deparment string) ([]request.ReqGetUsers, error) {
+	cekdepatmen, errdeparment := ssm.rd.NameDepartment(deparment)
+
+	if errdeparment != nil {
+		return []request.ReqGetUsers{}, errors.New("deparment not found")
+	}
+
+	datarepo, errrepo := ssm.rsm.GetAllSubmissionUser(cekdepatmen.NameDepartment)
+	if errrepo != nil {
+		return []request.ReqGetUsers{}, errrepo
+	}
+	return datarepo, nil
+}
 func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission, iduser int, res time.Time) (request.ReqSubmission, error) {
 
 	validerr := ssm.validate.Struct(newSubmission)
@@ -42,6 +56,13 @@ func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission,
 
 	if erruser != nil {
 		return request.ReqSubmission{}, erruser
+	}
+	if cekuser.Role == "direksi" && newSubmission.PosisiKosong == "vicepresident" {
+		for _, val := range dtauser {
+			if val.Role == "vicepresident" && val.Bagian == cekuser.Bagian {
+				return request.ReqSubmission{}, errors.New("anda sudah punya vicepresident")
+			}
+		}
 	}
 	if cekuser.Role == "vicepresident" && newSubmission.PosisiKosong == "manager" {
 		for _, val := range dtauser {
@@ -88,30 +109,12 @@ func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission,
 	return datarepo, nil
 }
 
-func (ssm *ServiceSubmission) GetAllSubmissionManager(id int) ([]request.ReqGetManager, error) {
-	datarepo, errrepo := ssm.rsm.GetAllSubmissionManager(id)
-
-	if errrepo != nil {
-		return []request.ReqGetManager{}, errrepo
-	}
-	return datarepo, nil
-}
-
 func (ssm *ServiceSubmission) GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error) {
 	datarepo, errrepo := ssm.rsm.GetAllSubmissionAdmin()
 
 	if errrepo != nil {
 
 		return []request.ReqGetAdmin{}, errrepo
-	}
-	return datarepo, nil
-}
-
-func (ssm *ServiceSubmission) GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error) {
-	datarepo, errrepo := ssm.rsm.GetAllSubmissionDireksi(deparment)
-
-	if errrepo != nil {
-		return []request.ReqGetDireksi{}, errrepo
 	}
 	return datarepo, nil
 }
@@ -139,6 +142,24 @@ func (ssm *ServiceSubmission) UpdateSubmissionAdmin(iduser int, idsubmission int
 		return request.UpdateAdmin{}, errors.New("anda tidak mempunyai akses tersebut")
 	}
 	update.TanggalDievalusi = now
+	cekdata, errdata := ssm.rsm.GetAllSubmissionAdmin()
+
+	if errdata != nil {
+		return request.UpdateAdmin{}, errdata
+	}
+	for _, val := range cekdata {
+
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "dievaluasi" {
+			return request.UpdateAdmin{}, errors.New("pengajuan sudah di evaluasi")
+		}
+
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diverifikasi" {
+			return request.UpdateAdmin{}, errors.New("pengajuan sudah verifikasi")
+		}
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "disetujui" {
+			return request.UpdateAdmin{}, errors.New("pengajuan sudah setujui oleh direksi")
+		}
+	}
 
 	datarepo, errrepo := ssm.rsm.UpdateSubmissionAdmin(idsubmission, update)
 
@@ -178,14 +199,12 @@ func (ssm *ServiceSubmission) UpdateSubmissionPresident(iduser int, idsubmission
 		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diajukan" {
 			return request.UpdateVicePresident{}, errors.New("masih di ajukan")
 		}
-		if uint(idsubmission) == val.Id && val.TanggalEvaluasi == "" {
-			return request.UpdateVicePresident{}, errors.New("belum di evaluasi")
-		}
+
 		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diverifikasi" {
-			return request.UpdateVicePresident{}, errors.New("anda sudah verifikasi")
+			return request.UpdateVicePresident{}, errors.New("pengajuan sudah verifikasi")
 		}
 		if uint(idsubmission) == val.Id && val.StatusPengajuan == "disetujui" {
-			return request.UpdateVicePresident{}, errors.New("anda sudah verifikasi")
+			return request.UpdateVicePresident{}, errors.New("pengajuan sudah setujui oleh direksi ")
 		}
 	}
 
@@ -242,11 +261,11 @@ func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission i
 		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diajukan" {
 			return request.UpdateDireksi{}, errors.New("masih di ajukan")
 		}
-		if uint(idsubmission) == val.Id && val.TanggalEvaluasi == "" {
-			return request.UpdateDireksi{}, errors.New("belum di evaluasi")
+		if uint(idsubmission) == val.Id && val.TanggalEvaluasi == "dievaluasi" {
+			return request.UpdateDireksi{}, errors.New("pengajuan masih di evaluasi belum diverifikasi")
 		}
-		if uint(idsubmission) == val.Id && val.TanggalVerifikasi == "" {
-			return request.UpdateDireksi{}, errors.New("belum di verifikasi")
+		if uint(idsubmission) == val.Id && val.StatusPengajuan == "disetujui" {
+			return request.UpdateDireksi{}, errors.New("pengajuan sudah di setujui")
 		}
 	}
 	if erruser != nil {
@@ -269,16 +288,6 @@ func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission i
 
 	if errrepo != nil {
 		return request.UpdateDireksi{}, errrepo
-	}
-	return datarepo, nil
-}
-
-// GetAllSubmissionPresident implements servicecontract.ServiceSubmission.
-func (ssm *ServiceSubmission) GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error) {
-	datarepo, errrepo := ssm.rsm.GetAllSubmissionPresident(deparment)
-	// fmt.Print("service", datarepo)
-	if errrepo != nil {
-		return []request.ReqGetPresident{}, errrepo
 	}
 	return datarepo, nil
 }

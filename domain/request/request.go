@@ -83,12 +83,31 @@ type ReqGetPresident struct {
 	TanggalPengajuan  time.Time
 	TanggalVerifikasi string `json:"tanggal_disetujui" form:"tanggal_disetujui" validate:"required"`
 }
+type ReqGetUsers struct {
+	Id                uint      `json:"id"`
+	UserPengajuan     string    `json:"nama_user"`
+	NamaDepartment    string    `json:"department"`
+	Alasan            string    `json:"alasan"`
+	Pencharian        string    `json:"pencarian"`
+	KodePengajuan     string    `json:"kode_pengajuan"`
+	TanggalKebutuhan  string    `json:"tanggal_kebutuhan"`
+	NamaEvaluasi      string    `json:"nama_admin"`
+	NamaVerifikasi    string    `json:"nama_verifikasi"`
+	NamaPersetujuan   string    `json:"nama_direksi"`
+	StatusPengajuan   string    `json:"status_pengajuan"`
+	TanggalVerifikasi string    `json:"tanggal_verifikasi"`
+	TanggalEvaluasi   string    `json:"tanggal_evalusi"`
+	PosisiKosong      string    `json:"posisi"`
+	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
+	TanggalDisetujui  string    `json:"tanggal_disetujui"`
+}
 type ReqGetAdmin struct {
 	Id                uint
 	UserPengajuan     string
 	NamaDepartment    string
 	Jumlah            string
 	Alasan            string
+	PosisiKosong      string
 	Pencharian        string
 	KodePengajuan     string
 	TanggalKebutuhan  string
@@ -169,7 +188,16 @@ type ReqDetailProsesAdmin struct {
 	TotalNilai         float64
 	NamaAdmin          string
 	KandidatDepartment string
-	Status             string
+	Status             string `json:"status" form:"status"`
+}
+type ReqDetailProsesDireksi struct {
+	Id            uint
+	IdDireksi     uint
+	KodePengajuan string `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
+	NilaiDireksi  float64
+	NamaKandidat  string `json:"nama_kandidat" form:"nama_kandidat" validate:"required,min=5"`
+	NamaDireksi   string
+	Status        string `json:"status" form:"status"`
 }
 type ReqDetailProsesManager struct {
 	Id                 uint
@@ -201,4 +229,25 @@ type ReqPosisi struct {
 	UserId      uint
 	LevelKosong string `json:"posisi" form:"posisi" validate:"required,min=5"`
 	Department  string
+}
+type RequesSoalFpt struct {
+	Id          uint
+	Kategori    string  `json:"kategori" form:"kategori" validate:"required,min=5"`
+	Description string  `json:"deskripsi" form:"deskripsi" validate:"required,min=5"`
+	Bobot       float64 `json:"bobot" form:"bobot" validate:"required"`
+}
+type ReqInterviewfpt struct {
+	Id                  uint
+	NamaUser            string  `json:"nama_user" form:"nama_user"`
+	KodePengajuan       string  `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
+	IdSoal              uint    `json:"id_soal" form:"id_soal"`
+	KategoriSoal        string  `json:"kategori" form:"kategori" validate:"required,min=5"`
+	DepartementUser     string  `json:"department_user" form:"department_manager"`
+	NamaKandidat        string  `json:"nama_kandidat" form:"nama_kandidat"`
+	Nilai               float64 `json:"nilai" form:"nilai"`
+	Bobot               float64
+	TanggalWwawancara   string `json:"tanggal" form:"tanggal"`
+	UserId              uint
+	DepartementKandidat string
+	Role                string
 }

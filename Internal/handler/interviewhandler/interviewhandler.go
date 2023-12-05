@@ -53,7 +53,6 @@ func (hi *Handlerinterview) AddFormulirInterview(e echo.Context) error {
 
 }
 
-// GetallInterview implements handlecontract.HandleInterview.
 func (hi *Handlerinterview) GetallInterview(e echo.Context) error {
 	kode := e.QueryParam("code")
 	nama := e.QueryParam("nama")
@@ -75,4 +74,36 @@ func (hi *Handlerinterview) GetallInterview(e echo.Context) error {
 	// respon := query.ReqtoResponKandidat(dataservice)
 
 	return e.JSON(http.StatusCreated, helper.GetResponse(dataservice, http.StatusOK, false))
+}
+
+// AddFormulirInterviewFpt implements handlecontract.HandleInterview.
+func (hi *Handlerinterview) AddFormulirInterviewFpt(e echo.Context) error {
+	reqinterview := request.ReqInterviewfpt{}
+
+	role := middlewares.ExtractTokenTeamRole(e)
+	user, errtoken := middlewares.ExtractTokenIdUser(e)
+
+	if errtoken != nil {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
+	}
+	if role == "" || role != "direksi" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses oleh direksi", http.StatusUnauthorized, true))
+	}
+	reqinterview.UserId = uint(user)
+
+	binderr := e.Bind(&reqinterview)
+
+	if binderr != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
+	}
+
+	dataservice, errservice := hi.si.AddInterviewfpt(reqinterview)
+
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+
+	// respon := query.ReqtoResponKandidat(dataservice)
+
+	return e.JSON(http.StatusCreated, helper.GetResponse(dataservice, http.StatusCreated, false))
 }
