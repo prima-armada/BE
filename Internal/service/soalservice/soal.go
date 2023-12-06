@@ -44,12 +44,15 @@ func (ssl *Servicessoal) AddSoal(newksoal request.RequesSoal) (request.RequesSoa
 
 // AllSoal implements servicecontract.ServiceSoal.
 func (ssl *Servicessoal) AllSoal() (data []request.RequesSoal, err error) {
-	data, err = ssl.rsl.AllSoal()
-
-	if err != nil {
-		return data, err
+	datarepo, errepo := ssl.rsl.AllSoal()
+	// fmt.Print(datarepo, "soal")
+	if datarepo == nil {
+		return []request.RequesSoal{}, errors.New("data tidak ada")
 	}
-	return data, nil
+	if errepo != nil {
+		return datarepo, err
+	}
+	return datarepo, nil
 }
 
 // KategoriSoal implements servicecontract.ServiceSoal.

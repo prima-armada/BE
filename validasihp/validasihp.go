@@ -6,7 +6,7 @@ import (
 	"github.com/ttacon/libphonenumber"
 )
 
-func validateAndFormatPhoneNumber(phoneNumber string) (string, error) {
+func ValidateAndFormatPhoneNumber(phoneNumber string) (string, error) {
 
 	countryCode := "ID"
 	normalizedNumber := strings.Join(strings.FieldsFunc(phoneNumber, func(r rune) bool {

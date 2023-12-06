@@ -17,9 +17,7 @@ type ServiceLogin interface {
 type ServiceSubmission interface {
 	AddSubmission(newSubmission request.ReqSubmission, iduser int, res time.Time) (request.ReqSubmission, error)
 	GetNamaManager(namamanager string) ([]request.ReqGetManager, error)
-	GetAllSubmissionManager(id int) ([]request.ReqGetManager, error)
-	GetAllSubmissionDireksi(deparment string) ([]request.ReqGetDireksi, error)
-	GetAllSubmissionPresident(deparment string) ([]request.ReqGetPresident, error)
+	GetAllSubmissionUser(deparment string) ([]request.ReqGetUsers, error)
 	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
 	UpdateSubmissionAdmin(iduser int, idsubmission int, update request.UpdateAdmin) (request.UpdateAdmin, error)
 	UpdateSubmissionPresident(iduser int, idsubmission int, update request.UpdateVicePresident) (request.UpdateVicePresident, error)
@@ -46,6 +44,7 @@ type ServiceDepartment interface {
 }
 type Serviceinterview interface {
 	AddInterview(newinterview request.ReqInterviewKandidat) (request.ReqInterviewKandidat, error)
+	AddInterviewfpt(newinterview request.ReqInterviewfpt) (request.ReqInterviewfpt, error)
 	GetallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
 }
 type ServiceProcess interface {
@@ -53,7 +52,17 @@ type ServiceProcess interface {
 	GetallDetail() (data []request.ReqDetailProses, err error)
 	GetAlldetailManager(id int) (data []request.ReqDetailProsesManager, err error)
 	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
+	UpdateDetailAdmin(id int, update request.ReqDetailProsesAdmin) (data request.ReqDetailProsesAdmin, err error)
+	UpdateDetailDireksi(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
 }
 type ServicePosisi interface {
 	AddPosisi(id int, newProcess request.ReqPosisi) (request.ReqPosisi, error)
+}
+type ServiceSoalFpt interface {
+	AddSoal(newsoal request.RequesSoalFpt) (request.RequesSoalFpt, error)
+	KategoriSoal(kategori string) (data request.RequesSoalFpt, err error)
+	AllSoal() (data []request.RequesSoalFpt, err error)
+
+	Updatedsoal(id int, update request.RequesSoalFpt) (data request.RequesSoalFpt, err error)
+	DeleteSoal(id int) error
 }

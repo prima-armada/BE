@@ -42,7 +42,7 @@ func (hs *HandlerSubmission) AddSubmission(e echo.Context) error {
 	}
 	res, errConvtime := time.Parse("02/01/2006", Reqsubmision.TanggalKebutuhan)
 	if errConvtime != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse(errConvtime.Error(), http.StatusBadRequest, true))
+		return e.JSON(http.StatusBadRequest, helper.GetResponse("gagal parsing tanggal", http.StatusBadRequest, true))
 	}
 	dataservice, errservice := hs.ss.AddSubmission(Reqsubmision, usermanagar, res)
 
@@ -54,25 +54,20 @@ func (hs *HandlerSubmission) AddSubmission(e echo.Context) error {
 
 }
 
-func (hs *HandlerSubmission) GetAllSubmissionManager(e echo.Context) error {
+// GetAllSubmissionUser implements handlecontract.HandleSubmission.
+func (hs *HandlerSubmission) GetAllSubmissionUser(e echo.Context) error {
 	role := middlewares.ExtractTokenTeamRole(e)
-	usermanagar, errtoken := middlewares.ExtractTokenIdUser(e)
+	departuser := middlewares.ExtractTokenTeamDepartment(e)
 
-	if errtoken != nil {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken, http.StatusUnauthorized, true))
+	if role == "admin" || role == "" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses atasan", http.StatusUnauthorized, true))
 	}
-	if role != "manager" || role == "" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses manager", http.StatusUnauthorized, true))
-	}
-
-	dataservice, errservice := hs.ss.GetAllSubmissionManager(usermanagar)
-
+	dataservice, errservice := hs.ss.GetAllSubmissionUser(departuser)
 	if errservice != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
 	}
-	respon := query.ListReqltoResmanager(dataservice)
 
-	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
+	return e.JSON(http.StatusOK, helper.GetResponse(dataservice, http.StatusOK, false))
 }
 
 func (hs *HandlerSubmission) GetAllSubmissionAdmin(e echo.Context) error {
@@ -86,22 +81,6 @@ func (hs *HandlerSubmission) GetAllSubmissionAdmin(e echo.Context) error {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
 	}
 	respon := query.ListReqltoResAdmin(dataservice)
-
-	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
-}
-
-func (hs *HandlerSubmission) GetAllSubmissionDireksi(e echo.Context) error {
-	role := middlewares.ExtractTokenTeamRole(e)
-	departdireksi := middlewares.ExtractTokenTeamDepartment(e)
-
-	if role != "direksi" || role == "" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses direksi", http.StatusUnauthorized, true))
-	}
-	dataservice, errservice := hs.ss.GetAllSubmissionDireksi(departdireksi)
-	if errservice != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
-	}
-	respon := query.ListReqltoResDireksi(dataservice)
 
 	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 }
@@ -193,23 +172,6 @@ func (hsm *HandlerSubmission) UpdateSubmissionDireksi(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
 	}
 	respon := query.ReqDireksiTores(dataservice)
-	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
-}
-
-// GetAllSubmissionPresident implements handlecontract.HandleSubmission.
-func (hsm *HandlerSubmission) GetAllSubmissionPresident(e echo.Context) error {
-	role := middlewares.ExtractTokenTeamRole(e)
-	departpresident := middlewares.ExtractTokenTeamDepartment(e)
-
-	if role != "vicepresident" || role == "" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses vicepresident", http.StatusUnauthorized, true))
-	}
-	dataservice, errservice := hsm.ss.GetAllSubmissionPresident(departpresident)
-	if errservice != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))
-	}
-	respon := query.ListReqltoResPresident(dataservice)
-
 	return e.JSON(http.StatusOK, helper.GetResponse(respon, http.StatusOK, false))
 }
 

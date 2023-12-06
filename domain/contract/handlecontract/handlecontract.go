@@ -27,9 +27,7 @@ type HandleSoal interface {
 }
 type HandleSubmission interface {
 	AddSubmission(e echo.Context) error
-	GetAllSubmissionManager(e echo.Context) error
-	GetAllSubmissionDireksi(e echo.Context) error
-	GetAllSubmissionPresident(e echo.Context) error
+	GetAllSubmissionUser(e echo.Context) error
 	GetAllSubmissionAdmin(e echo.Context) error
 	UpdateSubmissionAdmin(e echo.Context) error
 	GetNamaManager(e echo.Context) error
@@ -43,6 +41,7 @@ type HandleKandidat interface {
 }
 type HandleInterview interface {
 	AddFormulirInterview(e echo.Context) error
+	AddFormulirInterviewFpt(e echo.Context) error
 	GetallInterview(e echo.Context) error
 	// CekKategoriInterview(e echo.Context) error
 }
@@ -51,7 +50,16 @@ type HandleDetailProses interface {
 	GetallDetail(e echo.Context) error
 	Updatedetail(e echo.Context) error
 	GetallDetailManager(e echo.Context) error
+	UpdatedDetailAdmin(e echo.Context) error
+	UpdatedDetaildireksi(e echo.Context) error
 }
 type HandlePosisi interface {
 	AddPosisi(e echo.Context) error
+}
+type HandleSoalFPT interface {
+	Addsoal(e echo.Context) error
+	AllSoal(e echo.Context) error
+	KategoriSoal(e echo.Context) error
+	UpdatedSoal(e echo.Context) error
+	Deletedsoal(e echo.Context) error
 }

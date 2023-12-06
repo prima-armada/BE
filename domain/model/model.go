@@ -52,6 +52,24 @@ type Submission struct {
 	TanggalDisetujui  time.Time `gorm:"default:null"`
 	TanggalEvaluasi   time.Time `gorm:"default:null"`
 }
+type GetUsersSubmission struct {
+	Id                uint
+	UserPengajuan     string
+	NamaDepartment    string
+	Alasan            string
+	Pencharian        string
+	KodePengajuan     string
+	TanggalKebutuhan  string
+	NamaEvaluasi      string
+	NamaVerifikasi    string
+	NamaPersetujuan   string
+	StatusPengajuan   string
+	TanggalVerifikasi string
+	TanggalEvaluasi   string
+	PosisiKosong      string
+	TanggalPengajuan  time.Time
+	TanggalDisetujui  string
+}
 type ReqGetManager struct {
 	Id                uint
 	Nama              string
@@ -155,7 +173,21 @@ type InterviewKandidat struct {
 	UserId              uint
 	Role                string
 }
-
+type InterviewFPT struct {
+	gorm.Model
+	NamaUser            string
+	DepartementUser     string
+	DepartementKandidat string
+	KodePengajuan       string
+	IdSoal              uint
+	KategoriSoal        string
+	NamaKandidat        string
+	Bobot               float64
+	Nilai               float64
+	TanggalWwawancara   time.Time
+	UserId              uint
+	Role                string
+}
 type DetailProses struct {
 	gorm.Model
 	IDAdmin            uint
@@ -164,9 +196,19 @@ type DetailProses struct {
 	KandidatDepartment string
 	NamaKandidat       string
 	TotalNilai         float64
+	NilaiDireksi       float64
+	NamaDireksi        string
+	IdDireksi          uint
 	KodePengajuan      string
 	IdManager          uint
 	NamaManager        string
 	NamaAdmin          string
 	Status             string
+	CuricullumVitae    string
+}
+type SoalFPT struct {
+	gorm.Model
+	Kategori    string
+	Description string
+	Bobot       float64
 }

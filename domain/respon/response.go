@@ -68,7 +68,7 @@ type ReSponGetDireksi struct {
 }
 type ReSponGetAdmin struct {
 	IdPengajuan       int       `json:"id"`
-	NamaPengajuan     string    `json:"nama_manager"`
+	NamaPengajuan     string    `json:"nama_user"`
 	NamaDepartment    string    `json:"department"`
 	Jumlah            string    `json:"jumlah"`
 	Alasan            string    `json:"alasan"`
@@ -76,7 +76,7 @@ type ReSponGetAdmin struct {
 	TanggalKebutuhan  string    `json:"tanggal_kebutuhan"`
 	MaksimalGaji      float64   `json:"gaji"`
 	NamaEvaluasi      string    `json:"nama_admin"`
-	NamaVerifikasi    string    `json:"nama_vicepresident"`
+	NamaVerifikasi    string    `json:"nama_verifikasi"`
 	NamaPersetujuan   string    `json:"nama_direksi"`
 	StatusPengajuan   string    `json:"status_pengajuan"`
 	Golongan          string    `json:"golongan"`
@@ -85,6 +85,7 @@ type ReSponGetAdmin struct {
 	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
 	TanggalDisetujui  string    `json:"tanggal_disetujui"`
 	KodePengajuan     string    `json:"kode_pengajuan"`
+	PosisiKosong      string    `json:"posisi"`
 }
 type ReSponGetPresident struct {
 	IdPengajuan       int       `json:"id"`

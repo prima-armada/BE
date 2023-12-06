@@ -3,6 +3,7 @@ package reposoal
 import (
 	"errors"
 	"fmt"
+	"log"
 	"par/domain/contract/repocontract"
 	"par/domain/model"
 	"par/domain/query"
@@ -34,15 +35,16 @@ func (rsl *Reposoal) AddSoal(newksoal request.RequesSoal) (request.RequesSoal, e
 	return modeltoreq, nil
 }
 
-// AllSoal implements repocontract.RepoSoal.
 func (rsl *Reposoal) AllSoal() (data []request.RequesSoal, err error) {
 	var activ []model.SoalInterview
 	tx := rsl.db.Raw("Select soal_interviews.id, soal_interviews.kategori, soal_interviews.description from soal_interviews").Find(&activ)
 	if tx.Error != nil {
-		return data, tx.Error
+		return []request.RequesSoal{}, tx.Error
 	}
-	dtmdlttoreq := query.Listmodelotreqsoal(activ)
 
+	// log.Print(activ, "soal repo")
+	dtmdlttoreq := query.Listmodelotreqsoal(activ)
+	log.Print(dtmdlttoreq, "soal repo")
 	return dtmdlttoreq, nil
 }
 

@@ -39,6 +39,10 @@ import (
 	rpt "par/internal/repo/repoposisi"
 	pts "par/internal/service/posisiservice"
 
+	hf "par/internal/handler/fpthandler"
+	rf "par/internal/repo/repofpt"
+	sf "par/internal/service/fptservice"
+
 	middlewares "par/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -76,11 +80,9 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	handlesubmmission := sm.NewHandlesSubmission(servicesubmission)
 	submissiongrup := e.Group("/submission")
 	submissiongrup.POST("/addsubmission", handlesubmmission.AddSubmission, middlewares.JWTMiddleware())
-	submissiongrup.GET("/manager", handlesubmmission.GetAllSubmissionManager, middlewares.JWTMiddleware())
-	submissiongrup.GET("/direksi", handlesubmmission.GetAllSubmissionDireksi, middlewares.JWTMiddleware())
+	submissiongrup.GET("/user", handlesubmmission.GetAllSubmissionUser, middlewares.JWTMiddleware())
 	submissiongrup.GET("/admin", handlesubmmission.GetAllSubmissionAdmin, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/admin/:id", handlesubmmission.UpdateSubmissionAdmin, middlewares.JWTMiddleware())
-	submissiongrup.GET("/vicepresident", handlesubmmission.GetAllSubmissionPresident, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/vicepresident/:id", handlesubmmission.UpdateSubmissionPresident, middlewares.JWTMiddleware())
 	submissiongrup.PUT("/direksi/:id", handlesubmmission.UpdateSubmissionDireksi, middlewares.JWTMiddleware())
 	submissiongrup.GET("/manager/:nama", handlesubmmission.GetNamaManager, middlewares.JWTMiddleware())
@@ -98,34 +100,44 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	handlesoal := shl.NewHandlesSoal(servicesoal)
 	soalgrup := e.Group("/soal")
 	soalgrup.POST("/addsoal", handlesoal.Addsoal, middlewares.JWTMiddleware())
-	soalgrup.GET("", handlesoal.AllSoal, middlewares.JWTMiddleware())
+	soalgrup.GET("/datasoal", handlesoal.AllSoal, middlewares.JWTMiddleware())
 	soalgrup.GET("", handlesoal.KategoriSoal, middlewares.JWTMiddleware())
 	soalgrup.PUT("", handlesoal.UpdatedSoal, middlewares.JWTMiddleware())
 	soalgrup.DELETE("", handlesoal.Deletedsoal, middlewares.JWTMiddleware())
 
 	rpi := ri.NewRepoInterview(db)
-	serviceinteview := is.NewServiceinterview(rpi, rpk, rpd, rpm, rps)
+	rpp := rp.NewRepoproses(db)
+	rfp := rf.NewRepofpt(db)
+	serviceinteview := is.NewServiceinterview(rpi, rpk, rpd, rpm, rps, rpsm, rpp, rfp)
 	handleinterview := ih.NewHandlesInterview(serviceinteview)
 	interviewgrup := e.Group("/interview")
 	interviewgrup.POST("/addinterview", handleinterview.AddFormulirInterview, middlewares.JWTMiddleware())
 	interviewgrup.GET("", handleinterview.GetallInterview, middlewares.JWTMiddleware())
+	interviewgrup.POST("/addfpt", handleinterview.AddFormulirInterviewFpt, middlewares.JWTMiddleware())
 
-	rpp := rp.NewRepoproses(db)
-	serviceproses := ps.NewServiceprocess(rpp, rpi, rpk, rpm, rps)
+	// rpp := rp.NewRepoproses(db)
+	serviceproses := ps.NewServiceprocess(rpp, rpi, rpk, rpm, rps, rpsm, rfp)
 	handleproses := ph.NewHandlesProcess(serviceproses)
 	prosesgrup := e.Group("/proses")
 	prosesgrup.POST("/addproses", handleproses.AddProcess, middlewares.JWTMiddleware())
 	prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
 	prosesgrup.GET("/manager", handleproses.GetallDetailManager, middlewares.JWTMiddleware())
 	prosesgrup.PUT("", handleproses.Updatedetail, middlewares.JWTMiddleware())
+	prosesgrup.PUT("/admin", handleproses.UpdatedDetailAdmin, middlewares.JWTMiddleware())
+	prosesgrup.PUT("/direksi", handleproses.UpdatedDetaildireksi, middlewares.JWTMiddleware())
 
 	rpt := rpt.NewRepoposisi(db)
 	serviceposisi := pts.NewServiceposisi(rpt, rpm)
 	handleposis := pth.NewHandlesPosisi(serviceposisi)
 	posisigrup := e.Group("/posisi")
 	posisigrup.POST("/add", handleposis.AddPosisi, middlewares.JWTMiddleware())
-	// prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
-	// prosesgrup.GET("/manager", handleproses.GetallDetailManager, middlewares.JWTMiddleware())
-	// prosesgrup.PUT("", handleproses.Updatedetail, middlewares.JWTMiddleware())
 
+	servicefpt := sf.NewServicefpt(rfp)
+	handlefpt := hf.NewHandlesFpt(servicefpt)
+	fptgrup := e.Group("/fpt")
+	fptgrup.POST("/addsoal", handlefpt.Addsoal, middlewares.JWTMiddleware())
+	fptgrup.GET("", handlefpt.AllSoal, middlewares.JWTMiddleware())
+	fptgrup.GET("", handlefpt.KategoriSoal, middlewares.JWTMiddleware())
+	fptgrup.PUT("", handlefpt.UpdatedSoal, middlewares.JWTMiddleware())
+	fptgrup.DELETE("", handlefpt.Deletedsoal, middlewares.JWTMiddleware())
 }

@@ -24,11 +24,11 @@ func CekSTATUS(Nilai float64) (status string, err error) {
 		status = "nilai lebih dari 4 tidak ada"
 		return status, errors.New("lebih dari 4 tidak ada")
 	} else if Nilai >= float64(3) && Nilai <= 4 {
-		status = "anda lolos ke tahap interview user"
+		status = "lolos ke tahap interview user"
 
 		return status, nil
 	} else if Nilai > float64(2) && Nilai < float64(3) {
-		status = "anda tidak  lolos ke tahap interview user"
+		status = "tidak lolos ke tahap interview user"
 		return status, nil
 	}
 
@@ -50,4 +50,12 @@ func CekSTATUSformanager(Nilai float64) (status string, err error) {
 
 	status = "anda tidak  lolos ke tahap selanjutnya"
 	return status, nil
+}
+func CekSTATUSfordireksi(Nilai float64) (status string, err error) {
+	if Nilai > 100 {
+		return "", errors.New("nilai lebih dari 100 salah input dalam penilaiai ftp")
+	} else if Nilai >= 70 && Nilai <= 100 {
+		return "harap menunggu konfirmasi admin", nil
+	}
+	return "anda tidak lolos", nil
 }

@@ -112,7 +112,7 @@ func (ru *RepoUser) GetAllManager(roles string) ([]request.RequestUser, error) {
 func (ru *RepoUser) NameExist(name string) (data request.RequestUser, err error) {
 	var activ model.User
 
-	tx := ru.db.Raw("Select users.id, users.nip, users.password,users.username,users.nama,users.role from users WHERE users.nama= ? ", name).First(&activ)
+	tx := ru.db.Raw("Select users.id, users.nip, users.password,users.username,users.nama,users.role,users.bagian from users WHERE users.nama= ? ", name).First(&activ)
 
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 
