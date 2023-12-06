@@ -197,13 +197,14 @@ type DetailProses struct {
 	NamaKandidat       string
 	TotalNilai         float64
 	NilaiDireksi       float64
-	NamaDireksi string
-	IdDireksi uint
+	NamaDireksi        string
+	IdDireksi          uint
 	KodePengajuan      string
 	IdManager          uint
 	NamaManager        string
 	NamaAdmin          string
 	Status             string
+	CuricullumVitae    string
 }
 type SoalFPT struct {
 	gorm.Model

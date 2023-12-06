@@ -73,7 +73,7 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 	if newkandidata.InformasiJob == "internal" {
 
 		if (lennamaref < 0 || lennamaref < 5) || (lendepref < 0 || lendepref < 5) || (lennipref < 0 || lennipref < 5) {
-			return request.ReqFormulirKandidat{}, errors.New("nama tidak boleh kosong atau tidak boleh kurang dari 5 angka maupun huruf")
+			return request.ReqFormulirKandidat{}, errors.New("Kolom refrensi tidak boleh kosong, karena anda memilih" + newkandidata.InformasiJob)
 		}
 		return newkandidata, nil
 	}

@@ -100,7 +100,7 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	handlesoal := shl.NewHandlesSoal(servicesoal)
 	soalgrup := e.Group("/soal")
 	soalgrup.POST("/addsoal", handlesoal.Addsoal, middlewares.JWTMiddleware())
-	soalgrup.GET("", handlesoal.AllSoal, middlewares.JWTMiddleware())
+	soalgrup.GET("/datasoal", handlesoal.AllSoal, middlewares.JWTMiddleware())
 	soalgrup.GET("", handlesoal.KategoriSoal, middlewares.JWTMiddleware())
 	soalgrup.PUT("", handlesoal.UpdatedSoal, middlewares.JWTMiddleware())
 	soalgrup.DELETE("", handlesoal.Deletedsoal, middlewares.JWTMiddleware())

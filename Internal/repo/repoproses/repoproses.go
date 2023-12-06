@@ -37,7 +37,7 @@ func (rp *Repoproses) AddProcess(newProcess request.ReqDetailProsesAdmin) (reque
 // GetallDetail implements repocontract.RepoProcess.
 func (rp *Repoproses) GetallDetail() (data []request.ReqDetailProses, err error) {
 	model := []model.DetailProses{}
-	tx := rp.db.Raw("SELECT detail_proses.id, detail_proses.id_admin, detail_proses.nilai_admin, detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.nama_admin, detail_proses.status,detail_proses.kandidat_department FROM detail_proses").Find(&model)
+	tx := rp.db.Raw("SELECT formulir_kandidats.curicullum_vitae,detail_proses.id, detail_proses.id_admin, detail_proses.nilai_admin, detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.nama_admin, detail_proses.status,detail_proses.kandidat_department,detail_proses.nilai_direksi,detail_proses.nama_direksi FROM detail_proses LEFT JOIN formulir_kandidats ON formulir_kandidats.nama_kandidat = detail_proses.nama_kandidat").Find(&model)
 
 	if tx.Error != nil {
 		return data, tx.Error

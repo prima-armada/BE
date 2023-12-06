@@ -221,8 +221,11 @@ type ReqDetailProses struct {
 	TotalNilai         float64 `json:"total_nilai"`
 	NamaManager        string  `json:"nama_manager"`
 	NamaAdmin          string  `json:"nama_admin"`
+	NamaDireksi        string  `json:"nama_direksi"`
+	NilaiDireksi       float64 `json:"nilai_direksi"`
 	Status             string  `json:"status"`
 	KandidatDepartment string  `json:"department_kandidat"`
+	CuricullumVitae    string  `json:"cv"`
 }
 type ReqPosisi struct {
 	Id          uint

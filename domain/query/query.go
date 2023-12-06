@@ -705,10 +705,16 @@ func GetallProsessforAdmin(data *model.DetailProses) request.ReqDetailProses {
 		NilaiAdmin:         data.NilaiAdmin,
 		NamaKandidat:       data.NamaKandidat,
 		TotalNilai:         data.TotalNilai,
+		IdManager:          data.IdManager,
 		KodePengajuan:      data.KodePengajuan,
 		NamaAdmin:          data.NamaAdmin,
 		Status:             data.Status,
 		KandidatDepartment: data.KandidatDepartment,
+		CuricullumVitae:    data.CuricullumVitae,
+		NamaDireksi:        data.NamaDireksi,
+		NilaiDireksi:       data.NilaiDireksi,
+		NilaiManager:       data.NilaiManager,
+		NamaManager:        data.NamaManager,
 	}
 
 }
@@ -861,8 +867,8 @@ func ReqdetailDireksi(data request.ReqDetailProsesDireksi) model.DetailProses {
 		Status:        data.Status,
 	}
 }
-func ModeldetailDireksi(data *model.DetailProses)  request.ReqDetailProsesDireksi {
-	return  request.ReqDetailProsesDireksi{
+func ModeldetailDireksi(data *model.DetailProses) request.ReqDetailProsesDireksi {
+	return request.ReqDetailProsesDireksi{
 
 		NamaKandidat:  data.NamaKandidat,
 		NilaiDireksi:  data.NilaiDireksi,
