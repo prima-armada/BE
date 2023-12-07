@@ -120,7 +120,7 @@ func (hp *HandlerProses) Updatedetail(e echo.Context) error {
 		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
 	}
 	if role == "" || role == "admin" {
-		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses admin dan manager", http.StatusUnauthorized, true))
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya Bisa Diakses atasan", http.StatusUnauthorized, true))
 	}
 	binderr := e.Bind(&reqproses)
 	reqproses.IdManager = uint(user)

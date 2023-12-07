@@ -70,7 +70,7 @@ func (cl *cloudUpload) Upload(file *multipart.FileHeader) (string, error) {
 
 	uploadResult, err := cl.clds.Upload.Upload(context.Background(), src, uploadParams)
 	if err != nil {
-		return "", err
+		return "", errors.New("tidak berhasil upload,check your connection")
 	}
 
 	return uploadResult.SecureURL, nil
