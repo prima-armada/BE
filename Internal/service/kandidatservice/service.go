@@ -2,6 +2,7 @@ package kandidatservice
 
 import (
 	"errors"
+	"fmt"
 	"par/domain/contract/repocontract"
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
@@ -52,6 +53,7 @@ func (sk *Servicekandidat) AddFormulirKandidat(newkandidata request.ReqFormulirK
 	if errajuan != nil {
 		return request.ReqFormulirKandidat{}, errors.New("data kode pengajuan tidak ada")
 	}
+	fmt.Print("code", kodeajuan)
 
 	if kodeajuan.StatusPengajuan != "disetujui" {
 		return request.ReqFormulirKandidat{}, errors.New("status belum di setujui oleh direksi")
