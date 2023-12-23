@@ -138,6 +138,41 @@ func (hp *HandlerProses) Updatedetail(e echo.Context) error {
 	return e.JSON(http.StatusOK, helper.GetResponse(dataservice, http.StatusOK, false))
 }
 
+// UpdatedetailForDireksi implements handlecontract.HandleDetailProses.
+func (hp *HandlerProses) UpdatedetailForDireksi(e echo.Context) error {
+	reqproses := request.ReqDetailDireksi{}
+	IdProses := e.QueryParam("idproses")
+
+	cnv, errcnv := strconv.Atoi(IdProses)
+	fmt.Print(cnv)
+	if errcnv != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(errcnv, http.StatusBadRequest, true))
+	}
+	role := middlewares.ExtractTokenTeamRole(e)
+	user, errtoken := middlewares.ExtractTokenIdUser(e)
+
+	if errtoken != nil {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse(errtoken.Error(), http.StatusUnauthorized, true))
+	}
+	if role != "direksi" {
+		return e.JSON(http.StatusUnauthorized, helper.GetResponse("Hanya khusus direksi", http.StatusUnauthorized, true))
+	}
+	binderr := e.Bind(&reqproses)
+	reqproses.InterviewDireksi = uint(user)
+
+	if binderr != nil {
+		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
+	}
+	dataservice, errservice := hp.sp.UpdateDetailForDireksi(cnv, reqproses)
+	if errservice != nil {
+		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
+	}
+
+	// respon := query.ReqtoResponKandidat(dataservice)
+
+	return e.JSON(http.StatusOK, helper.GetResponse(dataservice, http.StatusOK, false))
+}
+
 func (hp *HandlerProses) GetallDetailManager(e echo.Context) error {
 	role := middlewares.ExtractTokenTeamRole(e)
 	user, errtoken := middlewares.ExtractTokenIdUser(e)

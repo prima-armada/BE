@@ -19,7 +19,7 @@ type RepoLogin interface {
 }
 
 type RepoSubmission interface {
-	AddSubmission(newSubmission request.ReqSubmission, res time.Time) (request.ReqSubmission, error)
+	AddSubmission(newSubmission request.ReqSubmission) (request.ReqSubmission, error)
 	GetNamaManager(namamanager string) ([]request.ReqGetManager, error)
 	NamaManager(namamanager string) (request.ReqGetManager, error)
 	CodeSubmission(kode string) (request.ReqGetManager, error)
@@ -68,6 +68,7 @@ type RepoProcess interface {
 	GetAlldetailManager(department string) (data []request.ReqDetailProsesManager, err error)
 	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
 	UpdateDetailAdmin(update request.ReqDetailProsesAdmin) (data request.ReqDetailProsesAdmin, err error)
+	UpdateDetailForDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error)
 	UpdateDetailDireksi(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
 }
 type RepoPosisi interface {

@@ -47,6 +47,7 @@ type Submission struct {
 	Idpersetujuan     uint
 	IdEvaluasi        uint
 	Golongan          string
+	Durasi            string
 	TanggalVerifikasi time.Time `gorm:"default:null"`
 	TanggalPengajuan  time.Time `gorm:"default:null"`
 	TanggalDisetujui  time.Time `gorm:"default:null"`
@@ -190,21 +191,24 @@ type InterviewFPT struct {
 }
 type DetailProses struct {
 	gorm.Model
-	IDAdmin            uint
-	NilaiAdmin         float64
-	NilaiManager       float64
-	KandidatDepartment string
-	NamaKandidat       string
-	TotalNilai         float64
-	NilaiDireksi       float64
-	NamaDireksi        string
-	IdDireksi          uint
-	KodePengajuan      string
-	IdManager          uint
-	NamaManager        string
-	NamaAdmin          string
-	Status             string
-	CuricullumVitae    string
+	IDAdmin               uint
+	NilaiAdmin            float64
+	NilaiManager          float64
+	KandidatDepartment    string
+	NamaKandidat          string
+	TotalNilai            float64
+	NilaiDireksi          float64
+	NilaiInterviewDireksi float64
+	NamaInterviewDireksi  string
+	NamaDireksi           string
+	InterviewDireksi      uint
+	IdDireksi             uint
+	KodePengajuan         string
+	IdManager             uint
+	NamaManager           string
+	NamaAdmin             string
+	Status                string
+	CuricullumVitae       string
 }
 type SoalFPT struct {
 	gorm.Model

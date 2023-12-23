@@ -1,6 +1,10 @@
 package kriteria
 
-import "errors"
+import (
+	"errors"
+	"par/domain/request"
+	"time"
+)
 
 func KriteriaKandidat(test string) (nilai int) {
 	if test == "sangat baik" {
@@ -58,4 +62,38 @@ func CekSTATUSfordireksi(Nilai float64) (status string, err error) {
 		return "harap menunggu konfirmasi admin", nil
 	}
 	return "anda tidak lolos", nil
+}
+
+func Timer(data []request.ReqGetAdmin, tanggalnow time.Time, id uint) (tanggal time.Time, durasi time.Duration) {
+	for _, val := range data {
+		if uint(id) == val.Id {
+			if val.PosisiKosong == "staff" {
+				tanggal = tanggalnow.AddDate(0, 0, 30)
+				durasi = tanggal.Sub(tanggalnow)
+				return tanggal, durasi
+
+			} else if val.PosisiKosong == "spv" {
+				tanggal = tanggalnow.AddDate(0, 0, 60)
+				durasi = tanggal.Sub(tanggalnow)
+				return tanggal, durasi
+
+			} else if val.PosisiKosong == "assisten manager" {
+				tanggal = tanggalnow.AddDate(0, 0, 90)
+				durasi = tanggal.Sub(tanggalnow)
+				return tanggal, durasi
+
+			} else if val.PosisiKosong == "manager" {
+				tanggal = tanggalnow.AddDate(0, 0, 120)
+				durasi = tanggal.Sub(tanggalnow)
+				return tanggal, durasi
+
+			} else if val.PosisiKosong == "vicepresident" {
+				tanggal = tanggalnow.AddDate(0, 0, 150)
+				durasi = tanggal.Sub(tanggalnow)
+				return tanggal, durasi
+
+			}
+		}
+	}
+	return tanggal, durasi
 }

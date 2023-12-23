@@ -7,7 +7,6 @@ import (
 	"par/domain/model"
 	"par/domain/query"
 	"par/domain/request"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -22,17 +21,17 @@ func NewRepoSubmission(db *gorm.DB) repocontract.RepoSubmission {
 	}
 }
 
-func (rsm *RepoSubmission) AddSubmission(newSubmission request.ReqSubmission, res time.Time) (request.ReqSubmission, error) {
-	reqsubmissiontomodel := query.RequestsubmissionTomodel(newSubmission, res)
+func (rsm *RepoSubmission) AddSubmission(newSubmission request.ReqSubmission) (request.ReqSubmission, error) {
+	reqsubmissiontomodel := query.RequestsubmissionTomodel(newSubmission)
 
 	tx := rsm.db.Create(&reqsubmissiontomodel)
 
 	if tx.Error != nil {
 		return request.ReqSubmission{}, tx.Error
 	}
-	timeString := reqsubmissiontomodel.TanggalKebutuhan.Format("02/01/2006")
+	// timeString := reqsubmissiontomodel.TanggalKebutuhan.Format("02/01/2006")
 
-	modeltoreq := query.ModelsubmissionToRequest(reqsubmissiontomodel, timeString)
+	modeltoreq := query.ModelsubmissionToRequest(reqsubmissiontomodel)
 
 	return modeltoreq, nil
 }
