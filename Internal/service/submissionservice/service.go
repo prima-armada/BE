@@ -7,6 +7,7 @@ import (
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
 	"par/helper"
+	"par/kriteria"
 	"par/validasi"
 	"time"
 
@@ -43,7 +44,7 @@ func (ssm *ServiceSubmission) GetAllSubmissionUser(deparment string) ([]request.
 	}
 	return datarepo, nil
 }
-func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission, iduser int, res time.Time) (request.ReqSubmission, error) {
+func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission, iduser int) (request.ReqSubmission, error) {
 
 	validerr := ssm.validate.Struct(newSubmission)
 	if validerr != nil {
@@ -101,7 +102,7 @@ func (ssm *ServiceSubmission) AddSubmission(newSubmission request.ReqSubmission,
 	randString := helper.FileName(8)
 	newSubmission.KodePengajuan = cekdepartment.NameDepartment + randString
 	fmt.Print("newsubmission", newSubmission)
-	datarepo, errrepo := ssm.rsm.AddSubmission(newSubmission, res)
+	datarepo, errrepo := ssm.rsm.AddSubmission(newSubmission)
 
 	if errrepo != nil {
 		return request.ReqSubmission{}, errrepo
@@ -231,7 +232,6 @@ func (ssm *ServiceSubmission) UpdateSubmissionPresident(iduser int, idsubmission
 	return datarepo, nil
 }
 
-// UpdateSubmissionDireksi implements servicecontract.ServiceSubmission.
 func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission int, update request.UpdateDireksi) (request.UpdateDireksi, error) {
 	validerr := ssm.validate.Struct(update)
 	if validerr != nil {
@@ -240,24 +240,22 @@ func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission i
 	}
 
 	cekuser, erruser := ssm.ru.IdUserExist(iduser)
-	dep, errdep := ssm.rd.NameDepartment(cekuser.Bagian)
+	// dep, errdep := ssm.rd.NameDepartment(cekuser.Bagian)
 
-	if errdep != nil {
-		return request.UpdateDireksi{}, errdep
-	}
+	// if errdep != nil {
+	// 	return request.UpdateDireksi{}, errdep
+	// }
 
-	if dep.NameDepartment == "" {
-		return request.UpdateDireksi{}, errors.New("department tidak ada")
-	}
+	// if dep.NameDepartment == "" {
+	// 	return request.UpdateDireksi{}, errors.New("department tidak ada")
+	// }
 	cekdata, errdata := ssm.rsm.GetAllSubmissionAdmin()
 
 	if errdata != nil {
 		return request.UpdateDireksi{}, errdata
 	}
 	for _, val := range cekdata {
-		if uint(idsubmission) == val.Id && cekuser.Bagian != val.NamaDepartment {
-			return request.UpdateDireksi{}, errors.New("department tidak sama")
-		}
+
 		if uint(idsubmission) == val.Id && val.StatusPengajuan == "diajukan" {
 			return request.UpdateDireksi{}, errors.New("masih di ajukan")
 		}
@@ -274,15 +272,19 @@ func (ssm *ServiceSubmission) UpdateSubmissionDireksi(iduser int, idsubmission i
 
 	update.IdSetujui = cekuser.Id
 
-	loc, _ := time.LoadLocation("Asia/Jakarta")
+	// loc, _ := time.LoadLocation("Asia/Jakarta")
 
-	//set timezone,
-	now := time.Now().In(loc)
+	now := time.Now()
 
 	if update.StatusPengajuan == "diverifikasi" || update.StatusPengajuan == "dievaluasi" {
 		return request.UpdateDireksi{}, errors.New(" anda hanya melakukan persutujuan pengajuan")
 	}
 	update.TanggalDisetujui = now
+
+	tanggal, durasi := kriteria.Timer(cekdata, update.TanggalDisetujui, uint(idsubmission))
+
+	update.Durasi = fmt.Sprintf("%.0f hari", durasi.Hours()/24)
+	update.TanggalKebutuhan = tanggal
 
 	datarepo, errrepo := ssm.rsm.UpdateSubmissionDireksi(idsubmission, update)
 

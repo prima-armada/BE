@@ -11,7 +11,7 @@ type RequestUser struct {
 	Password  string `json:"password" form:"password" validate:"required,min=5,alphanum,max=15"`
 	Username  string `json:"username" form:"username" validate:"required,min=5,alphanum,max=15"`
 	Name      string `json:"nama" form:"nama" validate:"required,min=5,alpha,max=15"`
-	Bagian    string `json:"bagian" form:"bagian" validate:"required,min=5,alpha,max=15" `
+	Bagian    string `json:"bagian" form:"bagian"`
 	CreatedAt time.Time
 	DeletedAt time.Time
 	UpdateAt  time.Time
@@ -31,9 +31,9 @@ type ReqSubmission struct {
 	Jumlah           string `json:"jumlah" form:"jumlah" validate:"required"`
 	Alasan           string `json:"alasan" form:"alasan" validate:"required,min=5"`
 	KodePengajuan    string
-	PosisiKosong     string `json:"posisi" form:"posisi" validate:"required,min=5"`
+	PosisiKosong     string `json:"posisi" form:"posisi" validate:"required,min=3"`
 	StatusPengajuan  string
-	TanggalKebutuhan string `json:"tanggal_kebutuhan" form:"tanggal_kebutuhan" validate:"required"`
+	TanggalKebutuhan string
 	Pencaharian      string `json:"pencaharian" form:"pencaharian" validate:"required"`
 	Golongan         string `json:"golongan" form:"golongan" validate:"required"`
 	NamaDepartment   string
@@ -100,6 +100,7 @@ type ReqGetUsers struct {
 	PosisiKosong      string    `json:"posisi"`
 	TanggalPengajuan  time.Time `json:"tanggal_pengajuan"`
 	TanggalDisetujui  string    `json:"tanggal_disetujui"`
+	Durasi            string    `json:"durasi"`
 }
 type ReqGetAdmin struct {
 	Id                uint
@@ -121,6 +122,7 @@ type ReqGetAdmin struct {
 	TanggalEvaluasi   string
 	TanggalPengajuan  time.Time
 	TanggalDisetujui  string
+	Durasi            string
 }
 type UpdateAdmin struct {
 	IdEvaluasi       int
@@ -138,6 +140,8 @@ type UpdateDireksi struct {
 	IdSetujui        int
 	StatusPengajuan  string    `json:"status" form:"status" validate:"required,min=5"`
 	TanggalDisetujui time.Time `json:"tanggal_disetujui" form:"tanggal_disetujui"`
+	TanggalKebutuhan time.Time
+	Durasi           string
 }
 type ReqFormulirKandidat struct {
 	Id                   uint
@@ -211,21 +215,34 @@ type ReqDetailProsesManager struct {
 	Status             string
 }
 type ReqDetailProses struct {
-	Id                 uint    `json:"id"`
-	IDAdmin            uint    `json:"idadmin"`
-	IdManager          uint    `json:"id_manager"`
-	NilaiManager       float64 `json:"nilai_manager"`
-	NilaiAdmin         float64 `json:"nilai_admin"`
-	KodePengajuan      string  `json:"kodepengajuan"`
-	NamaKandidat       string  `json:"nama_kandidat"`
-	TotalNilai         float64 `json:"total_nilai"`
-	NamaManager        string  `json:"nama_manager"`
-	NamaAdmin          string  `json:"nama_admin"`
-	NamaDireksi        string  `json:"nama_direksi"`
-	NilaiDireksi       float64 `json:"nilai_direksi"`
-	Status             string  `json:"status"`
-	KandidatDepartment string  `json:"department_kandidat"`
-	CuricullumVitae    string  `json:"cv"`
+	Id                    uint    `json:"id"`
+	IDAdmin               uint    `json:"idadmin"`
+	IdManager             uint    `json:"id_manager"`
+	NilaiManager          float64 `json:"nilai_manager"`
+	NilaiAdmin            float64 `json:"nilai_admin"`
+	KodePengajuan         string  `json:"kodepengajuan"`
+	NamaKandidat          string  `json:"nama_kandidat"`
+	NilaiInterviewDireksi float64 `json:"nilai_interviewdireksi"`
+	NamaInterviewDireksi  string  `json:"nama_interview_direksi"`
+	InterviewDireksi      uint    `json:"id_direksi_interview"`
+	TotalNilai            float64 `json:"total_nilai"`
+	NamaManager           string  `json:"nama_manager"`
+	NamaAdmin             string  `json:"nama_admin"`
+	NamaDireksi           string  `json:"nama_direksi"`
+	NilaiDireksi          float64 `json:"nilai_direksi"`
+	Status                string  `json:"status"`
+	KandidatDepartment    string  `json:"department_kandidat"`
+	CuricullumVitae       string  `json:"cv"`
+}
+type ReqDetailDireksi struct {
+	Id                    uint
+	NilaiInterviewDireksi float64
+	NamaInterviewDireksi  string
+	InterviewDireksi      uint
+	KodePengajuan         string `json:"kodepengajuan" form:"kodepengajuan" validate:"required,min=5"`
+	NamaKandidat          string `json:"nama_kandidat" form:"nama_kandidat" validate:"required,min=5"`
+	KandidatDepartment    string
+	Status                string
 }
 type ReqPosisi struct {
 	Id          uint

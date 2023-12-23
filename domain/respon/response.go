@@ -116,6 +116,8 @@ type ResponUpdateDireksi struct {
 	IdPersetujuan      int       `json:"direksi"`
 	StatusPengajuan    string    `json:"status"`
 	TanggalPersetujuan time.Time `json:"persetujuan_tanggal"`
+	TanggalKebutuhan   time.Time `json:"tanggal_kebutuhan"`
+	Durasi             string    `json:"durasi"`
 }
 
 type ResFormulirKandidat struct {

@@ -9,7 +9,6 @@ import (
 	"par/helper"
 	middlewares "par/middleware"
 	"strconv"
-	"time"
 
 	echo "github.com/labstack/echo/v4"
 )
@@ -40,11 +39,11 @@ func (hs *HandlerSubmission) AddSubmission(e echo.Context) error {
 	if binderr != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
-	res, errConvtime := time.Parse("02/01/2006", Reqsubmision.TanggalKebutuhan)
-	if errConvtime != nil {
-		return e.JSON(http.StatusBadRequest, helper.GetResponse("gagal parsing tanggal", http.StatusBadRequest, true))
-	}
-	dataservice, errservice := hs.ss.AddSubmission(Reqsubmision, usermanagar, res)
+	// _, errConvtime := time.Parse("02/01/2006", Reqsubmision.TanggalKebutuhan)
+	// if errConvtime != nil {
+	// 	return e.JSON(http.StatusBadRequest, helper.GetResponse("gagal parsing tanggal", http.StatusBadRequest, true))
+	// }
+	dataservice, errservice := hs.ss.AddSubmission(Reqsubmision, usermanagar)
 
 	if errservice != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(errservice.Error(), http.StatusBadRequest, true))

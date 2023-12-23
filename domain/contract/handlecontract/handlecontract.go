@@ -49,6 +49,7 @@ type HandleDetailProses interface {
 	AddProcess(e echo.Context) error
 	GetallDetail(e echo.Context) error
 	Updatedetail(e echo.Context) error
+	UpdatedetailForDireksi(e echo.Context) error
 	GetallDetailManager(e echo.Context) error
 	UpdatedDetailAdmin(e echo.Context) error
 	UpdatedDetaildireksi(e echo.Context) error

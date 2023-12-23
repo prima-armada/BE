@@ -2,7 +2,6 @@ package interviewservice
 
 import (
 	"errors"
-	"fmt"
 	"par/domain/contract/repocontract"
 	"par/domain/contract/servicecontract"
 	"par/domain/request"
@@ -39,7 +38,6 @@ func NewServiceinterview(ri repocontract.RepoInterview, rk repocontract.RepoKand
 	}
 }
 
-// AddInterview implements servicecontract.Serviceinterview.
 func (si *Serviceinterview) AddInterview(newinterview request.ReqInterviewKandidat) (request.ReqInterviewKandidat, error) {
 	validerr := si.validate.Struct(newinterview)
 	if validerr != nil {
@@ -103,23 +101,27 @@ func (si *Serviceinterview) AddInterview(newinterview request.ReqInterviewKandid
 	if newinterview.Role == "direksi" {
 		for _, val := range datapengajuan {
 			if newinterview.KodePengajuan == val.KodePengajuan {
-				if val.PosisiKosong == "manager" {
-					for _, val := range getuser {
-						if val.Role == "vicepresident" && newinterview.DepartementUser == val.Bagian {
-							return request.ReqInterviewKandidat{}, errors.New("anda sudah punya manager,harap vicepresident anda yang isi")
-						}
-					}
-				}
-				if val.PosisiKosong == "vicepresident" {
-					for _, val := range getuser {
-						if val.Role == "vicepresident" && newinterview.DepartementUser == val.Bagian {
-							return request.ReqInterviewKandidat{}, errors.New("anda sudah punya vicepresident")
-						}
-					}
+				if val.PosisiKosong == "staff" {
+					return request.ReqInterviewKandidat{}, errors.New("maaf anda tidak bisa interview kandidat")
+					// for _, val := range getuser {
+					// 	if val.Role == "vicepresident" {
+					// 		return request.ReqInterviewKandidat{}, errors.New("anda sudah punya manager,harap vicepresident anda yang isi")
+					// 	}
 				}
 			}
 		}
 	}
+	// 			if val.PosisiKosong == "vicepresident" {
+	// 				for _, val := range getuser {
+	// 					if val.Role == "vicepresident" && newinterview.DepartementUser == val.Bagian {
+	// 						return request.ReqInterviewKandidat{}, errors.New("anda sudah punya vicepresident")
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+
 	for _, val := range datapengajuan {
 		if newinterview.KodePengajuan == val.KodePengajuan {
 			if val.StatusPengajuan != "disetujui" {
@@ -132,7 +134,7 @@ func (si *Serviceinterview) AddInterview(newinterview request.ReqInterviewKandid
 	if errproses != nil {
 		return request.ReqInterviewKandidat{}, errproses
 	}
-	if repouser.Role == "manager" || repouser.Role == "vicepresident" || repouser.Role == "direksi" {
+	if repouser.Role == "manager" || repouser.Role == "vicepresident" {
 		for _, val := range dataproses {
 			if newinterview.KodePengajuan == val.KodePengajuan {
 				if val.Status != "lolos ke tahap interview user" && newinterview.NamaKandidat == val.NamaKandidat {
@@ -141,12 +143,18 @@ func (si *Serviceinterview) AddInterview(newinterview request.ReqInterviewKandid
 			}
 		}
 	}
-	if repouser.Role == "manager" || repouser.Role == "vicepresident" || repouser.Role == "direksi" {
+	if repouser.Role == "manager" || repouser.Role == "vicepresident" {
 		if repouser.Bagian != newinterview.DepartementKandidat {
 			return request.ReqInterviewKandidat{}, errors.New("hanya boleh interview sesama department")
 		}
 	}
-
+	if repouser.Role == "direksi" {
+		for _, val := range dataproses {
+			if val.Status != "lolos ke tahap interview direksi" && newinterview.NamaKandidat == val.NamaKandidat {
+				return request.ReqInterviewKandidat{}, errors.New(" maaf kode pengajuan " + newinterview.KodePengajuan + val.Status)
+			}
+		}
+	}
 	res, errConvtime := time.Parse("02/01/2006", newinterview.TanggalWwawancara)
 	if errConvtime != nil {
 		return request.ReqInterviewKandidat{}, errConvtime
@@ -207,7 +215,7 @@ func (si *Serviceinterview) AddInterviewfpt(newinterview request.ReqInterviewfpt
 
 	newinterview.UserId = uint(repouser.Id)
 	ceksoal, errsoal := si.rft.KategoriSoal(newinterview.KategoriSoal)
-	fmt.Print("ini bobot", ceksoal.Bobot)
+	// fmt.Print("ini bobot", ceksoal.Bobot)
 	if errsoal != nil {
 		return request.ReqInterviewfpt{}, errsoal
 	}
@@ -226,9 +234,9 @@ func (si *Serviceinterview) AddInterviewfpt(newinterview request.ReqInterviewfpt
 	}
 	newinterview.NamaKandidat = getcodedannama.NamaKandidat
 	newinterview.DepartementKandidat = getcodedannama.DepartementManager
-	fmt.Print("tes", newinterview.DepartementKandidat)
+
 	dataproses, errproses := si.rdt.GetallDetail()
-	fmt.Print("ini data proses", dataproses)
+
 	if errproses != nil {
 		return request.ReqInterviewfpt{}, errproses
 	}

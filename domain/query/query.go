@@ -147,13 +147,13 @@ func ListReqDepartmentToRespondepart(data []request.RequestDepartment) (datareq 
 	return datareq
 }
 
-func RequestsubmissionTomodel(data request.ReqSubmission, tanggal time.Time) model.Submission {
+func RequestsubmissionTomodel(data request.ReqSubmission) model.Submission {
 	return model.Submission{
-		IdDepartment:     data.IdDepartment,
-		UserPengajuan:    uint(data.IdPengajuan),
-		Jumlah:           data.Jumlah,
-		Alasan:           data.Alasan,
-		TanggalKebutuhan: tanggal,
+		IdDepartment:  data.IdDepartment,
+		UserPengajuan: uint(data.IdPengajuan),
+		Jumlah:        data.Jumlah,
+		Alasan:        data.Alasan,
+		// TanggalKebutuhan: tanggal,
 		Pencharian:       data.Pencaharian,
 		StatusPengajuan:  data.StatusPengajuan,
 		PosisiKosong:     data.PosisiKosong,
@@ -163,13 +163,13 @@ func RequestsubmissionTomodel(data request.ReqSubmission, tanggal time.Time) mod
 	}
 
 }
-func ModelsubmissionToRequest(data model.Submission, tanggal string) request.ReqSubmission {
+func ModelsubmissionToRequest(data model.Submission) request.ReqSubmission {
 	return request.ReqSubmission{
-		IdDepartment:     data.IdDepartment,
-		IdPengajuan:      int(data.UserPengajuan),
-		Jumlah:           data.Jumlah,
-		Alasan:           data.Alasan,
-		TanggalKebutuhan: tanggal,
+		IdDepartment: data.IdDepartment,
+		IdPengajuan:  int(data.UserPengajuan),
+		Jumlah:       data.Jumlah,
+		Alasan:       data.Alasan,
+		// TanggalKebutuhan: tanggal,
 		PosisiKosong:     data.PosisiKosong,
 		Pencaharian:      data.Pencharian,
 		StatusPengajuan:  data.StatusPengajuan,
@@ -425,7 +425,8 @@ func ReqtoResponPresident(data request.UpdateVicePresident) respon.ResponUpdateV
 }
 func ReqdireksiTomodelsubmissionudated(data request.UpdateDireksi) model.Submission {
 	return model.Submission{
-
+		TanggalKebutuhan: data.TanggalKebutuhan,
+		Durasi:           data.Durasi,
 		StatusPengajuan:  data.StatusPengajuan,
 		Idpersetujuan:    uint(data.IdSetujui),
 		TanggalDisetujui: data.TanggalDisetujui,
@@ -433,7 +434,8 @@ func ReqdireksiTomodelsubmissionudated(data request.UpdateDireksi) model.Submiss
 }
 func ModelDireksiToreq(data model.Submission) request.UpdateDireksi {
 	return request.UpdateDireksi{
-
+		TanggalKebutuhan: data.TanggalKebutuhan,
+		Durasi:           data.Durasi,
 		StatusPengajuan:  data.StatusPengajuan,
 		IdSetujui:        int(data.Idpersetujuan),
 		TanggalDisetujui: data.TanggalDisetujui,
@@ -441,7 +443,8 @@ func ModelDireksiToreq(data model.Submission) request.UpdateDireksi {
 }
 func ReqDireksiTores(data request.UpdateDireksi) respon.ResponUpdateDireksi {
 	return respon.ResponUpdateDireksi{
-
+		TanggalKebutuhan:   data.TanggalKebutuhan,
+		Durasi:             data.Durasi,
 		StatusPengajuan:    data.StatusPengajuan,
 		IdPersetujuan:      data.IdSetujui,
 		TanggalPersetujuan: data.TanggalDisetujui,

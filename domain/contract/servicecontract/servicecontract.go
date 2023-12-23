@@ -2,7 +2,6 @@ package servicecontract
 
 import (
 	"par/domain/request"
-	"time"
 )
 
 type ServiceCase interface {
@@ -15,7 +14,7 @@ type ServiceLogin interface {
 }
 
 type ServiceSubmission interface {
-	AddSubmission(newSubmission request.ReqSubmission, iduser int, res time.Time) (request.ReqSubmission, error)
+	AddSubmission(newSubmission request.ReqSubmission, iduser int) (request.ReqSubmission, error)
 	GetNamaManager(namamanager string) ([]request.ReqGetManager, error)
 	GetAllSubmissionUser(deparment string) ([]request.ReqGetUsers, error)
 	GetAllSubmissionAdmin() ([]request.ReqGetAdmin, error)
@@ -52,6 +51,7 @@ type ServiceProcess interface {
 	GetallDetail() (data []request.ReqDetailProses, err error)
 	GetAlldetailManager(id int) (data []request.ReqDetailProsesManager, err error)
 	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
+	UpdateDetailForDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error)
 	UpdateDetailAdmin(id int, update request.ReqDetailProsesAdmin) (data request.ReqDetailProsesAdmin, err error)
 	UpdateDetailDireksi(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
 }

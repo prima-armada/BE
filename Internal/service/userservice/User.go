@@ -35,7 +35,9 @@ func (sc *ServicesCase) Register(newRequest request.RequestUser) (data request.R
 	newRequest.CreatedAt = time.Now()
 	haspw := bycripts.Bcript(newRequest.Password)
 	newRequest.Password = haspw
-
+	if newRequest.Role == "direksi" {
+		newRequest.Bagian = "none"
+	}
 	datarepo, errrepo := sc.ru.Register(newRequest)
 
 	if errrepo != nil {
