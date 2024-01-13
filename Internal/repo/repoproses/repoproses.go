@@ -37,7 +37,7 @@ func (rp *Repoproses) AddProcess(newProcess request.ReqDetailProsesAdmin) (reque
 // GetallDetail implements repocontract.RepoProcess.
 func (rp *Repoproses) GetallDetail() (data []request.ReqDetailProses, err error) {
 	model := []model.DetailProses{}
-	tx := rp.db.Raw("SELECT formulir_kandidats.curicullum_vitae,detail_proses.id, detail_proses.id_admin, detail_proses.nilai_admin, detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.nama_admin, detail_proses.status,detail_proses.kandidat_department,detail_proses.nilai_direksi,detail_proses.nama_direksi FROM detail_proses LEFT JOIN formulir_kandidats ON formulir_kandidats.nama_kandidat = detail_proses.nama_kandidat").Find(&model)
+	tx := rp.db.Raw("SELECT formulir_kandidats.curicullum_vitae,detail_proses.id, detail_proses.id_admin, detail_proses.nilai_admin, detail_proses.nilai_manager, detail_proses.nama_kandidat, detail_proses.total_nilai, detail_proses.kode_pengajuan, detail_proses.id_manager, detail_proses.nama_manager, detail_proses.nama_admin, detail_proses.status,detail_proses.kandidat_department,detail_proses.nilai_direksi,detail_proses.nama_direksi,detail_proses.nama_interview_direksi,detail_proses.nilai_interview_direksi,detail_proses.nilai_direksi_ftp2,detail_proses.nilai_direksi_ftp3,detail_proses.nama_direksi2,detail_proses.nama_direksi3 FROM detail_proses LEFT JOIN formulir_kandidats ON formulir_kandidats.nama_kandidat = detail_proses.nama_kandidat").Find(&model)
 
 	if tx.Error != nil {
 		return data, tx.Error
@@ -91,7 +91,6 @@ func (rp *Repoproses) UpdateDetailAdmin(update request.ReqDetailProsesAdmin) (da
 	return modeltoreq, nil
 }
 
-// UpdateDetail implements repocontract.RepoProcess.
 func (rp *Repoproses) UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error) {
 	reqmanagertomodel := query.Reqdetailmanager(update)
 
@@ -101,6 +100,20 @@ func (rp *Repoproses) UpdateDetail(id int, update request.ReqDetailProsesManager
 		return data, tx2.Error
 	}
 	modeltoreq := query.Modeldetailmanagertoreq(&reqmanagertomodel)
+
+	return modeltoreq, nil
+}
+
+// UpdateDetailsDireksi implements repocontract.RepoProcess.
+func (rp *Repoproses) UpdateDetailsDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error) {
+	reqmanagertomodel := query.Reqdetailsdireksi(update)
+
+	tx2 := rp.db.Model(&reqmanagertomodel).Where("id = ?", id).Updates(&reqmanagertomodel)
+
+	if tx2.Error != nil {
+		return data, tx2.Error
+	}
+	modeltoreq := query.Modeldetailsdireksitoreq(&reqmanagertomodel)
 
 	return modeltoreq, nil
 }
@@ -129,6 +142,34 @@ func (rp *Repoproses) UpdateDetailDireksi(update request.ReqDetailProsesDireksi)
 		return data, tx2.Error
 	}
 	modeltoreq := query.ModeldetailDireksi(&reqmanagertomodel)
+
+	return modeltoreq, nil
+}
+
+// UpdateDetailDireksi2 implements repocontract.RepoProcess.
+func (rp *Repoproses) UpdateDetailDireksi2(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error) {
+	reqmanagertomodel := query.ReqdetailDireksi2(update)
+
+	tx2 := rp.db.Model(&reqmanagertomodel).Where("id = ?", update.Id).Updates(&reqmanagertomodel)
+
+	if tx2.Error != nil {
+		return data, tx2.Error
+	}
+	modeltoreq := query.ModeldetailDireksi2(&reqmanagertomodel)
+
+	return modeltoreq, nil
+}
+
+// UpdateDetailDireksi3 implements repocontract.RepoProcess.
+func (rp *Repoproses) UpdateDetailDireksi3(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error) {
+	reqmanagertomodel := query.ReqdetailDireksi3(update)
+
+	tx2 := rp.db.Model(&reqmanagertomodel).Where("id = ?", update.Id).Updates(&reqmanagertomodel)
+
+	if tx2.Error != nil {
+		return data, tx2.Error
+	}
+	modeltoreq := query.ModeldetailDireksi3(&reqmanagertomodel)
 
 	return modeltoreq, nil
 }

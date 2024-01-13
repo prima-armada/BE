@@ -703,21 +703,27 @@ func Modelprosesadmintoreq(data *model.DetailProses) request.ReqDetailProsesAdmi
 }
 func GetallProsessforAdmin(data *model.DetailProses) request.ReqDetailProses {
 	return request.ReqDetailProses{
-		Id:                 data.ID,
-		IDAdmin:            data.IDAdmin,
-		NilaiAdmin:         data.NilaiAdmin,
-		NamaKandidat:       data.NamaKandidat,
-		TotalNilai:         data.TotalNilai,
-		IdManager:          data.IdManager,
-		KodePengajuan:      data.KodePengajuan,
-		NamaAdmin:          data.NamaAdmin,
-		Status:             data.Status,
-		KandidatDepartment: data.KandidatDepartment,
-		CuricullumVitae:    data.CuricullumVitae,
-		NamaDireksi:        data.NamaDireksi,
-		NilaiDireksi:       data.NilaiDireksi,
-		NilaiManager:       data.NilaiManager,
-		NamaManager:        data.NamaManager,
+		Id:                    data.ID,
+		IDAdmin:               data.IDAdmin,
+		NilaiAdmin:            data.NilaiAdmin,
+		NamaKandidat:          data.NamaKandidat,
+		TotalNilai:            data.TotalNilai,
+		IdManager:             data.IdManager,
+		KodePengajuan:         data.KodePengajuan,
+		NamaAdmin:             data.NamaAdmin,
+		Status:                data.Status,
+		KandidatDepartment:    data.KandidatDepartment,
+		CuricullumVitae:       data.CuricullumVitae,
+		NamaDireksi:           data.NamaDireksi,
+		NilaiDireksi:          data.NilaiDireksi,
+		NilaiManager:          data.NilaiManager,
+		NamaManager:           data.NamaManager,
+		NilaiInterviewDireksi: data.NilaiInterviewDireksi,
+		NilaiDireksiFtp2:      data.NilaiDireksiFtp2,
+		NilaiDireksiFtp3:      data.NilaiDireksiFtp3,
+		NamaInterviewDireksi:  data.NamaInterviewDireksi,
+		NamaDireksi2:          data.NamaDireksi2,
+		NamaDireksi3:          data.NamaDireksi3,
 	}
 
 }
@@ -738,6 +744,32 @@ func Reqdetailmanager(data request.ReqDetailProsesManager) model.DetailProses {
 		IdManager:          data.IdManager,
 		NamaManager:        data.NamaManager,
 		Status:             data.Status,
+	}
+}
+func Reqdetailsdireksi(data request.ReqDetailDireksi) model.DetailProses {
+	return model.DetailProses{
+
+		NilaiInterviewDireksi: data.NilaiInterviewDireksi,
+		KandidatDepartment:    data.KandidatDepartment,
+		NamaKandidat:          data.NamaKandidat,
+
+		KodePengajuan:        data.KodePengajuan,
+		InterviewDireksi:     data.InterviewDireksi,
+		NamaInterviewDireksi: data.NamaInterviewDireksi,
+		Status:               data.Status,
+	}
+}
+func Modeldetailsdireksitoreq(data *model.DetailProses) request.ReqDetailDireksi {
+	return request.ReqDetailDireksi{
+		Id:                    data.ID,
+		NilaiInterviewDireksi: data.NilaiInterviewDireksi,
+		KandidatDepartment:    data.KandidatDepartment,
+		NamaKandidat:          data.NamaKandidat,
+
+		KodePengajuan:        data.KodePengajuan,
+		InterviewDireksi:     data.InterviewDireksi,
+		NamaInterviewDireksi: data.NamaInterviewDireksi,
+		Status:               data.Status,
 	}
 }
 func Modeldetailmanagertoreq(data *model.DetailProses) request.ReqDetailProsesManager {
@@ -870,6 +902,17 @@ func ReqdetailDireksi(data request.ReqDetailProsesDireksi) model.DetailProses {
 		Status:        data.Status,
 	}
 }
+func ReqdetailDireksi2(data request.ReqDetailProsesDireksi) model.DetailProses {
+	return model.DetailProses{
+
+		NamaKandidat:     data.NamaKandidat,
+		NilaiDireksiFtp2: data.NilaiDireksi,
+		KodePengajuan:    data.KodePengajuan,
+		IdDireksi2:       data.IdDireksi,
+		NamaDireksi2:     data.NamaDireksi,
+		Status:           data.Status,
+	}
+}
 func ModeldetailDireksi(data *model.DetailProses) request.ReqDetailProsesDireksi {
 	return request.ReqDetailProsesDireksi{
 
@@ -878,6 +921,39 @@ func ModeldetailDireksi(data *model.DetailProses) request.ReqDetailProsesDireksi
 		KodePengajuan: data.KodePengajuan,
 		IdDireksi:     data.IdDireksi,
 		NamaDireksi:   data.NamaDireksi,
+		Status:        data.Status,
+	}
+}
+func ModeldetailDireksi2(data *model.DetailProses) request.ReqDetailProsesDireksi {
+	return request.ReqDetailProsesDireksi{
+
+		NamaKandidat:  data.NamaKandidat,
+		NilaiDireksi:  data.NilaiDireksiFtp2,
+		KodePengajuan: data.KodePengajuan,
+		IdDireksi:     data.IdDireksi2,
+		NamaDireksi:   data.NamaDireksi2,
+		Status:        data.Status,
+	}
+}
+func ReqdetailDireksi3(data request.ReqDetailProsesDireksi) model.DetailProses {
+	return model.DetailProses{
+
+		NamaKandidat:     data.NamaKandidat,
+		NilaiDireksiFtp3: data.NilaiDireksi,
+		KodePengajuan:    data.KodePengajuan,
+		IdDireksi3:       data.IdDireksi,
+		NamaDireksi3:     data.NamaDireksi,
+		Status:           data.Status,
+	}
+}
+func ModeldetailDireksi3(data *model.DetailProses) request.ReqDetailProsesDireksi {
+	return request.ReqDetailProsesDireksi{
+
+		NamaKandidat:  data.NamaKandidat,
+		NilaiDireksi:  data.NilaiDireksiFtp3,
+		KodePengajuan: data.KodePengajuan,
+		IdDireksi:     data.IdDireksi3,
+		NamaDireksi:   data.NamaDireksi3,
 		Status:        data.Status,
 	}
 }

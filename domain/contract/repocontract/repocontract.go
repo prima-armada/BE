@@ -55,8 +55,9 @@ type RepoInterview interface {
 	AddInterviewfpt(newinterview request.ReqInterviewfpt, tanggal time.Time) (request.ReqInterviewfpt, error)
 	GetallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
 	CekallInterview(userid int, kode, nama string) (data []request.ReqInterviewKandidat, err error)
-	GetallInterviewftp(nama string, kode string) (data []request.ReqInterviewfpt, err error)
-	Getallnilaiftp(kode, nama string) (data []request.ReqInterviewfpt, err error)
+	GetallInterviewftp(nama string, kode string, user string) (data []request.ReqInterviewfpt, err error)
+	Getallnilaiftp(kode, nama string, user string) (data []request.ReqInterviewfpt, err error)
+	Cekllnilaiftp(kode, nama string) (data []request.ReqInterviewfpt, err error)
 	CekKategorInterview(kategori string) (request.ReqInterviewKandidat, error)
 	// ReqInterviewKfpt
 }
@@ -68,8 +69,10 @@ type RepoProcess interface {
 	GetAlldetailManager(department string) (data []request.ReqDetailProsesManager, err error)
 	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
 	UpdateDetailAdmin(update request.ReqDetailProsesAdmin) (data request.ReqDetailProsesAdmin, err error)
-	UpdateDetailForDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error)
+	UpdateDetailsDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error)
 	UpdateDetailDireksi(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
+	UpdateDetailDireksi2(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
+	UpdateDetailDireksi3(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
 }
 type RepoPosisi interface {
 	AddPosisi(newProcess request.ReqPosisi) (request.ReqPosisi, error)

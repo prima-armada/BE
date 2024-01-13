@@ -233,6 +233,12 @@ type ReqDetailProses struct {
 	Status                string  `json:"status"`
 	KandidatDepartment    string  `json:"department_kandidat"`
 	CuricullumVitae       string  `json:"cv"`
+	NilaiDireksiFtp2      float64 `json:"niali_direksi2"`
+	NilaiDireksiFtp3      float64 `json:"niali_direksi3"`
+	NamaDireksi2          string  `json:"nama_direksi2"`
+	NamaDireksi3          string  `json:"nama_direksi3"`
+	IdDireksi2            uint    `json:"id_direksi2"`
+	IdDireksi3            uint    `json:"id_direksi3"`
 }
 type ReqDetailDireksi struct {
 	Id                    uint

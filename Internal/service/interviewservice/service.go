@@ -268,13 +268,13 @@ func (si *Serviceinterview) AddInterviewfpt(newinterview request.ReqInterviewfpt
 	if errConvtime != nil {
 		return request.ReqInterviewfpt{}, errConvtime
 	}
-	cekinterview, errinterview := si.ri.GetallInterviewftp(newinterview.NamaKandidat, newinterview.KodePengajuan)
+	cekinterview, errinterview := si.ri.GetallInterviewftp(newinterview.NamaKandidat, newinterview.KodePengajuan, newinterview.NamaUser)
 	if errinterview != nil {
 		return request.ReqInterviewfpt{}, errinterview
 	}
 
 	for _, val := range cekinterview {
-		if newinterview.KodePengajuan == val.KodePengajuan && newinterview.KategoriSoal == val.KategoriSoal && newinterview.NamaKandidat == val.NamaKandidat {
+		if newinterview.KodePengajuan == val.KodePengajuan && newinterview.KategoriSoal == val.KategoriSoal && newinterview.NamaKandidat == val.NamaKandidat && newinterview.NamaUser == val.NamaUser {
 			return request.ReqInterviewfpt{}, errors.New("kategori tidak boleh sama")
 		}
 	}

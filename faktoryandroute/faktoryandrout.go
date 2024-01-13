@@ -123,8 +123,9 @@ func FaktoryAndRoute(e *echo.Echo, db *gorm.DB) {
 	prosesgrup.GET("", handleproses.GetallDetail, middlewares.JWTMiddleware())
 	prosesgrup.GET("/manager", handleproses.GetallDetailManager, middlewares.JWTMiddleware())
 	prosesgrup.PUT("", handleproses.Updatedetail, middlewares.JWTMiddleware())
+	prosesgrup.PUT("/direksi", handleproses.UpdatedetailForDireksi, middlewares.JWTMiddleware())
 	prosesgrup.PUT("/admin", handleproses.UpdatedDetailAdmin, middlewares.JWTMiddleware())
-	prosesgrup.PUT("/direksi", handleproses.UpdatedDetaildireksi, middlewares.JWTMiddleware())
+	prosesgrup.PUT("/fpt", handleproses.UpdatedDetaildireksi, middlewares.JWTMiddleware())
 
 	rpt := rpt.NewRepoposisi(db)
 	serviceposisi := pts.NewServiceposisi(rpt, rpm)

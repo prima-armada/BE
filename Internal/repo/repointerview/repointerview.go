@@ -83,9 +83,9 @@ func (ri *Repointerview) CekallInterview(userid int, kode string, nama string) (
 	return modeltoreq, nil
 }
 
-func (ri *Repointerview) GetallInterviewftp(nama string, kode string) (data []request.ReqInterviewfpt, err error) {
+func (ri *Repointerview) GetallInterviewftp(nama string, kode string, user string) (data []request.ReqInterviewfpt, err error) {
 	modelinterview := []model.InterviewFPT{}
-	tx := ri.db.Raw("SELECT interview_fpts.nama_kandidat,interview_fpts.departement_user,interview_fpts.departement_kandidat,interview_fpts.kategori_soal,interview_fpts.tanggal_wwawancara,interview_fpts.kode_pengajuan,interview_fpts.nilai FROM interview_fpts WHERE interview_fpts.nama_kandidat = ?  and interview_fpts.kode_pengajuan = ?", nama, kode).Find(&modelinterview)
+	tx := ri.db.Raw("SELECT interview_fpts.nama_user, interview_fpts.nama_kandidat,interview_fpts.departement_user,interview_fpts.departement_kandidat,interview_fpts.kategori_soal,interview_fpts.tanggal_wwawancara,interview_fpts.kode_pengajuan,interview_fpts.nilai FROM interview_fpts WHERE interview_fpts.nama_kandidat = ?  and interview_fpts.kode_pengajuan = ? AND interview_fpts.nama_user = ?", nama, kode, user).Find(&modelinterview)
 	if tx.Error != nil {
 		return []request.ReqInterviewfpt{}, tx.Error
 	}
@@ -95,9 +95,21 @@ func (ri *Repointerview) GetallInterviewftp(nama string, kode string) (data []re
 }
 
 // Getallnilaiftp implements repocontract.RepoInterview.
-func (ri *Repointerview) Getallnilaiftp(kode string, nama string) (data []request.ReqInterviewfpt, err error) {
+func (ri *Repointerview) Getallnilaiftp(kode string, nama string, user string) (data []request.ReqInterviewfpt, err error) {
 	modelinterview := []model.InterviewFPT{}
-	tx := ri.db.Raw("SELECT interview_fpts.nama_kandidat,interview_fpts.departement_user,interview_fpts.departement_kandidat,interview_fpts.kategori_soal,interview_fpts.tanggal_wwawancara,interview_fpts.kode_pengajuan,SUM(interview_fpts.nilai) AS nilai FROM interview_fpts WHERE interview_fpts.nama_kandidat = ? and interview_fpts.kode_pengajuan = ?", nama, kode).Find(&modelinterview)
+	tx := ri.db.Raw("SELECT interview_fpts.nama_kandidat,interview_fpts.departement_user,interview_fpts.departement_kandidat,interview_fpts.kategori_soal,interview_fpts.tanggal_wwawancara,interview_fpts.kode_pengajuan,SUM(interview_fpts.nilai) AS nilai FROM interview_fpts WHERE interview_fpts.nama_kandidat = ? and interview_fpts.kode_pengajuan = ? and interview_fpts.nama_user = ?", nama, kode, user).Find(&modelinterview)
+	if tx.Error != nil {
+		return []request.ReqInterviewfpt{}, tx.Error
+	}
+	modeltoreq := query.Listmodelotreqinterviewfpt(modelinterview)
+
+	return modeltoreq, nil
+}
+
+// Cekllnilaiftp implements repocontract.RepoInterview.
+func (rp *Repointerview) Cekllnilaiftp(kode string, nama string) (data []request.ReqInterviewfpt, err error) {
+	modelinterview := []model.InterviewFPT{}
+	tx := rp.db.Raw("SELECT interview_fpts.user_id, interview_fpts.nama_user, SUM(interview_fpts.nilai) AS total_nilai,interview_fpts.nama_kandidat FROM interview_fpts WHERE interview_fpts.kode_pengajuan = ? AND interview_fpts.nama_kandidat = ? GROUP BY interview_fpts.user_id, interview_fpts.nama_user, interview_fpts.nama_kandidat;", nama, kode).Find(&modelinterview)
 	if tx.Error != nil {
 		return []request.ReqInterviewfpt{}, tx.Error
 	}

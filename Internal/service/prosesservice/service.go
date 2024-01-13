@@ -265,6 +265,91 @@ func (sp *Serviceprocess) UpdateDetail(id int, update request.ReqDetailProsesMan
 	return datarepo, nil
 }
 
+func (sp *Serviceprocess) UpdateDetailsDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error) {
+	repousers, erruser := sp.ru.IdUserExist(int(update.InterviewDireksi))
+
+	update.NamaInterviewDireksi = repousers.Name
+
+	if erruser != nil {
+		return data, erruser
+	}
+	cekinterview, errinterview := sp.ri.GetallInterview(repousers.Id, update.KodePengajuan, update.NamaKandidat)
+	if errinterview != nil {
+		return data, errinterview
+	}
+
+	var nilai float64
+
+	for _, val := range cekinterview {
+		if update.KodePengajuan == val.KodePengajuan {
+			nilai += val.Nilai
+		}
+	}
+
+	soal, _ := sp.rs.AllSoal()
+	panjangsoal := len(soal)
+
+	ceklen, _ := sp.ri.CekallInterview(repousers.Id, update.KodePengajuan, update.NamaKandidat)
+
+	panjanginterview := len(ceklen)
+
+	if panjanginterview != panjangsoal {
+		return data, errors.New("penilaiain interview tidak sama dengan soal interview")
+	}
+
+	update.NilaiInterviewDireksi = nilai / float64(panjangsoal)
+	cekproseses, errproses := sp.rp.GetallDetail()
+
+	if errproses != nil {
+		return data, errproses
+	}
+	// var total float64
+
+	// for _, val := range cekproseses {
+	// 	if update.KodePengajuan == val.KodePengajuan {
+	// 		total = val.TotalNilai
+
+	// 	}
+
+	// }
+
+	for _, val := range cekproseses {
+		if id == int(val.Id) {
+			if update.KodePengajuan != val.KodePengajuan || update.NamaKandidat != val.NamaKandidat {
+				return request.ReqDetailDireksi{}, errors.New("data yang anda masukkan salah")
+			}
+		}
+	}
+	getdetail, errdetail := sp.rp.GetdetailkandidatManager(id)
+
+	if getdetail.Id == 0 {
+		return data, errors.New("id tidak ada")
+	}
+
+	if errdetail != nil {
+		return data, errdetail
+	}
+	// if repousers.Bagian != getdetail.KandidatDepartment {
+	// 	return data, errors.New("anda tidak berhak untuk update kandidat ini")
+	// }
+	update.KandidatDepartment = getdetail.KandidatDepartment
+	// update.TotalNilai = (update.NilaiManager + total) / 2
+
+	status, errstatus := kriteria.CekSTATUSformanager(update.NilaiInterviewDireksi)
+
+	if errstatus != nil {
+		return data, errstatus
+	}
+	update.Status = status
+
+	datarepo, errepo := sp.rp.UpdateDetailsDireksi(id, update)
+
+	if errepo != nil {
+		return data, errepo
+	}
+	return datarepo, nil
+}
+
 // GetAlldetailManager implements servicecontract.ServiceProcess.
 func (sp *Serviceprocess) GetAlldetailManager(id int) (data []request.ReqDetailProsesManager, err error) {
 	repousers, erruser := sp.ru.IdUserExist(id)
@@ -293,7 +378,8 @@ func (sp *Serviceprocess) UpdateDetailDireksi(update request.ReqDetailProsesDire
 	}
 
 	var nilai float64
-	ceknilai, errnilai := sp.ri.Getallnilaiftp(update.KodePengajuan, update.NamaKandidat)
+	ceknilai, errnilai := sp.ri.Getallnilaiftp(update.KodePengajuan, update.NamaKandidat, update.NamaDireksi)
+	cekdetail, _ := sp.rp.GetallDetail()
 
 	if errnilai != nil {
 		return request.ReqDetailProsesDireksi{}, errnilai
@@ -303,15 +389,15 @@ func (sp *Serviceprocess) UpdateDetailDireksi(update request.ReqDetailProsesDire
 		if update.KodePengajuan == val.KodePengajuan && update.NamaKandidat == val.NamaKandidat {
 			nilai = val.Nilai
 		}
-		if repousers.Bagian != val.DepartementKandidat {
-			return request.ReqDetailProsesDireksi{}, errors.New("department tidak sama")
-		}
+		// if repousers.Bagian != val.DepartementKandidat {
+		// 	return request.ReqDetailProsesDireksi{}, errors.New("department tidak sama")
+		// }
 	}
 	update.NilaiDireksi = nilai
 	soal, _ := sp.rft.AllSoal()
 	panjangsoal := len(soal)
-
-	ceklen, _ := sp.ri.GetallInterviewftp(update.NamaKandidat, update.KodePengajuan)
+	fmt.Print("test", update.NilaiDireksi)
+	ceklen, _ := sp.ri.GetallInterviewftp(update.NamaKandidat, update.KodePengajuan, repousers.Name)
 
 	panjanginterview := len(ceklen)
 
@@ -336,6 +422,23 @@ func (sp *Serviceprocess) UpdateDetailDireksi(update request.ReqDetailProsesDire
 				return request.ReqDetailProsesDireksi{}, errors.New("data yang anda masukkan salah")
 			}
 		}
+	}
+	for _, val := range cekdetail {
+		if val.NilaiDireksi != 0 && val.NamaDireksi != "" {
+			data2, errdata2 := sp.rp.UpdateDetailDireksi2(update)
+
+			if errdata2 != nil {
+				return request.ReqDetailProsesDireksi{}, errdata2
+			}
+			return data2, nil
+		} else if val.NilaiDireksiFtp2 != 0 && val.NamaDireksi2 != "" {
+			data3, errdata3 := sp.rp.UpdateDetailDireksi3(update)
+			if errdata3 != nil {
+				return request.ReqDetailProsesDireksi{}, errdata3
+			}
+			return data3, nil
+		}
+
 	}
 	datarepo, errepo := sp.rp.UpdateDetailDireksi(update)
 

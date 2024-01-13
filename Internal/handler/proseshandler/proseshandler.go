@@ -163,7 +163,7 @@ func (hp *HandlerProses) UpdatedetailForDireksi(e echo.Context) error {
 	if binderr != nil {
 		return e.JSON(http.StatusBadRequest, helper.GetResponse(binderr.Error(), http.StatusBadRequest, true))
 	}
-	dataservice, errservice := hp.sp.UpdateDetailForDireksi(cnv, reqproses)
+	dataservice, errservice := hp.sp.UpdateDetailsDireksi(cnv, reqproses)
 	if errservice != nil {
 		return e.JSON(http.StatusInternalServerError, helper.GetResponse(errservice.Error(), http.StatusInternalServerError, true))
 	}

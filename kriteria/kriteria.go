@@ -59,7 +59,7 @@ func CekSTATUSfordireksi(Nilai float64) (status string, err error) {
 	if Nilai > 100 {
 		return "", errors.New("nilai lebih dari 100 salah input dalam penilaiai ftp")
 	} else if Nilai >= 70 && Nilai <= 100 {
-		return "harap menunggu konfirmasi admin", nil
+		return "harap menunggu konfirmasi hr", nil
 	}
 	return "anda tidak lolos", nil
 }

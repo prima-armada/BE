@@ -198,11 +198,17 @@ type DetailProses struct {
 	NamaKandidat          string
 	TotalNilai            float64
 	NilaiDireksi          float64
+	NilaiDireksiFtp2      float64
+	NilaiDireksiFtp3      float64
 	NilaiInterviewDireksi float64
 	NamaInterviewDireksi  string
 	NamaDireksi           string
+	NamaDireksi2          string
+	NamaDireksi3          string
 	InterviewDireksi      uint
 	IdDireksi             uint
+	IdDireksi2            uint
+	IdDireksi3            uint
 	KodePengajuan         string
 	IdManager             uint
 	NamaManager           string

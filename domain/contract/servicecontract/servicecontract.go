@@ -51,7 +51,7 @@ type ServiceProcess interface {
 	GetallDetail() (data []request.ReqDetailProses, err error)
 	GetAlldetailManager(id int) (data []request.ReqDetailProsesManager, err error)
 	UpdateDetail(id int, update request.ReqDetailProsesManager) (data request.ReqDetailProsesManager, err error)
-	UpdateDetailForDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error)
+	UpdateDetailsDireksi(id int, update request.ReqDetailDireksi) (data request.ReqDetailDireksi, err error)
 	UpdateDetailAdmin(id int, update request.ReqDetailProsesAdmin) (data request.ReqDetailProsesAdmin, err error)
 	UpdateDetailDireksi(update request.ReqDetailProsesDireksi) (data request.ReqDetailProsesDireksi, err error)
 }
