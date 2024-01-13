@@ -1,4 +1,4 @@
-package departmentservice
+package departmentservics
 
 import (
 	"errors"
